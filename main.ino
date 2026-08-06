@@ -1132,7 +1132,14 @@ static void connectivityTask(void *param) {
             wdtFeed();
           }
         } else if (xSemaphoreTake(mMqtt, pdMS_TO_TICKS(5000)) == pdTRUE) {
+          /* mqtt.connect() blocks on DNS + TCP. Against an unreachable broker the
+           * socket timeout can exceed WDT_TIMEOUT_S, which would panic-reset the
+           * device for what is really just a slow network. Step out of the watchdog
+           * for the duration of the blocking call and re-enter straight after --
+           * the retry rate stays bounded by the exponential backoff either way. */
+          esp_task_wdt_delete(NULL);
           mqtt.connect();                       // one shot; backoff governs the retry rate
+          esp_task_wdt_add(NULL);
           xSemaphoreGive(mMqtt);
         }
 
@@ -1570,9 +1577,14 @@ void setup() {
 }
 
 void loop() {
-  /* All work happens in the eight FreeRTOS tasks above. The Arduino loop task has
+  /* All work happens in the nine FreeRTOS tasks above. The Arduino loop task has
    * nothing to do, so unsubscribe it from the watchdog (parking it forever would
-   * otherwise look like a hang) and delete it to reclaim its 8 KB stack. */
-  esp_task_wdt_delete(NULL);
+   * otherwise look like a hang) and delete it to reclaim its 8 KB stack.
+   *
+   * Only unsubscribe if it was actually subscribed -- whether the Arduino core adds
+   * loopTask to the TWDT depends on CONFIG_ARDUINO_LOOP_TASK_WDT. Calling delete
+   * unconditionally logs "task_wdt: delete_entry(): task not found" on builds where
+   * it wasn't, which looks like a fault in the serial log during a demo. */
+  if (esp_task_wdt_status(NULL) == ESP_OK) esp_task_wdt_delete(NULL);
   vTaskDelete(NULL);
 }
