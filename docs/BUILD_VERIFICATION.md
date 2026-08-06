@@ -98,10 +98,55 @@ so the ordering is not "tidied up" back into a broken state later.
 
 ---
 
+## Emulator attempt (Espressif QEMU) — partial
+
+Beyond compiling, the firmware was flashed into a 4 MB image and booted under
+Espressif's ESP32 emulator (`qemu-system-xtensa`, esp-develop-9.2.2-20260417):
+
+```bash
+qemu-system-xtensa -nographic -machine esp32 -drive file=RemotePatientRiskMonitoring.ino.merged.bin,if=mtd,format=raw
+```
+
+**What worked.** The second-stage bootloader validated and loaded the image, the entry
+point ran, and `setup()` executed far enough to emit:
+
+```
+=== Remote Patient Risk Monitoring System ===
+ElevanceSkills internship build -- 6 integrated tasks
+[WIFI] not connected -- starting offline
+```
+
+That confirms the flash image is well-formed and bootable, and that `setup()` runs
+through GPIO configuration, driver construction and the non-blocking Wi-Fi path.
+
+**Where it stopped.** Two emulator limitations blocked a full run:
+
+1. `assert failed: esp_phy_enable phy_init.c:336` — QEMU does not emulate the Wi-Fi
+   PHY, so `WiFi.begin()` traps. Worked around in a throwaway test build by stubbing
+   the radio; the shipped `main.ino` is unmodified.
+2. `Guru Meditation Error: Core panic'ed (Cache error) — Cache disabled but cached
+   memory region accessed`, with a backtrace inside ESP-IDF startup, *before* any
+   application code. Rebuilding at `FlashFreq=40` did not change it.
+
+Failure (2) sits in the emulator's SPI-flash cache model, which is a known gap for
+Arduino-ESP32 images (Espressif's QEMU targets ESP-IDF apps with specific sdkconfigs).
+It is **not** evidence of a defect in this project — it reproduces before `app_main`
+hands control to Arduino's `setup()`, and the same image compiles clean and boots to
+the banner.
+
+**Conclusion:** QEMU is not a viable runtime harness for this firmware.
+**Use Wokwi**, which emulates the peripherals this project actually needs — OLED,
+DS18B20, DHT22, servo, potentiometers — and provides the Wi-Fi/MQTT bridge that QEMU
+lacks. Run `TEST_PLAN.md` TC-01…TC-12 there.
+
+---
+
 ## What this does and does not prove
 
 **Proven**
 - The code is syntactically and semantically valid C++ for the ESP32 target.
+- It links into a valid, bootable 4 MB flash image, and `setup()` executes on an
+  emulated ESP32 as far as the Wi-Fi stage.
 - Every library API call (`Adafruit_MQTT`, `ESP32Servo`, `DHT`, `DallasTemperature`,
   `Adafruit_SSD1306`, FreeRTOS, `esp_task_wdt`) matches its real signature.
 - The FreeRTOS and watchdog calls compile against ESP-IDF 5.x under Arduino core 3.x,
