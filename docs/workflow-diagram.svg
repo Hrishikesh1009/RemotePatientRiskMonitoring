@@ -1,0 +1,260 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1010" viewBox="0 0 1240 1010" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6b7c"/>
+    </marker>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/>
+    </marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0f9d58"/>
+    </marker>
+  </defs>
+
+  <rect width="1240" height="1010" fill="#ffffff"/>
+
+  <text x="620" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#12212e">
+    Runtime Workflow &amp; State Machines
+  </text>
+  <text x="620" y="56" text-anchor="middle" font-size="12.5" fill="#5b6b7c">
+    Remote Patient Risk Monitoring System — Hrishikesh Lokhande
+  </text>
+
+  <!-- ================= A: MAIN DATA PIPELINE ================= -->
+  <rect x="24" y="76" width="1192" height="286" rx="10" fill="#f7f9fb" stroke="#b9c7d4"/>
+  <text x="44" y="100" font-size="14" font-weight="700" fill="#12212e">A · MAIN MONITORING PIPELINE  (every sampling period, 5–60 s)</text>
+
+  <rect x="44" y="112" width="150" height="56" rx="8" fill="#eef4fa" stroke="#a9c4de"/>
+  <text x="119" y="132" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1f5f9e">vitalsSensorTask</text>
+  <text x="119" y="148" text-anchor="middle" font-size="9" fill="#40546a">temp · HR · SpO₂</text>
+  <text x="119" y="161" text-anchor="middle" font-size="9" fill="#40546a">motion</text>
+
+  <rect x="44" y="176" width="150" height="56" rx="8" fill="#e8f0fb" stroke="#1f7ae0" stroke-width="1.5"/>
+  <text x="119" y="196" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1f5f9e">advancedVitalsTask</text>
+  <text x="119" y="212" text-anchor="middle" font-size="9" fill="#40546a">blood pressure · ECG</text>
+  <text x="119" y="225" text-anchor="middle" font-size="8.5" font-style="italic" fill="#5b6b7c">own task — T1</text>
+
+  <rect x="44" y="240" width="150" height="56" rx="8" fill="#eefaf2" stroke="#9fd3ae"/>
+  <text x="119" y="260" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f7a42">envSensorTask</text>
+  <text x="119" y="276" text-anchor="middle" font-size="9" fill="#40546a">room temp · RH</text>
+  <text x="119" y="289" text-anchor="middle" font-size="9" fill="#40546a">O₂ · AQI</text>
+
+  <rect x="228" y="146" width="118" height="98" rx="8" fill="#f4eefb" stroke="#c0a8e0"/>
+  <text x="287" y="170" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5b32a8">qVitals</text>
+  <text x="287" y="188" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5b32a8">qAdvanced</text>
+  <text x="287" y="206" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5b32a8">qEnv</text>
+  <text x="287" y="226" text-anchor="middle" font-size="9" fill="#6b4a8a">depth 1 · overwrite</text>
+
+  <rect x="380" y="140" width="164" height="110" rx="8" fill="#ffffff" stroke="#9fd3ae" stroke-width="2"/>
+  <text x="462" y="163" text-anchor="middle" font-size="11" font-weight="700" fill="#0f7a42">processingTask</text>
+  <text x="462" y="181" text-anchor="middle" font-size="9.5" fill="#40546a">fuse both streams</text>
+  <text x="462" y="196" text-anchor="middle" font-size="9.5" fill="#40546a">score clinical risk</text>
+  <text x="462" y="211" text-anchor="middle" font-size="9.5" fill="#40546a">score facility risk</text>
+  <text x="462" y="226" text-anchor="middle" font-size="9.5" fill="#40546a">set sampling rate</text>
+  <text x="462" y="241" text-anchor="middle" font-size="9.5" fill="#40546a">auto bed angle</text>
+
+  <rect x="578" y="112" width="150" height="58" rx="8" fill="#ffe2e2" stroke="#e08c8c"/>
+  <text x="653" y="134" text-anchor="middle" font-size="10.5" font-weight="700" fill="#a02020">alertTask (prio 6)</text>
+  <text x="653" y="152" text-anchor="middle" font-size="9.5" fill="#5b3030">buzzers · LEDs</text>
+
+  <rect x="578" y="184" width="150" height="58" rx="8" fill="#eef4fa" stroke="#a9c4de"/>
+  <text x="653" y="206" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1f5f9e">displayTask</text>
+  <text x="653" y="224" text-anchor="middle" font-size="9.5" fill="#40546a">OLED 5 pages</text>
+
+  <rect x="578" y="256" width="150" height="58" rx="8" fill="#eefaf2" stroke="#9fd3ae"/>
+  <text x="653" y="278" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f7a42">mqttTask</text>
+  <text x="653" y="296" text-anchor="middle" font-size="9.5" fill="#40546a">publish + aggregate</text>
+
+  <path d="M 728 285 L 786 285" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
+
+  <rect x="792" y="112" width="190" height="90" rx="8" fill="#eef4fa" stroke="#a9c4de"/>
+  <text x="887" y="134" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1f5f9e">MEDICAL DASHBOARD</text>
+  <text x="887" y="153" text-anchor="middle" font-size="9.5" fill="#40546a">medical.* — 8 feeds</text>
+  <text x="887" y="169" text-anchor="middle" font-size="9.5" fill="#40546a">gauges · alerts · trend</text>
+  <text x="887" y="188" text-anchor="middle" font-size="9" font-style="italic" fill="#5b6b7c">clinical staff only</text>
+
+  <rect x="792" y="216" width="190" height="90" rx="8" fill="#eefaf2" stroke="#9fd3ae"/>
+  <text x="887" y="238" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f7a42">FACILITY DASHBOARD</text>
+  <text x="887" y="257" text-anchor="middle" font-size="9.5" fill="#40546a">facility.* — 7 feeds</text>
+  <text x="887" y="273" text-anchor="middle" font-size="9.5" fill="#40546a">gauges · alerts · trend</text>
+  <text x="887" y="292" text-anchor="middle" font-size="9" font-style="italic" fill="#5b6b7c">maintenance staff only</text>
+
+  <rect x="1004" y="150" width="190" height="122" rx="8" fill="#fff6e5" stroke="#e8c37a"/>
+  <text x="1099" y="172" text-anchor="middle" font-size="10.5" font-weight="700" fill="#8a5c00">control.* (INBOUND)</text>
+  <text x="1016" y="192" font-size="9.5" fill="#4a3a10">dosage slider 0–100 mg/hr</text>
+  <text x="1016" y="208" font-size="9.5" fill="#4a3a10">dosage confirm button</text>
+  <text x="1016" y="224" font-size="9.5" fill="#4a3a10">bed slider 0–90°</text>
+  <text x="1016" y="240" font-size="9.5" fill="#4a3a10">bed preset + auto toggle</text>
+  <text x="1016" y="256" font-size="9.5" fill="#4a3a10">sampling 5–60 s + mode</text>
+
+  <path d="M 194 140 L 224 168" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  <path d="M 194 204 L 224 190" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  <path d="M 194 268 L 224 214" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  <path d="M 232 152 L 208 128 L 194 128" stroke="#1f7ae0" stroke-width="1.5" fill="none" marker-end="url(#a)" stroke-dasharray="4,3" opacity="0"/>
+  <path d="M 346 195 L 376 195" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  <path d="M 544 180 L 574 145" stroke="#c0392b" stroke-width="2" fill="none" marker-end="url(#ar)"/>
+  <path d="M 544 200 L 574 210" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  <path d="M 544 224 L 574 275" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  <text x="556" y="158" font-size="8.5" fill="#c0392b" transform="rotate(-42 556 158)">semAlert</text>
+
+  <path d="M 1099 272 L 1099 330 L 462 330 L 462 254" stroke="#e0a020" stroke-width="2" fill="none" marker-end="url(#a)" stroke-dasharray="5,4"/>
+  <text x="790" y="345" text-anchor="middle" font-size="9.5" fill="#c08010">dashboard commands ▸ qCommand ▸ applyCommand() ▸ actuatorTask</text>
+
+  <!-- ================= B: DOSAGE ================= -->
+  <rect x="24" y="378" width="586" height="300" rx="10" fill="#fdf0f0" stroke="#e0aaaa"/>
+  <text x="44" y="402" font-size="14" font-weight="700" fill="#a02020">B · MEDICATION DOSAGE SAFETY PIPELINE  (Task 3)</text>
+
+  <rect x="44" y="418" width="126" height="54" rx="7" fill="#ffffff" stroke="#e0aaaa"/>
+  <text x="107" y="440" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4a2a2a">dosageSetpoint</text>
+  <text x="107" y="458" text-anchor="middle" font-size="9" fill="#6b4444">raw slider 0–100</text>
+
+  <path d="M 170 445 L 206 445" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
+
+  <polygon points="272,406 348,445 272,484 196,445" fill="#fff6e5" stroke="#e8c37a"/>
+  <text x="272" y="441" text-anchor="middle" font-size="10" font-weight="700" fill="#8a5c00">&gt; 80 mg/hr ?</text>
+  <text x="272" y="457" text-anchor="middle" font-size="9" fill="#8a5c00">critical band</text>
+
+  <path d="M 348 445 L 396 445" stroke="#c0392b" stroke-width="2" fill="none" marker-end="url(#ar)"/>
+  <text x="372" y="437" text-anchor="middle" font-size="9" font-weight="700" fill="#c0392b">YES</text>
+
+  <rect x="400" y="406" width="190" height="78" rx="7" fill="#ffe2e2" stroke="#e08c8c"/>
+  <text x="495" y="426" text-anchor="middle" font-size="10.5" font-weight="700" fill="#a02020">HOLD at 80 mg/hr</text>
+  <text x="412" y="444" font-size="9.5" fill="#5b3030">OLED shows "&gt;CONFIRM nn mg/hr"</text>
+  <text x="412" y="460" font-size="9.5" fill="#5b3030">wait ≤15 s for control.dosage-confirm</text>
+  <text x="412" y="476" font-size="9.5" font-weight="700" fill="#a02020">timeout ▸ stays at 80 (fails SAFE)</text>
+
+  <path d="M 272 484 L 272 520" stroke="#0f9d58" stroke-width="2" fill="none" marker-end="url(#ag)"/>
+  <text x="292" y="506" font-size="9" font-weight="700" fill="#0f9d58">NO</text>
+  <path d="M 495 484 L 495 508 L 300 508 L 300 520" stroke="#0f9d58" stroke-width="2" fill="none" marker-end="url(#ag)" stroke-dasharray="5,4"/>
+  <text x="410" y="503" font-size="8.5" fill="#0f9d58">confirmed</text>
+
+  <rect x="180" y="524" width="240" height="60" rx="7" fill="#ffffff" stroke="#e0aaaa"/>
+  <text x="300" y="546" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4a2a2a">dosageTarget</text>
+  <text x="300" y="565" text-anchor="middle" font-size="9.5" fill="#6b4444">agreed value — still not delivered</text>
+
+  <path d="M 300 584 L 300 608" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
+
+  <rect x="120" y="612" width="360" height="50" rx="7" fill="#fff6e5" stroke="#e8c37a"/>
+  <text x="300" y="632" text-anchor="middle" font-size="10.5" font-weight="700" fill="#8a5c00">RATE LIMITER — actuatorTask, max 5 mg/hr per second</text>
+  <text x="300" y="651" text-anchor="middle" font-size="9.5" fill="#6b4a08">a full 0▸100 drag takes 20 s of continuous ramp</text>
+
+  <rect x="496" y="524" width="98" height="138" rx="7" fill="#ffffff" stroke="#e0aaaa"/>
+  <text x="545" y="548" text-anchor="middle" font-size="10" font-weight="700" fill="#4a2a2a">OUTPUT</text>
+  <text x="545" y="570" text-anchor="middle" font-size="9" fill="#6b4444">OLED value</text>
+  <text x="545" y="588" text-anchor="middle" font-size="9" fill="#6b4444">&lt;60 normal</text>
+  <text x="545" y="606" text-anchor="middle" font-size="9" fill="#c08010">60–80 warning</text>
+  <text x="545" y="624" text-anchor="middle" font-size="9" font-weight="700" fill="#c0392b">&gt;80 red LED</text>
+  <text x="545" y="642" text-anchor="middle" font-size="9" font-weight="700" fill="#c0392b">+ buzzer</text>
+  <path d="M 480 637 L 492 620" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
+
+  <!-- ================= C: CONNECTIVITY ================= -->
+  <rect x="630" y="378" width="586" height="300" rx="10" fill="#fffbf0" stroke="#e8c37a"/>
+  <text x="650" y="402" font-size="14" font-weight="700" fill="#8a5c00">C · CONNECTIVITY STATE MACHINE  (Task 6, 1 Hz)</text>
+
+  <rect x="666" y="424" width="140" height="56" rx="28" fill="#e6f7ec" stroke="#0f9d58" stroke-width="2"/>
+  <text x="736" y="448" text-anchor="middle" font-size="12" font-weight="700" fill="#0f7a42">ONLINE</text>
+  <text x="736" y="466" text-anchor="middle" font-size="9" fill="#40546a">publishing normally</text>
+
+  <rect x="1030" y="424" width="140" height="56" rx="28" fill="#fff4e0" stroke="#e0a020" stroke-width="2"/>
+  <text x="1100" y="448" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5c00">DEGRADED</text>
+  <text x="1100" y="466" text-anchor="middle" font-size="9" fill="#40546a">link up, data unreliable</text>
+
+  <rect x="848" y="574" width="140" height="56" rx="28" fill="#fdeaea" stroke="#c0392b" stroke-width="2"/>
+  <text x="918" y="598" text-anchor="middle" font-size="12" font-weight="700" fill="#a02020">OFFLINE</text>
+  <text x="918" y="616" text-anchor="middle" font-size="9" fill="#40546a">buffering locally</text>
+
+  <path d="M 806 442 L 1026 442" stroke="#e0a020" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  <text x="916" y="435" text-anchor="middle" font-size="9" fill="#8a5c00">≥2 publish fails · or sensor fault</text>
+
+  <path d="M 1026 466 L 806 466" stroke="#0f9d58" stroke-width="2" fill="none" marker-end="url(#ag)"/>
+  <text x="916" y="481" text-anchor="middle" font-size="9" fill="#0f7a42">publishes succeed again</text>
+
+  <path d="M 716 484 L 716 540 L 862 574" stroke="#c0392b" stroke-width="2" fill="none" marker-end="url(#ar)"/>
+  <text x="668" y="530" font-size="9" fill="#c0392b">Wi-Fi lost</text>
+  <text x="668" y="544" font-size="9" fill="#c0392b">broker lost</text>
+
+  <path d="M 1104 484 L 1104 546 L 976 578" stroke="#c0392b" stroke-width="2" fill="none" marker-end="url(#ar)"/>
+  <text x="1112" y="530" font-size="9" fill="#c0392b">link drops</text>
+
+  <path d="M 880 574 L 796 496" stroke="#0f9d58" stroke-width="2.5" fill="none" marker-end="url(#ag)"/>
+  <text x="792" y="556" font-size="9" font-weight="700" fill="#0f7a42">reconnect ▸ replay backlog</text>
+
+  <rect x="650" y="642" width="256" height="26" rx="6" fill="#ffffff" stroke="#e8c37a"/>
+  <text x="662" y="659" font-size="9.5" fill="#4a3a10">OFFLINE: OLED "LOGGING OFFLINE" + cause + count</text>
+
+  <rect x="918" y="642" width="286" height="26" rx="6" fill="#ffffff" stroke="#e8c37a"/>
+  <text x="930" y="659" font-size="9.5" fill="#4a3a10">Buzzer: Wi-Fi 3×short · MQTT 2×long · sensor 1 chirp</text>
+
+  <rect x="650" y="500" width="200" height="30" rx="6" fill="#ffffff" stroke="#e8c37a" opacity="0"/>
+
+  <!-- ================= D: ADAPTIVE SAMPLING ================= -->
+  <rect x="24" y="694" width="586" height="296" rx="10" fill="#f2f7fc" stroke="#c3d6e8"/>
+  <text x="44" y="718" font-size="14" font-weight="700" fill="#1f5f9e">D · ADAPTIVE SAMPLING &amp; BED CONTROL  (Tasks 4 &amp; 5)</text>
+
+  <rect x="44" y="734" width="256" height="118" rx="8" fill="#ffffff" stroke="#a9c4de"/>
+  <text x="172" y="754" text-anchor="middle" font-size="11" font-weight="700" fill="#1f5f9e">SAMPLING RATE — Task 5</text>
+  <text x="56" y="774" font-size="9.5" fill="#2c3d4e">MANUAL  slider 5–60 s ▸ applyCommand()</text>
+  <text x="56" y="792" font-size="9.5" fill="#2c3d4e">AUTO   risk ≠ NORMAL ▸ 5 s (watch closely)</text>
+  <text x="56" y="810" font-size="9.5" fill="#2c3d4e">       3 stable cycles ▸ 30 s (save power)</text>
+  <text x="56" y="830" font-size="9.5" font-weight="700" fill="#1f5f9e">3-cycle hysteresis stops rate flapping</text>
+  <text x="56" y="846" font-size="9" font-style="italic" fill="#5b6b7c">any manual change ▸ auto mode off</text>
+
+  <rect x="44" y="862" width="256" height="110" rx="8" fill="#f4eefb" stroke="#c0a8e0"/>
+  <text x="172" y="882" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5b32a8">interruptibleDelay()</text>
+  <text x="56" y="901" font-size="9.5" fill="#3c2c56">sleep in 1 s slices on the task's OWN wake queue</text>
+  <text x="56" y="918" font-size="9.5" fill="#3c2c56">token arrives ▸ wake instantly (3 queues, 1 per waiter)</text>
+  <text x="56" y="935" font-size="9.5" fill="#3c2c56">feed watchdog every slice</text>
+  <text x="56" y="954" font-size="9.5" font-weight="700" fill="#5b32a8">one helper solves T1 watchdog + T5 response</text>
+
+  <rect x="316" y="734" width="278" height="118" rx="8" fill="#ffffff" stroke="#a9c4de"/>
+  <text x="455" y="754" text-anchor="middle" font-size="11" font-weight="700" fill="#1f5f9e">BED ELEVATION — Task 4</text>
+  <text x="328" y="774" font-size="9.5" fill="#2c3d4e">PRESETS  sleep 10° · breathing 45° · emergency 90°</text>
+  <text x="328" y="792" font-size="9.5" fill="#2c3d4e">SMOOTH  1°/25 ms ▸ 0–90° in ≈2.3 s</text>
+  <text x="328" y="810" font-size="9.5" fill="#2c3d4e">EMERGENCY 3°/step ▸ ≈0.75 s, still ramped</text>
+  <text x="328" y="830" font-size="9.5" fill="#2c3d4e">every path shares one rate limiter</text>
+  <text x="328" y="846" font-size="9" font-style="italic" fill="#5b6b7c">no command can bypass the ramp</text>
+
+  <rect x="316" y="862" width="278" height="110" rx="8" fill="#eefaf2" stroke="#9fd3ae"/>
+  <text x="455" y="882" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f7a42">AUTO MODE — condition driven</text>
+  <text x="328" y="902" font-size="9.5" fill="#2c3d4e">SpO₂ &lt; 85 % + CRITICAL  ▸ 90° upright</text>
+  <text x="328" y="920" font-size="9.5" fill="#2c3d4e">SpO₂ &lt; 90 %             ▸ 45° breathing</text>
+  <text x="328" y="938" font-size="9.5" fill="#2c3d4e">risk NORMAL             ▸ 10° resting</text>
+  <text x="328" y="958" font-size="9.5" font-weight="700" fill="#0f7a42">manual overrides auto — auto never overrides manual</text>
+
+  <!-- ================= E: BOOT ================= -->
+  <rect x="630" y="694" width="586" height="296" rx="10" fill="#f7f9fb" stroke="#b9c7d4"/>
+  <text x="650" y="718" font-size="14" font-weight="700" fill="#12212e">E · BOOT SEQUENCE</text>
+
+  <rect x="650" y="734" width="240" height="34" rx="6" fill="#ffffff" stroke="#b9c7d4"/>
+  <text x="662" y="756" font-size="10" fill="#2c3d4e">1 · Serial 115200 · initState()</text>
+
+  <rect x="650" y="776" width="240" height="34" rx="6" fill="#ffffff" stroke="#b9c7d4"/>
+  <text x="662" y="798" font-size="10" fill="#2c3d4e">2 · GPIO modes · 12-bit ADC</text>
+
+  <rect x="650" y="818" width="240" height="34" rx="6" fill="#ffffff" stroke="#b9c7d4"/>
+  <text x="662" y="840" font-size="10" fill="#2c3d4e">3 · DS18B20 · DHT22 · I²C OLED</text>
+
+  <rect x="650" y="860" width="240" height="34" rx="6" fill="#ffffff" stroke="#b9c7d4"/>
+  <text x="662" y="882" font-size="10" fill="#2c3d4e">4 · Servo attach · write 0°</text>
+
+  <rect x="650" y="902" width="240" height="34" rx="6" fill="#f4eefb" stroke="#c0a8e0"/>
+  <text x="662" y="924" font-size="10" fill="#3c2c56">5 · Create 5 queues · 3 mutexes · 1 sem</text>
+
+  <rect x="928" y="734" width="276" height="34" rx="6" fill="#ffffff" stroke="#b9c7d4"/>
+  <text x="940" y="756" font-size="10" fill="#2c3d4e">6 · Seed qVitals / qEnv (no stale reads)</text>
+
+  <rect x="928" y="776" width="276" height="34" rx="6" fill="#fff6e5" stroke="#e8c37a"/>
+  <text x="940" y="798" font-size="10" fill="#4a3a10">7 · Wi-Fi connect — 10 s cap, non-blocking</text>
+
+  <rect x="928" y="818" width="276" height="34" rx="6" fill="#ffffff" stroke="#b9c7d4"/>
+  <text x="940" y="840" font-size="10" fill="#2c3d4e">8 · Subscribe 7 control.* topics</text>
+
+  <rect x="928" y="860" width="276" height="34" rx="6" fill="#fff6e5" stroke="#e8c37a"/>
+  <text x="940" y="882" font-size="10" fill="#4a3a10">9 · Task watchdog 20 s · panic reset</text>
+
+  <rect x="928" y="902" width="276" height="34" rx="6" fill="#e6f7ec" stroke="#0f9d58"/>
+  <text x="940" y="924" font-size="10" font-weight="700" fill="#0f7a42">10 · Start 9 tasks · delete loop() task</text>
+
+  <text x="650" y="962" font-size="9.5" font-style="italic" fill="#5b6b7c">Wi-Fi failure at step 7 is not fatal — the system boots straight into OFFLINE and buffers.</text>
+  <text x="650" y="978" font-size="9.5" font-style="italic" fill="#5b6b7c">loop() is unsubscribed from the watchdog and deleted; parking it forever would look like a hang.</text>
+</svg>

@@ -1,0 +1,132 @@
+{
+  "version": 1,
+  "author": "Hrishikesh Lokhande",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-v1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+
+    { "type": "wokwi-ssd1306", "id": "oled", "top": -140, "left": 240,
+      "attrs": { "i2cAddress": "0x3c" } },
+
+    { "type": "wokwi-ds18b20", "id": "bodyTemp", "top": 130, "left": -230,
+      "attrs": { "temperature": "36.8" } },
+    { "type": "wokwi-resistor", "id": "rTemp", "top": 100, "left": -140,
+      "attrs": { "value": "4700" } },
+
+    { "type": "wokwi-dht22", "id": "roomEnv", "top": -150, "left": -230,
+      "attrs": { "temperature": "22", "humidity": "45" } },
+
+    { "type": "wokwi-pir-motion-sensor", "id": "pir", "top": 250, "left": -240, "attrs": {} },
+
+    { "type": "wokwi-potentiometer", "id": "potEcg", "top": -90, "left": 430,
+      "attrs": { "value": "512" } },
+    { "type": "wokwi-potentiometer", "id": "potO2", "top": 20, "left": 430,
+      "attrs": { "value": "700" } },
+    { "type": "wokwi-potentiometer", "id": "potAqi", "top": 130, "left": 430,
+      "attrs": { "value": "200" } },
+
+    { "type": "wokwi-buzzer", "id": "bzTemp",   "top": 300, "left": 60,  "attrs": { "volume": "0.1" } },
+    { "type": "wokwi-buzzer", "id": "bzHr",     "top": 300, "left": 130, "attrs": { "volume": "0.1" } },
+    { "type": "wokwi-buzzer", "id": "bzSpo2",   "top": 300, "left": 200, "attrs": { "volume": "0.1" } },
+    { "type": "wokwi-buzzer", "id": "bzSystem", "top": 300, "left": 270, "attrs": { "volume": "0.1" } },
+
+    { "type": "wokwi-slide-switch", "id": "swTemp",   "top": -240, "left": 20,  "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "swHr",     "top": -240, "left": 100, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "swSpo2",   "top": -240, "left": 180, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "swMotion", "top": -240, "left": 260, "attrs": {} },
+
+    { "type": "wokwi-servo", "id": "bedServo", "top": 200, "left": 400,
+      "attrs": { "horn": "double", "hornColor": "#ccc" } },
+
+    { "type": "wokwi-led", "id": "ledDose", "top": 60, "left": 240,
+      "attrs": { "color": "red", "label": "DOSE" } },
+    { "type": "wokwi-resistor", "id": "rDose", "top": 100, "left": 240,
+      "attrs": { "value": "220" } },
+
+    { "type": "wokwi-led", "id": "ledOk", "top": 60, "left": 300,
+      "attrs": { "color": "green", "label": "OK" } },
+    { "type": "wokwi-resistor", "id": "rOk", "top": 100, "left": 300,
+      "attrs": { "value": "220" } },
+
+    { "type": "wokwi-led", "id": "ledNet", "top": 60, "left": 360,
+      "attrs": { "color": "yellow", "label": "LINK" } },
+    { "type": "wokwi-resistor", "id": "rNet", "top": 100, "left": 360,
+      "attrs": { "value": "220" } }
+  ],
+
+  "connections": [
+    [ "esp:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX0", "$serialMonitor:TX", "", [] ],
+
+    [ "oled:GND", "esp:GND.1", "black", [ "v0" ] ],
+    [ "oled:VCC", "esp:3V3",   "red",   [ "v0" ] ],
+    [ "oled:SCL", "esp:D22",   "green", [ "v0" ] ],
+    [ "oled:SDA", "esp:D21",   "blue",  [ "v0" ] ],
+
+    [ "bodyTemp:GND", "esp:GND.2", "black", [ "v0" ] ],
+    [ "bodyTemp:VCC", "esp:3V3",   "red",   [ "v0" ] ],
+    [ "bodyTemp:DQ",  "esp:D14",   "green", [ "v0" ] ],
+    [ "rTemp:1", "esp:D14", "green", [ "v0" ] ],
+    [ "rTemp:2", "esp:3V3", "red",   [ "v0" ] ],
+
+    [ "roomEnv:GND", "esp:GND.2", "black", [ "v0" ] ],
+    [ "roomEnv:VCC", "esp:3V3",   "red",   [ "v0" ] ],
+    [ "roomEnv:SDA", "esp:D27",   "orange",[ "v0" ] ],
+
+    [ "pir:GND", "esp:GND.2", "black", [ "v0" ] ],
+    [ "pir:VCC", "esp:3V3",   "red",   [ "v0" ] ],
+    [ "pir:OUT", "esp:D12",   "purple",[ "v0" ] ],
+
+    [ "potEcg:GND", "esp:GND.3", "black", [ "v0" ] ],
+    [ "potEcg:VCC", "esp:3V3",   "red",   [ "v0" ] ],
+    [ "potEcg:SIG", "esp:VP",    "cyan",  [ "v0" ] ],
+
+    [ "potO2:GND", "esp:GND.3", "black", [ "v0" ] ],
+    [ "potO2:VCC", "esp:3V3",   "red",   [ "v0" ] ],
+    [ "potO2:SIG", "esp:D34",   "cyan",  [ "v0" ] ],
+
+    [ "potAqi:GND", "esp:GND.3", "black", [ "v0" ] ],
+    [ "potAqi:VCC", "esp:3V3",   "red",   [ "v0" ] ],
+    [ "potAqi:SIG", "esp:D35",   "cyan",  [ "v0" ] ],
+
+    [ "bzTemp:1",   "esp:GND.1", "black", [ "v0" ] ],
+    [ "bzTemp:2",   "esp:D4",    "green", [ "v0" ] ],
+    [ "bzHr:1",     "esp:GND.1", "black", [ "v0" ] ],
+    [ "bzHr:2",     "esp:D16",   "green", [ "v0" ] ],
+    [ "bzSpo2:1",   "esp:GND.1", "black", [ "v0" ] ],
+    [ "bzSpo2:2",   "esp:D17",   "green", [ "v0" ] ],
+    [ "bzSystem:1", "esp:GND.1", "black", [ "v0" ] ],
+    [ "bzSystem:2", "esp:D5",    "green", [ "v0" ] ],
+
+    [ "swTemp:1",   "esp:GND.3", "black", [ "v0" ] ],
+    [ "swTemp:2",   "esp:D32",   "gold",  [ "v0" ] ],
+    [ "swTemp:3",   "esp:3V3",   "red",   [ "v0" ] ],
+    [ "swHr:1",     "esp:GND.3", "black", [ "v0" ] ],
+    [ "swHr:2",     "esp:D33",   "gold",  [ "v0" ] ],
+    [ "swHr:3",     "esp:3V3",   "red",   [ "v0" ] ],
+    [ "swSpo2:1",   "esp:GND.3", "black", [ "v0" ] ],
+    [ "swSpo2:2",   "esp:D25",   "gold",  [ "v0" ] ],
+    [ "swSpo2:3",   "esp:3V3",   "red",   [ "v0" ] ],
+    [ "swMotion:1", "esp:GND.3", "black", [ "v0" ] ],
+    [ "swMotion:2", "esp:D26",   "gold",  [ "v0" ] ],
+    [ "swMotion:3", "esp:3V3",   "red",   [ "v0" ] ],
+
+    [ "bedServo:GND", "esp:GND.1", "black", [ "v0" ] ],
+    [ "bedServo:V+",  "esp:3V3",   "red",   [ "v0" ] ],
+    [ "bedServo:PWM", "esp:D13",   "orange",[ "v0" ] ],
+
+    [ "ledDose:C", "esp:GND.1", "black", [ "v0" ] ],
+    [ "ledDose:A", "rDose:1",   "red",   [ "v0" ] ],
+    [ "rDose:2",   "esp:D15",   "red",   [ "v0" ] ],
+
+    [ "ledOk:C", "esp:GND.1", "black", [ "v0" ] ],
+    [ "ledOk:A", "rOk:1",     "green", [ "v0" ] ],
+    [ "rOk:2",   "esp:D2",    "green", [ "v0" ] ],
+
+    [ "ledNet:C", "esp:GND.1", "black", [ "v0" ] ],
+    [ "ledNet:A", "rNet:1",    "gold",  [ "v0" ] ],
+    [ "rNet:2",   "esp:D18",   "gold",  [ "v0" ] ]
+  ],
+
+  "dependencies": {}
+}

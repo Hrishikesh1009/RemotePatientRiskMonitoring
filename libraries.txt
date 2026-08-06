@@ -1,0 +1,13 @@
+# Wokwi library dependencies for the Remote Patient Risk Monitoring System
+# Paste this file into the Wokwi "libraries.txt" tab, or install the same
+# libraries via Arduino IDE -> Library Manager for a hardware build.
+
+OneWire
+DallasTemperature
+Adafruit GFX Library
+Adafruit SSD1306
+Adafruit BusIO
+Adafruit MQTT Library
+Adafruit Unified Sensor
+DHT sensor library
+ESP32Servo

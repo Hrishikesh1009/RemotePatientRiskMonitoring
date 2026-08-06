@@ -1,0 +1,9 @@
+# Wokwi for VS Code configuration.
+# Only needed if you build locally with arduino-cli / PlatformIO and simulate
+# inside VS Code. For wokwi.com (browser) this file is ignored -- just paste
+# main.ino, diagram.json and libraries.txt into the matching tabs.
+
+[wokwi]
+version = 1
+firmware = ".pio/build/esp32dev/firmware.bin"
+elf = ".pio/build/esp32dev/firmware.elf"

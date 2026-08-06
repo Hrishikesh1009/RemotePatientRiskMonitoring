@@ -1,0 +1,198 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="880" viewBox="0 0 1240 880" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6b7c"/>
+    </marker>
+    <marker id="arrowB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1f7ae0"/>
+    </marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0f9d58"/>
+    </marker>
+  </defs>
+
+  <rect width="1240" height="880" fill="#ffffff"/>
+
+  <text x="620" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#12212e">
+    Remote Patient Risk Monitoring System — System Architecture
+  </text>
+  <text x="620" y="56" text-anchor="middle" font-size="12.5" fill="#5b6b7c">
+    ESP32 · FreeRTOS (9 concurrent tasks, 2 cores) · MQTT · Adafruit IO · Hrishikesh Lokhande
+  </text>
+
+  <!-- ============ SENSING LAYER ============ -->
+  <rect x="24" y="80" width="252" height="330" rx="10" fill="#f2f7fc" stroke="#c3d6e8"/>
+  <text x="150" y="104" text-anchor="middle" font-size="13.5" font-weight="700" fill="#12212e">SENSING LAYER</text>
+
+  <rect x="40" y="118" width="220" height="128" rx="7" fill="#ffffff" stroke="#9fc3e5"/>
+  <text x="52" y="138" font-size="11.5" font-weight="700" fill="#1f5f9e">PATIENT SIDE</text>
+  <text x="52" y="157" font-size="10.5" fill="#2c3d4e">DS18B20 body temp — GPIO14</text>
+  <text x="52" y="173" font-size="10.5" fill="#2c3d4e">Heart rate (simulated channel)</text>
+  <text x="52" y="189" font-size="10.5" fill="#2c3d4e">SpO₂ (simulated channel)</text>
+  <text x="52" y="205" font-size="10.5" fill="#2c3d4e">Blood pressure (HR-derived)</text>
+  <text x="52" y="221" font-size="10.5" fill="#2c3d4e">ECG amplitude — GPIO36 pot</text>
+  <text x="52" y="237" font-size="10.5" fill="#2c3d4e">PIR motion — GPIO12</text>
+
+  <rect x="40" y="258" width="220" height="94" rx="7" fill="#ffffff" stroke="#9fd3ae"/>
+  <text x="52" y="278" font-size="11.5" font-weight="700" fill="#0f7a42">FACILITY SIDE</text>
+  <text x="52" y="297" font-size="10.5" fill="#2c3d4e">DHT22 room temp + RH — GPIO27</text>
+  <text x="52" y="313" font-size="10.5" fill="#2c3d4e">Oxygen level — GPIO34 pot</text>
+  <text x="52" y="329" font-size="10.5" fill="#2c3d4e">Air Quality Index — GPIO35 pot</text>
+  <text x="52" y="345" font-size="10.5" fill="#2c3d4e">Occupancy (shared PIR)</text>
+
+  <rect x="40" y="364" width="220" height="32" rx="7" fill="#fff6e5" stroke="#e8c37a"/>
+  <text x="52" y="384" font-size="10.5" fill="#8a5c00">4× slide switch = fault injection</text>
+
+  <!-- ============ ESP32 / FreeRTOS ============ -->
+  <rect x="308" y="80" width="480" height="612" rx="10" fill="#f7f9fb" stroke="#b9c7d4"/>
+  <text x="548" y="104" text-anchor="middle" font-size="13.5" font-weight="700" fill="#12212e">ESP32 — FreeRTOS KERNEL</text>
+
+  <!-- core 1 -->
+  <rect x="322" y="118" width="222" height="300" rx="8" fill="#eef4fa" stroke="#a9c4de"/>
+  <text x="433" y="138" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1f5f9e">CORE 1 — real-time</text>
+
+  <rect x="334" y="148" width="198" height="36" rx="6" fill="#ffe2e2" stroke="#e08c8c"/>
+  <text x="344" y="164" font-size="10.5" font-weight="700" fill="#a02020">alertTask — prio 6</text>
+  <text x="344" y="178" font-size="9" fill="#5b3030">buzzers ×4, LEDs ×3</text>
+
+  <rect x="334" y="192" width="198" height="36" rx="6" fill="#ffffff" stroke="#a9c4de"/>
+  <text x="344" y="208" font-size="10.5" font-weight="700" fill="#1f5f9e">vitalsSensorTask — prio 4</text>
+  <text x="344" y="222" font-size="9" fill="#40546a">temp · HR · SpO₂ · motion</text>
+
+  <rect x="334" y="236" width="198" height="36" rx="6" fill="#ffffff" stroke="#a9c4de"/>
+  <text x="344" y="252" font-size="10.5" font-weight="700" fill="#1f5f9e">actuatorTask — prio 4</text>
+  <text x="344" y="266" font-size="9" fill="#40546a">dosage ramp · servo ramp</text>
+
+  <rect x="334" y="280" width="198" height="36" rx="6" fill="#e8f0fb" stroke="#1f7ae0" stroke-width="1.5"/>
+  <text x="344" y="296" font-size="10.5" font-weight="700" fill="#1f5f9e">advancedVitalsTask — prio 3</text>
+  <text x="344" y="310" font-size="9" fill="#40546a">blood pressure · ECG  [T1]</text>
+
+  <rect x="334" y="324" width="198" height="36" rx="6" fill="#ffffff" stroke="#a9c4de"/>
+  <text x="344" y="340" font-size="10.5" font-weight="700" fill="#1f5f9e">envSensorTask — prio 3</text>
+  <text x="344" y="354" font-size="9" fill="#40546a">4 facility parameters</text>
+
+  <rect x="334" y="368" width="198" height="36" rx="6" fill="#ffffff" stroke="#a9c4de"/>
+  <text x="344" y="384" font-size="10.5" font-weight="700" fill="#1f5f9e">displayTask — prio 2</text>
+  <text x="344" y="398" font-size="9" fill="#40546a">OLED · 5 rotating pages</text>
+
+  <!-- core 0 -->
+  <rect x="554" y="118" width="222" height="300" rx="8" fill="#eefaf2" stroke="#9fd3ae"/>
+  <text x="665" y="138" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0f7a42">CORE 0 — compute + net</text>
+
+  <rect x="566" y="150" width="198" height="40" rx="6" fill="#ffffff" stroke="#9fd3ae"/>
+  <text x="576" y="167" font-size="11" font-weight="700" fill="#0f7a42">processingTask — prio 5</text>
+  <text x="576" y="182" font-size="9.5" fill="#40546a">risk engine · 1 Hz</text>
+
+  <rect x="566" y="198" width="198" height="40" rx="6" fill="#ffffff" stroke="#9fd3ae"/>
+  <text x="576" y="215" font-size="11" font-weight="700" fill="#0f7a42">mqttTask — prio 3</text>
+  <text x="576" y="230" font-size="9.5" fill="#40546a">pub / sub / aggregate</text>
+
+  <rect x="566" y="246" width="198" height="40" rx="6" fill="#ffffff" stroke="#9fd3ae"/>
+  <text x="576" y="263" font-size="11" font-weight="700" fill="#0f7a42">connectivityTask — prio 3</text>
+  <text x="576" y="278" font-size="9.5" fill="#40546a">state machine · backoff</text>
+
+  <rect x="566" y="300" width="198" height="82" rx="6" fill="#fff6e5" stroke="#e8c37a"/>
+  <text x="576" y="319" font-size="10.5" font-weight="700" fill="#8a5c00">Task Watchdog — 20 s</text>
+  <text x="576" y="336" font-size="9.5" fill="#6b4a08">all 9 tasks subscribed</text>
+  <text x="576" y="351" font-size="9.5" fill="#6b4a08">fed via interruptibleDelay()</text>
+  <text x="576" y="366" font-size="9.5" fill="#6b4a08">1 s slices · panic reset</text>
+
+  <!-- IPC -->
+  <rect x="322" y="432" width="454" height="112" rx="8" fill="#f4eefb" stroke="#c0a8e0"/>
+  <text x="549" y="452" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5b32a8">INTER-TASK COMMUNICATION</text>
+  <text x="336" y="472" font-size="10" fill="#3c2c56">QUEUES  qVitals(1,ovw) · qAdvanced(1,ovw) · qEnv(1,ovw) · qCommand(12) · qOffline(120) · 3× wake(1)</text>
+  <text x="336" y="492" font-size="10" fill="#3c2c56">MUTEXES  mState (SystemState) · mI2C (OLED bus) · mMqtt (non-reentrant client)</text>
+  <text x="336" y="512" font-size="10" fill="#3c2c56">SEMAPHORE  semAlert — processingTask ▸ alertTask</text>
+  <text x="336" y="532" font-size="10" font-style="italic" fill="#6b4a8a">Lock order is always mMqtt ▸ mState — deadlock is structurally impossible. One wake queue PER waiter.</text>
+
+  <!-- actuators -->
+  <rect x="322" y="558" width="454" height="120" rx="8" fill="#fdf0f0" stroke="#e0aaaa"/>
+  <text x="549" y="578" text-anchor="middle" font-size="11.5" font-weight="700" fill="#a02020">ACTUATION &amp; LOCAL HMI</text>
+  <text x="336" y="600" font-size="10.5" fill="#4a2a2a">SSD1306 OLED — GPIO21/22 · 5 pages · offline banner</text>
+  <text x="336" y="619" font-size="10.5" fill="#4a2a2a">SG90 servo — GPIO13 · bed 0–90° · 1°/25 ms smooth ramp</text>
+  <text x="336" y="638" font-size="10.5" fill="#4a2a2a">Buzzers — GPIO4/16/17/5 · distinct pattern per fault class</text>
+  <text x="336" y="657" font-size="10.5" fill="#4a2a2a">LEDs — GPIO15 dosage · GPIO2 healthy · GPIO18 link</text>
+
+  <!-- ============ TRANSPORT ============ -->
+  <rect x="820" y="80" width="396" height="238" rx="10" fill="#f2f7fc" stroke="#c3d6e8"/>
+  <text x="1018" y="104" text-anchor="middle" font-size="13.5" font-weight="700" fill="#12212e">MQTT TRANSPORT — Adafruit IO</text>
+
+  <rect x="836" y="118" width="364" height="44" rx="7" fill="#ffffff" stroke="#9fc3e5"/>
+  <text x="848" y="137" font-size="11" font-weight="700" fill="#1f5f9e">medical.*  — 8 feeds</text>
+  <text x="848" y="153" font-size="9.5" fill="#40546a">temp · HR · SpO₂ · BP · ECG · status · alerts · summary</text>
+
+  <rect x="836" y="170" width="364" height="44" rx="7" fill="#ffffff" stroke="#9fd3ae"/>
+  <text x="848" y="189" font-size="11" font-weight="700" fill="#0f7a42">facility.*  — 7 feeds</text>
+  <text x="848" y="205" font-size="9.5" fill="#40546a">room temp · RH · O₂ · AQI · motion · alerts · summary</text>
+
+  <rect x="836" y="222" width="364" height="40" rx="7" fill="#ffffff" stroke="#b9c7d4"/>
+  <text x="848" y="240" font-size="11" font-weight="700" fill="#40546a">system.*  — 5 feeds</text>
+  <text x="848" y="255" font-size="9.5" fill="#40546a">state · dosage · bed-angle · sampling-rate · backlog</text>
+
+  <rect x="836" y="270" width="364" height="40" rx="7" fill="#fff6e5" stroke="#e8c37a"/>
+  <text x="848" y="288" font-size="11" font-weight="700" fill="#8a5c00">control.*  — 7 feeds  (INBOUND)</text>
+  <text x="848" y="303" font-size="9.5" fill="#6b4a08">dosage · confirm · bed-angle · preset · auto · rate · mode</text>
+
+  <!-- ============ DASHBOARDS ============ -->
+  <rect x="820" y="338" width="396" height="354" rx="10" fill="#f7f9fb" stroke="#b9c7d4"/>
+  <text x="1018" y="362" text-anchor="middle" font-size="13.5" font-weight="700" fill="#12212e">ROLE-BASED DASHBOARDS</text>
+
+  <rect x="836" y="376" width="364" height="140" rx="8" fill="#eef4fa" stroke="#a9c4de"/>
+  <text x="848" y="396" font-size="11.5" font-weight="700" fill="#1f5f9e">MEDICAL STAFF DASHBOARD</text>
+  <text x="848" y="415" font-size="10" fill="#2c3d4e">Gauges: HR 40–180 · SpO₂ 70–100 · temp 33–42</text>
+  <text x="848" y="431" font-size="10" fill="#2c3d4e">Text: blood pressure · ECG mV · patient status</text>
+  <text x="848" y="447" font-size="10" fill="#2c3d4e">Stream: clinical alert log</text>
+  <text x="848" y="463" font-size="10" fill="#2c3d4e">Line chart: 60 s aggregated trend</text>
+  <text x="848" y="483" font-size="10" font-weight="700" fill="#a02020">Controls: dosage slider · confirm · bed · sampling</text>
+  <text x="848" y="503" font-size="9.5" font-style="italic" fill="#5b6b7c">subscribes to medical.# + system.# only</text>
+
+  <rect x="836" y="528" width="364" height="128" rx="8" fill="#eefaf2" stroke="#9fd3ae"/>
+  <text x="848" y="548" font-size="11.5" font-weight="700" fill="#0f7a42">FACILITY MANAGEMENT DASHBOARD</text>
+  <text x="848" y="567" font-size="10" fill="#2c3d4e">Gauges: room temp 10–35 · O₂ 15–25 · AQI 0–500</text>
+  <text x="848" y="583" font-size="10" fill="#2c3d4e">Text: humidity · occupancy</text>
+  <text x="848" y="599" font-size="10" fill="#2c3d4e">Stream: environmental alert log</text>
+  <text x="848" y="615" font-size="10" fill="#2c3d4e">Line chart: 60 s aggregated trend</text>
+  <text x="848" y="637" font-size="9.5" font-style="italic" fill="#5b6b7c">subscribes to facility.# only — no patient data reaches it</text>
+
+  <rect x="836" y="666" width="364" height="14" rx="4" fill="#fdf0f0" stroke="#e0aaaa"/>
+  <text x="1018" y="677" text-anchor="middle" font-size="9.5" fill="#a02020">Topic-prefix ACLs enforce separation at the broker, not in the UI</text>
+
+  <!-- ============ RESILIENCE ============ -->
+  <rect x="24" y="712" width="1192" height="140" rx="10" fill="#fffbf0" stroke="#e8c37a"/>
+  <text x="620" y="736" text-anchor="middle" font-size="13.5" font-weight="700" fill="#8a5c00">FAULT TOLERANCE — Task 6</text>
+
+  <rect x="44" y="750" width="270" height="86" rx="7" fill="#ffffff" stroke="#e8c37a"/>
+  <text x="56" y="770" font-size="11" font-weight="700" fill="#8a5c00">DETECT</text>
+  <text x="56" y="789" font-size="10" fill="#4a3a10">Wi-Fi association · broker liveness</text>
+  <text x="56" y="805" font-size="10" fill="#4a3a10">publish-failure counter (≥2 ▸ DEGRADED)</text>
+  <text x="56" y="821" font-size="10" fill="#4a3a10">sensor-disconnect flag</text>
+
+  <rect x="330" y="750" width="270" height="86" rx="7" fill="#ffffff" stroke="#e8c37a"/>
+  <text x="342" y="770" font-size="11" font-weight="700" fill="#8a5c00">ANNOUNCE</text>
+  <text x="342" y="789" font-size="10" fill="#4a3a10">OLED "LOGGING OFFLINE" + cause</text>
+  <text x="342" y="805" font-size="10" fill="#4a3a10">Wi-Fi 3× short · MQTT 2× long · sensor 1 chirp</text>
+  <text x="342" y="821" font-size="10" fill="#4a3a10">yellow link LED on GPIO18</text>
+
+  <rect x="616" y="750" width="270" height="86" rx="7" fill="#ffffff" stroke="#e8c37a"/>
+  <text x="628" y="770" font-size="11" font-weight="700" fill="#8a5c00">BUFFER</text>
+  <text x="628" y="789" font-size="10" fill="#4a3a10">qOffline — 120 records ≈ 3.8 KB</text>
+  <text x="628" y="805" font-size="10" fill="#4a3a10">ring: oldest dropped when full</text>
+  <text x="628" y="821" font-size="10" fill="#4a3a10">optional SPIFFS mirror</text>
+
+  <rect x="902" y="750" width="294" height="86" rx="7" fill="#ffffff" stroke="#e8c37a"/>
+  <text x="914" y="770" font-size="11" font-weight="700" fill="#8a5c00">RECOVER</text>
+  <text x="914" y="789" font-size="10" fill="#4a3a10">backoff 1·2·4·8·16·32·60 s (capped)</text>
+  <text x="914" y="805" font-size="10" fill="#4a3a10">replay to system.backlog @ 600 ms</text>
+  <text x="914" y="821" font-size="10" fill="#4a3a10">failed record re-queued to FRONT — order kept</text>
+
+  <!-- ============ FLOW ARROWS ============ -->
+  <path d="M 276 240 L 318 240" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 788 200 L 830 160" stroke="#1f7ae0" stroke-width="2" fill="none" marker-end="url(#arrowB)"/>
+  <path d="M 830 292 L 788 250" stroke="#e0a020" stroke-width="2" fill="none" marker-end="url(#arrowB)"/>
+  <path d="M 1018 318 L 1018 334" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 548 418 L 548 428" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 548 544 L 548 554" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+  <text x="806" y="176" font-size="9.5" fill="#1f7ae0" transform="rotate(-42 806 176)">publish</text>
+  <text x="800" y="290" font-size="9.5" fill="#c08010" transform="rotate(42 800 290)">subscribe</text>
+</svg>
