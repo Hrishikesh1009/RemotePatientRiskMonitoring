@@ -262,6 +262,19 @@ typedef enum {
 
 typedef struct { CommandType type; float value; } Command;
 
+/* Rolling 60 s statistics for the periodic dashboard summaries [T2].
+ *
+ * IMPORTANT: every struct used in a function signature must be declared HERE, above
+ * the first function definition. The Arduino .ino preprocessor auto-generates forward
+ * prototypes and inserts them near the top of the file -- if the type is defined
+ * further down, those prototypes reference an undeclared type and the build fails with
+ * "variable or field declared void". Declaring all types up front avoids that. */
+typedef struct {
+  float hrSum, spo2Sum, tempSum, roomSum, o2Sum, aqiSum;
+  int   hrMin, hrMax, spo2Min, aqiMax;
+  uint16_t n;
+} Aggregate;
+
 /* One buffered sample retained while offline [T6]. */
 typedef struct {
   uint32_t tsMs;
@@ -1206,12 +1219,8 @@ static void publishAll(const SystemState &s) {
   unlockState();
 }
 
-/* [T2] periodic aggregation -- summarised insight rather than raw firehose. */
-typedef struct {
-  float hrSum, spo2Sum, tempSum, roomSum, o2Sum, aqiSum;
-  int   hrMin, hrMax, spo2Min, aqiMax;
-  uint16_t n;
-} Aggregate;
+/* [T2] periodic aggregation -- summarised insight rather than raw firehose.
+ * (The Aggregate type itself lives in Section 4 -- see the note there on why.) */
 
 static void aggReset(Aggregate &a) {
   a.hrSum = a.spo2Sum = a.tempSum = a.roomSum = a.o2Sum = a.aqiSum = 0;

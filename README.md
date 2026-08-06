@@ -29,6 +29,24 @@ Full detail: [`docs/TASK_MAPPING.md`](docs/TASK_MAPPING.md).
 
 ---
 
+## Build status
+
+**Compiles clean** against arduino-cli 1.5.2 / esp32:esp32 core 3.3.11
+(`esp32:esp32:esp32doit-devkit-v1`):
+
+```
+Sketch uses 980546 bytes (74%) of program storage space. Maximum is 1310720 bytes.
+Global variables use 53840 bytes (16%) of dynamic memory, leaving 273840 bytes for local variables.
+```
+
+0 errors, 0 sketch warnings on a clean rebuild with `--warnings all`.
+Full toolchain details and reproduction steps: [`docs/BUILD_VERIFICATION.md`](docs/BUILD_VERIFICATION.md).
+
+Runtime behaviour still needs the simulator — work through
+[`docs/TEST_PLAN.md`](docs/TEST_PLAN.md) TC-01…TC-12 in Wokwi before submitting.
+
+---
+
 ## Repository layout
 
 ```
@@ -40,6 +58,7 @@ RemotePatientRiskMonitoring/
 ├── README.md                    This file
 ├── docs/
 │   ├── PROJECT_REPORT.md        Full project report
+│   ├── BUILD_VERIFICATION.md    Compile evidence, toolchain, repro steps
 │   ├── TASK_MAPPING.md          Task-by-task evidence with line references
 │   ├── ARCHITECTURE.md          Design rationale, RTOS table, MQTT topic map
 │   ├── DASHBOARD_SETUP.md       Step-by-step Adafruit IO dashboard build
