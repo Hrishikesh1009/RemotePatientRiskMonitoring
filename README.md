@@ -59,6 +59,7 @@ RemotePatientRiskMonitoring/
 ├── docs/
 │   ├── PROJECT_REPORT.md        Full project report
 │   ├── BUILD_VERIFICATION.md    Compile evidence, toolchain, repro steps
+│   ├── NODE_RED_SETUP.md        Free dashboard route — import and deploy
 │   ├── TASK_MAPPING.md          Task-by-task evidence with line references
 │   ├── ARCHITECTURE.md          Design rationale, RTOS table, MQTT topic map
 │   ├── DASHBOARD_SETUP.md       Step-by-step Adafruit IO dashboard build

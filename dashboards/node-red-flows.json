@@ -1,0 +1,1739 @@
+[
+  {
+    "id": "f_rprms",
+    "type": "tab",
+    "label": "RPRMS \u2014 Remote Patient Risk Monitoring",
+    "disabled": false,
+    "info": "Auto-generated dashboard for the ElevanceSkills internship project. Import via Menu -> Import -> paste this file."
+  },
+  {
+    "id": "broker1",
+    "type": "mqtt-broker",
+    "name": "RPRMS broker",
+    "broker": "broker.hivemq.com",
+    "port": "1883",
+    "clientid": "",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": "4",
+    "keepalive": "60",
+    "cleansession": true,
+    "autoUnsubscribe": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthPayload": "",
+    "birthMsg": {},
+    "closeTopic": "",
+    "closeQos": "0",
+    "closePayload": "",
+    "closeMsg": {},
+    "willTopic": "",
+    "willQos": "0",
+    "willPayload": "",
+    "willMsg": {},
+    "userProps": "",
+    "sessionExpiry": ""
+  },
+  {
+    "id": "ui_base",
+    "type": "ui_base",
+    "theme": {
+      "name": "theme-dark",
+      "lightTheme": {
+        "default": "#0094CE",
+        "baseColor": "#0094CE",
+        "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif",
+        "edited": true,
+        "reset": false
+      },
+      "darkTheme": {
+        "default": "#097479",
+        "baseColor": "#1f7ae0",
+        "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif",
+        "edited": true,
+        "reset": false
+      },
+      "customTheme": {
+        "name": "Untitled Theme 1",
+        "default": "#4B7930",
+        "baseColor": "#4B7930",
+        "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif"
+      },
+      "themeState": {
+        "base-color": {
+          "default": "#097479",
+          "value": "#1f7ae0",
+          "edited": true
+        },
+        "page-titlebar-backgroundColor": {
+          "value": "#1f7ae0",
+          "edited": false
+        },
+        "page-backgroundColor": {
+          "value": "#111827",
+          "edited": true
+        },
+        "page-sidebar-backgroundColor": {
+          "value": "#1f2937",
+          "edited": true
+        },
+        "group-textColor": {
+          "value": "#e5e7eb",
+          "edited": true
+        },
+        "group-borderColor": {
+          "value": "#374151",
+          "edited": true
+        },
+        "group-backgroundColor": {
+          "value": "#1f2937",
+          "edited": true
+        },
+        "widget-textColor": {
+          "value": "#f9fafb",
+          "edited": true
+        },
+        "widget-backgroundColor": {
+          "value": "#1f7ae0",
+          "edited": false
+        },
+        "widget-borderColor": {
+          "value": "#1f2937",
+          "edited": true
+        },
+        "base-font": {
+          "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif"
+        }
+      },
+      "angularTheme": {
+        "primary": "indigo",
+        "accents": "blue",
+        "warn": "red",
+        "background": "grey",
+        "palette": "light"
+      }
+    },
+    "site": {
+      "name": "RPRMS",
+      "hideToolbar": "false",
+      "allowSwipe": "false",
+      "lockMenu": "false",
+      "allowTempTheme": "true",
+      "dateFormat": "DD/MM/YYYY",
+      "sizes": {
+        "sx": 48,
+        "sy": 48,
+        "gx": 6,
+        "gy": 6,
+        "cx": 6,
+        "cy": 6,
+        "px": 0,
+        "py": 0
+      }
+    }
+  },
+  {
+    "id": "tab_med",
+    "type": "ui_tab",
+    "name": "Medical Staff",
+    "icon": "fa-heartbeat",
+    "order": 1,
+    "disabled": false,
+    "hidden": false
+  },
+  {
+    "id": "tab_fac",
+    "type": "ui_tab",
+    "name": "Facility Management",
+    "icon": "fa-building",
+    "order": 2,
+    "disabled": false,
+    "hidden": false
+  },
+  {
+    "id": "g_vitals",
+    "type": "ui_group",
+    "name": "Patient Vitals",
+    "tab": "tab_med",
+    "order": 1,
+    "disp": true,
+    "width": "12",
+    "collapse": false,
+    "className": ""
+  },
+  {
+    "id": "g_extra",
+    "type": "ui_group",
+    "name": "Extended Vitals",
+    "tab": "tab_med",
+    "order": 2,
+    "disp": true,
+    "width": "12",
+    "collapse": false,
+    "className": ""
+  },
+  {
+    "id": "g_trend",
+    "type": "ui_group",
+    "name": "Vitals Trend",
+    "tab": "tab_med",
+    "order": 3,
+    "disp": true,
+    "width": "12",
+    "collapse": false,
+    "className": ""
+  },
+  {
+    "id": "g_ctrl",
+    "type": "ui_group",
+    "name": "Therapy Control (Tasks 3-5)",
+    "tab": "tab_med",
+    "order": 4,
+    "disp": true,
+    "width": "12",
+    "collapse": false,
+    "className": ""
+  },
+  {
+    "id": "g_ack",
+    "type": "ui_group",
+    "name": "Actuator Readback",
+    "tab": "tab_med",
+    "order": 5,
+    "disp": true,
+    "width": "12",
+    "collapse": false,
+    "className": ""
+  },
+  {
+    "id": "g_medalert",
+    "type": "ui_group",
+    "name": "Clinical Alert Log",
+    "tab": "tab_med",
+    "order": 6,
+    "disp": true,
+    "width": "12",
+    "collapse": false,
+    "className": ""
+  },
+  {
+    "id": "g_env",
+    "type": "ui_group",
+    "name": "Room Environment",
+    "tab": "tab_fac",
+    "order": 1,
+    "disp": true,
+    "width": "12",
+    "collapse": false,
+    "className": ""
+  },
+  {
+    "id": "g_envx",
+    "type": "ui_group",
+    "name": "Occupancy & Humidity",
+    "tab": "tab_fac",
+    "order": 2,
+    "disp": true,
+    "width": "12",
+    "collapse": false,
+    "className": ""
+  },
+  {
+    "id": "g_envtrend",
+    "type": "ui_group",
+    "name": "Environment Trend",
+    "tab": "tab_fac",
+    "order": 3,
+    "disp": true,
+    "width": "12",
+    "collapse": false,
+    "className": ""
+  },
+  {
+    "id": "g_sys",
+    "type": "ui_group",
+    "name": "System Health (Task 6)",
+    "tab": "tab_fac",
+    "order": 4,
+    "disp": true,
+    "width": "12",
+    "collapse": false,
+    "className": ""
+  },
+  {
+    "id": "g_facalert",
+    "type": "ui_group",
+    "name": "Environmental Alert Log",
+    "tab": "tab_fac",
+    "order": 5,
+    "disp": true,
+    "width": "12",
+    "collapse": false,
+    "className": ""
+  },
+  {
+    "id": "in_medical_heart_rate",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "medical.heart-rate",
+    "topic": "rprms/feeds/medical.heart-rate",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 140,
+    "wires": [
+      [
+        "fn_medical_heart_rate"
+      ]
+    ]
+  },
+  {
+    "id": "fn_medical_heart_rate",
+    "type": "function",
+    "z": "f_rprms",
+    "name": "prep Heart Rate",
+    "func": "msg.payload = Number(msg.payload);\nif (isNaN(msg.payload)) return null;\nmsg.topic = \"Heart Rate\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 330,
+    "y": 140,
+    "wires": [
+      [
+        "g_medical_heart_rate",
+        "chart_vitals"
+      ]
+    ]
+  },
+  {
+    "id": "g_medical_heart_rate",
+    "type": "ui_gauge",
+    "z": "f_rprms",
+    "name": "Heart Rate",
+    "group": "g_vitals",
+    "order": 1,
+    "width": "4",
+    "height": "4",
+    "gtype": "gage",
+    "title": "Heart Rate",
+    "label": "bpm",
+    "format": "{{value}}",
+    "min": 40,
+    "max": "180",
+    "colors": [
+      "#00b500",
+      "#e6e600",
+      "#ca3838"
+    ],
+    "seg1": "60",
+    "seg2": "120",
+    "diff": false,
+    "className": "",
+    "x": 540,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "in_medical_spo2",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "medical.spo2",
+    "topic": "rprms/feeds/medical.spo2",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 200,
+    "wires": [
+      [
+        "fn_medical_spo2"
+      ]
+    ]
+  },
+  {
+    "id": "fn_medical_spo2",
+    "type": "function",
+    "z": "f_rprms",
+    "name": "prep SpO2",
+    "func": "msg.payload = Number(msg.payload);\nif (isNaN(msg.payload)) return null;\nmsg.topic = \"SpO2\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 330,
+    "y": 200,
+    "wires": [
+      [
+        "g_medical_spo2",
+        "chart_vitals"
+      ]
+    ]
+  },
+  {
+    "id": "g_medical_spo2",
+    "type": "ui_gauge",
+    "z": "f_rprms",
+    "name": "SpO2",
+    "group": "g_vitals",
+    "order": 2,
+    "width": "4",
+    "height": "4",
+    "gtype": "gage",
+    "title": "SpO2",
+    "label": "%",
+    "format": "{{value}}",
+    "min": 70,
+    "max": "100",
+    "colors": [
+      "#ca3838",
+      "#e6e600",
+      "#00b500"
+    ],
+    "seg1": "85",
+    "seg2": "90",
+    "diff": false,
+    "className": "",
+    "x": 540,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "in_medical_body_temperature",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "medical.body-temperature",
+    "topic": "rprms/feeds/medical.body-temperature",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 260,
+    "wires": [
+      [
+        "fn_medical_body_temperature"
+      ]
+    ]
+  },
+  {
+    "id": "fn_medical_body_temperature",
+    "type": "function",
+    "z": "f_rprms",
+    "name": "prep Body Temp",
+    "func": "msg.payload = Number(msg.payload);\nif (isNaN(msg.payload)) return null;\nmsg.topic = \"Body Temp\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 330,
+    "y": 260,
+    "wires": [
+      [
+        "g_medical_body_temperature",
+        "chart_vitals"
+      ]
+    ]
+  },
+  {
+    "id": "g_medical_body_temperature",
+    "type": "ui_gauge",
+    "z": "f_rprms",
+    "name": "Body Temp",
+    "group": "g_vitals",
+    "order": 3,
+    "width": "4",
+    "height": "4",
+    "gtype": "gage",
+    "title": "Body Temp",
+    "label": "degC",
+    "format": "{{value}}",
+    "min": 33,
+    "max": "42",
+    "colors": [
+      "#00b500",
+      "#e6e600",
+      "#ca3838"
+    ],
+    "seg1": "37.5",
+    "seg2": "38.0",
+    "diff": false,
+    "className": "",
+    "x": 540,
+    "y": 260,
+    "wires": []
+  },
+  {
+    "id": "in_facility_room_temperature",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "facility.room-temperature",
+    "topic": "rprms/feeds/facility.room-temperature",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 320,
+    "wires": [
+      [
+        "fn_facility_room_temperature"
+      ]
+    ]
+  },
+  {
+    "id": "fn_facility_room_temperature",
+    "type": "function",
+    "z": "f_rprms",
+    "name": "prep Room Temp",
+    "func": "msg.payload = Number(msg.payload);\nif (isNaN(msg.payload)) return null;\nmsg.topic = \"Room Temp\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 330,
+    "y": 320,
+    "wires": [
+      [
+        "g_facility_room_temperature",
+        "chart_env"
+      ]
+    ]
+  },
+  {
+    "id": "g_facility_room_temperature",
+    "type": "ui_gauge",
+    "z": "f_rprms",
+    "name": "Room Temp",
+    "group": "g_env",
+    "order": 1,
+    "width": "4",
+    "height": "4",
+    "gtype": "gage",
+    "title": "Room Temp",
+    "label": "degC",
+    "format": "{{value}}",
+    "min": 10,
+    "max": "35",
+    "colors": [
+      "#00b500",
+      "#e6e600",
+      "#ca3838"
+    ],
+    "seg1": "26",
+    "seg2": "30",
+    "diff": false,
+    "className": "",
+    "x": 540,
+    "y": 320,
+    "wires": []
+  },
+  {
+    "id": "in_facility_oxygen_level",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "facility.oxygen-level",
+    "topic": "rprms/feeds/facility.oxygen-level",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 380,
+    "wires": [
+      [
+        "fn_facility_oxygen_level"
+      ]
+    ]
+  },
+  {
+    "id": "fn_facility_oxygen_level",
+    "type": "function",
+    "z": "f_rprms",
+    "name": "prep Oxygen",
+    "func": "msg.payload = Number(msg.payload);\nif (isNaN(msg.payload)) return null;\nmsg.topic = \"Oxygen\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 330,
+    "y": 380,
+    "wires": [
+      [
+        "g_facility_oxygen_level",
+        "chart_env"
+      ]
+    ]
+  },
+  {
+    "id": "g_facility_oxygen_level",
+    "type": "ui_gauge",
+    "z": "f_rprms",
+    "name": "Oxygen",
+    "group": "g_env",
+    "order": 2,
+    "width": "4",
+    "height": "4",
+    "gtype": "gage",
+    "title": "Oxygen",
+    "label": "%",
+    "format": "{{value}}",
+    "min": 15,
+    "max": "25",
+    "colors": [
+      "#ca3838",
+      "#00b500",
+      "#ca3838"
+    ],
+    "seg1": "19.5",
+    "seg2": "23.5",
+    "diff": false,
+    "className": "",
+    "x": 540,
+    "y": 380,
+    "wires": []
+  },
+  {
+    "id": "in_facility_aqi",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "facility.aqi",
+    "topic": "rprms/feeds/facility.aqi",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 440,
+    "wires": [
+      [
+        "fn_facility_aqi"
+      ]
+    ]
+  },
+  {
+    "id": "fn_facility_aqi",
+    "type": "function",
+    "z": "f_rprms",
+    "name": "prep AQI",
+    "func": "msg.payload = Number(msg.payload);\nif (isNaN(msg.payload)) return null;\nmsg.topic = \"AQI\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 330,
+    "y": 440,
+    "wires": [
+      [
+        "g_facility_aqi",
+        "chart_env"
+      ]
+    ]
+  },
+  {
+    "id": "g_facility_aqi",
+    "type": "ui_gauge",
+    "z": "f_rprms",
+    "name": "Air Quality",
+    "group": "g_env",
+    "order": 3,
+    "width": "4",
+    "height": "4",
+    "gtype": "gage",
+    "title": "Air Quality",
+    "label": "AQI",
+    "format": "{{value}}",
+    "min": 0,
+    "max": "500",
+    "colors": [
+      "#00b500",
+      "#e6e600",
+      "#ca3838"
+    ],
+    "seg1": "150",
+    "seg2": "300",
+    "diff": false,
+    "className": "",
+    "x": 540,
+    "y": 440,
+    "wires": []
+  },
+  {
+    "id": "in_medical_blood_pressure",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "medical.blood-pressure",
+    "topic": "rprms/feeds/medical.blood-pressure",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 500,
+    "wires": [
+      [
+        "t_medical_blood_pressure"
+      ]
+    ]
+  },
+  {
+    "id": "t_medical_blood_pressure",
+    "type": "ui_text",
+    "z": "f_rprms",
+    "group": "g_extra",
+    "order": 1,
+    "width": "6",
+    "height": "1",
+    "name": "Blood Pressure",
+    "label": "Blood Pressure",
+    "format": "{{msg.payload}} mmHg",
+    "layout": "row-spread",
+    "className": "",
+    "style": false,
+    "font": "",
+    "fontSize": 16,
+    "color": "#000000",
+    "x": 440,
+    "y": 500,
+    "wires": []
+  },
+  {
+    "id": "in_medical_ecg",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "medical.ecg",
+    "topic": "rprms/feeds/medical.ecg",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 560,
+    "wires": [
+      [
+        "t_medical_ecg"
+      ]
+    ]
+  },
+  {
+    "id": "t_medical_ecg",
+    "type": "ui_text",
+    "z": "f_rprms",
+    "group": "g_extra",
+    "order": 2,
+    "width": "6",
+    "height": "1",
+    "name": "ECG amplitude",
+    "label": "ECG amplitude",
+    "format": "{{msg.payload}} mV",
+    "layout": "row-spread",
+    "className": "",
+    "style": false,
+    "font": "",
+    "fontSize": 16,
+    "color": "#000000",
+    "x": 440,
+    "y": 560,
+    "wires": []
+  },
+  {
+    "id": "in_medical_patient_status",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "medical.patient-status",
+    "topic": "rprms/feeds/medical.patient-status",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 620,
+    "wires": [
+      [
+        "t_medical_patient_status"
+      ]
+    ]
+  },
+  {
+    "id": "t_medical_patient_status",
+    "type": "ui_text",
+    "z": "f_rprms",
+    "group": "g_extra",
+    "order": 3,
+    "width": "6",
+    "height": "1",
+    "name": "Clinical Status",
+    "label": "Clinical Status",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "className": "",
+    "style": false,
+    "font": "",
+    "fontSize": 16,
+    "color": "#000000",
+    "x": 440,
+    "y": 620,
+    "wires": []
+  },
+  {
+    "id": "in_medical_summary",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "medical.summary",
+    "topic": "rprms/feeds/medical.summary",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 680,
+    "wires": [
+      [
+        "t_medical_summary"
+      ]
+    ]
+  },
+  {
+    "id": "t_medical_summary",
+    "type": "ui_text",
+    "z": "f_rprms",
+    "group": "g_extra",
+    "order": 4,
+    "width": "6",
+    "height": "1",
+    "name": "60 s Aggregate",
+    "label": "60 s Aggregate",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "className": "",
+    "style": false,
+    "font": "",
+    "fontSize": 16,
+    "color": "#000000",
+    "x": 440,
+    "y": 680,
+    "wires": []
+  },
+  {
+    "id": "in_facility_humidity",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "facility.humidity",
+    "topic": "rprms/feeds/facility.humidity",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 740,
+    "wires": [
+      [
+        "t_facility_humidity"
+      ]
+    ]
+  },
+  {
+    "id": "t_facility_humidity",
+    "type": "ui_text",
+    "z": "f_rprms",
+    "group": "g_envx",
+    "order": 1,
+    "width": "6",
+    "height": "1",
+    "name": "Humidity",
+    "label": "Humidity",
+    "format": "{{msg.payload}} %",
+    "layout": "row-spread",
+    "className": "",
+    "style": false,
+    "font": "",
+    "fontSize": 16,
+    "color": "#000000",
+    "x": 440,
+    "y": 740,
+    "wires": []
+  },
+  {
+    "id": "in_facility_motion",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "facility.motion",
+    "topic": "rprms/feeds/facility.motion",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 800,
+    "wires": [
+      [
+        "t_facility_motion"
+      ]
+    ]
+  },
+  {
+    "id": "t_facility_motion",
+    "type": "ui_text",
+    "z": "f_rprms",
+    "group": "g_envx",
+    "order": 2,
+    "width": "6",
+    "height": "1",
+    "name": "Room Occupancy",
+    "label": "Room Occupancy",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "className": "",
+    "style": false,
+    "font": "",
+    "fontSize": 16,
+    "color": "#000000",
+    "x": 440,
+    "y": 800,
+    "wires": []
+  },
+  {
+    "id": "in_facility_summary",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "facility.summary",
+    "topic": "rprms/feeds/facility.summary",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 860,
+    "wires": [
+      [
+        "t_facility_summary"
+      ]
+    ]
+  },
+  {
+    "id": "t_facility_summary",
+    "type": "ui_text",
+    "z": "f_rprms",
+    "group": "g_envx",
+    "order": 3,
+    "width": "6",
+    "height": "1",
+    "name": "60 s Aggregate",
+    "label": "60 s Aggregate",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "className": "",
+    "style": false,
+    "font": "",
+    "fontSize": 16,
+    "color": "#000000",
+    "x": 440,
+    "y": 860,
+    "wires": []
+  },
+  {
+    "id": "in_system_state",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "system.state",
+    "topic": "rprms/feeds/system.state",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 920,
+    "wires": [
+      [
+        "t_system_state"
+      ]
+    ]
+  },
+  {
+    "id": "t_system_state",
+    "type": "ui_text",
+    "z": "f_rprms",
+    "group": "g_sys",
+    "order": 1,
+    "width": "6",
+    "height": "1",
+    "name": "Link State",
+    "label": "Link State",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "className": "",
+    "style": false,
+    "font": "",
+    "fontSize": 16,
+    "color": "#000000",
+    "x": 440,
+    "y": 920,
+    "wires": []
+  },
+  {
+    "id": "in_system_sampling_rate",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "system.sampling-rate",
+    "topic": "rprms/feeds/system.sampling-rate",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 980,
+    "wires": [
+      [
+        "t_system_sampling_rate"
+      ]
+    ]
+  },
+  {
+    "id": "t_system_sampling_rate",
+    "type": "ui_text",
+    "z": "f_rprms",
+    "group": "g_sys",
+    "order": 2,
+    "width": "6",
+    "height": "1",
+    "name": "Sampling Interval",
+    "label": "Sampling Interval",
+    "format": "{{msg.payload}} s",
+    "layout": "row-spread",
+    "className": "",
+    "style": false,
+    "font": "",
+    "fontSize": 16,
+    "color": "#000000",
+    "x": 440,
+    "y": 980,
+    "wires": []
+  },
+  {
+    "id": "in_system_backlog",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "system.backlog",
+    "topic": "rprms/feeds/system.backlog",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 1040,
+    "wires": [
+      [
+        "t_system_backlog"
+      ]
+    ]
+  },
+  {
+    "id": "t_system_backlog",
+    "type": "ui_text",
+    "z": "f_rprms",
+    "group": "g_sys",
+    "order": 3,
+    "width": "6",
+    "height": "1",
+    "name": "Last Resynced Record",
+    "label": "Last Resynced Record",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "className": "",
+    "style": false,
+    "font": "",
+    "fontSize": 16,
+    "color": "#000000",
+    "x": 440,
+    "y": 1040,
+    "wires": []
+  },
+  {
+    "id": "in_system_dosage",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "system.dosage",
+    "topic": "rprms/feeds/system.dosage",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 1100,
+    "wires": [
+      [
+        "fn_system_dosage"
+      ]
+    ]
+  },
+  {
+    "id": "fn_system_dosage",
+    "type": "function",
+    "z": "f_rprms",
+    "name": "toNumber",
+    "func": "msg.payload = Number(msg.payload);\nreturn isNaN(msg.payload) ? null : msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 330,
+    "y": 1100,
+    "wires": [
+      [
+        "g_system_dosage"
+      ]
+    ]
+  },
+  {
+    "id": "g_system_dosage",
+    "type": "ui_gauge",
+    "z": "f_rprms",
+    "name": "Delivered Dose mg/hr",
+    "group": "g_ack",
+    "order": 1,
+    "width": "6",
+    "height": "4",
+    "gtype": "gage",
+    "title": "Delivered Dose mg/hr",
+    "label": "",
+    "format": "{{value}}",
+    "min": 0,
+    "max": "100",
+    "colors": [
+      "#00b500",
+      "#e6e600",
+      "#ca3838"
+    ],
+    "seg1": "60",
+    "seg2": "80",
+    "diff": false,
+    "className": "",
+    "x": 540,
+    "y": 1100,
+    "wires": []
+  },
+  {
+    "id": "in_system_bed_angle",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "system.bed-angle",
+    "topic": "rprms/feeds/system.bed-angle",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 1160,
+    "wires": [
+      [
+        "fn_system_bed_angle"
+      ]
+    ]
+  },
+  {
+    "id": "fn_system_bed_angle",
+    "type": "function",
+    "z": "f_rprms",
+    "name": "toNumber",
+    "func": "msg.payload = Number(msg.payload);\nreturn isNaN(msg.payload) ? null : msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 330,
+    "y": 1160,
+    "wires": [
+      [
+        "g_system_bed_angle"
+      ]
+    ]
+  },
+  {
+    "id": "g_system_bed_angle",
+    "type": "ui_gauge",
+    "z": "f_rprms",
+    "name": "Actual Bed Angle deg",
+    "group": "g_ack",
+    "order": 2,
+    "width": "6",
+    "height": "4",
+    "gtype": "gage",
+    "title": "Actual Bed Angle deg",
+    "label": "",
+    "format": "{{value}}",
+    "min": 0,
+    "max": "90",
+    "colors": [
+      "#00b500",
+      "#00b500",
+      "#00b500"
+    ],
+    "seg1": "91",
+    "seg2": "92",
+    "diff": false,
+    "className": "",
+    "x": 540,
+    "y": 1160,
+    "wires": []
+  },
+  {
+    "id": "chart_vitals",
+    "type": "ui_chart",
+    "z": "f_rprms",
+    "name": "Vitals (1 h)",
+    "group": "g_trend",
+    "order": 1,
+    "width": "12",
+    "height": "6",
+    "label": "Vitals (1 h)",
+    "chartType": "line",
+    "legend": "true",
+    "xformat": "HH:mm:ss",
+    "interpolate": "linear",
+    "nodata": "waiting for data...",
+    "dot": false,
+    "ymin": "",
+    "ymax": "",
+    "removeOlder": 1,
+    "removeOlderPoints": "",
+    "removeOlderUnit": "3600",
+    "cutout": 0,
+    "useOneColor": false,
+    "useUTC": false,
+    "colors": [
+      "#1f7ae0",
+      "#aec7e8",
+      "#ff7f0e",
+      "#2ca02c",
+      "#98df8a",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "outputs": 1,
+    "useDifferentColor": false,
+    "className": "",
+    "x": 760,
+    "y": 1220,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "chart_env",
+    "type": "ui_chart",
+    "z": "f_rprms",
+    "name": "Environment (1 h)",
+    "group": "g_envtrend",
+    "order": 1,
+    "width": "12",
+    "height": "6",
+    "label": "Environment (1 h)",
+    "chartType": "line",
+    "legend": "true",
+    "xformat": "HH:mm:ss",
+    "interpolate": "linear",
+    "nodata": "waiting for data...",
+    "dot": false,
+    "ymin": "",
+    "ymax": "",
+    "removeOlder": 1,
+    "removeOlderPoints": "",
+    "removeOlderUnit": "3600",
+    "cutout": 0,
+    "useOneColor": false,
+    "useUTC": false,
+    "colors": [
+      "#1f7ae0",
+      "#aec7e8",
+      "#ff7f0e",
+      "#2ca02c",
+      "#98df8a",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "outputs": 1,
+    "useDifferentColor": false,
+    "className": "",
+    "x": 760,
+    "y": 1280,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "out_ctrl",
+    "type": "mqtt out",
+    "z": "f_rprms",
+    "name": "-> control.*",
+    "topic": "",
+    "qos": "0",
+    "retain": "false",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "broker1",
+    "x": 760,
+    "y": 1360,
+    "wires": []
+  },
+  {
+    "id": "sl_control_dosage",
+    "type": "ui_slider",
+    "z": "f_rprms",
+    "name": "Medication mg/hr",
+    "label": "Medication mg/hr",
+    "tooltip": "",
+    "group": "g_ctrl",
+    "order": 1,
+    "width": "8",
+    "height": "1",
+    "passthru": false,
+    "outs": "end",
+    "topic": "rprms/feeds/control.dosage",
+    "topicType": "str",
+    "min": 0,
+    "max": "100",
+    "step": 1,
+    "className": "",
+    "x": 140,
+    "y": 1420,
+    "wires": [
+      [
+        "out_ctrl"
+      ]
+    ]
+  },
+  {
+    "id": "sl_control_bed_angle",
+    "type": "ui_slider",
+    "z": "f_rprms",
+    "name": "Bed Angle deg",
+    "label": "Bed Angle deg",
+    "tooltip": "",
+    "group": "g_ctrl",
+    "order": 3,
+    "width": "8",
+    "height": "1",
+    "passthru": false,
+    "outs": "end",
+    "topic": "rprms/feeds/control.bed-angle",
+    "topicType": "str",
+    "min": 0,
+    "max": "90",
+    "step": 1,
+    "className": "",
+    "x": 140,
+    "y": 1480,
+    "wires": [
+      [
+        "out_ctrl"
+      ]
+    ]
+  },
+  {
+    "id": "sl_control_sampling_rate",
+    "type": "ui_slider",
+    "z": "f_rprms",
+    "name": "Sampling Interval s",
+    "label": "Sampling Interval s",
+    "tooltip": "",
+    "group": "g_ctrl",
+    "order": 5,
+    "width": "8",
+    "height": "1",
+    "passthru": false,
+    "outs": "end",
+    "topic": "rprms/feeds/control.sampling-rate",
+    "topicType": "str",
+    "min": 5,
+    "max": "60",
+    "step": 1,
+    "className": "",
+    "x": 140,
+    "y": 1540,
+    "wires": [
+      [
+        "out_ctrl"
+      ]
+    ]
+  },
+  {
+    "id": "sw_control_dosage_confirm",
+    "type": "ui_switch",
+    "z": "f_rprms",
+    "name": "CONFIRM CRITICAL DOSE",
+    "label": "CONFIRM CRITICAL DOSE",
+    "tooltip": "",
+    "group": "g_ctrl",
+    "order": 2,
+    "width": "6",
+    "height": "1",
+    "passthru": false,
+    "decouple": "false",
+    "topic": "rprms/feeds/control.dosage-confirm",
+    "topicType": "str",
+    "style": "",
+    "onvalue": "1",
+    "onvalueType": "str",
+    "onicon": "",
+    "oncolor": "",
+    "offvalue": "0",
+    "offvalueType": "str",
+    "officon": "",
+    "offcolor": "",
+    "animate": true,
+    "className": "",
+    "x": 140,
+    "y": 1600,
+    "wires": [
+      [
+        "out_ctrl"
+      ]
+    ]
+  },
+  {
+    "id": "sw_control_bed_auto",
+    "type": "ui_switch",
+    "z": "f_rprms",
+    "name": "Auto Bed Control",
+    "label": "Auto Bed Control",
+    "tooltip": "",
+    "group": "g_ctrl",
+    "order": 4,
+    "width": "6",
+    "height": "1",
+    "passthru": false,
+    "decouple": "false",
+    "topic": "rprms/feeds/control.bed-auto",
+    "topicType": "str",
+    "style": "",
+    "onvalue": "1",
+    "onvalueType": "str",
+    "onicon": "",
+    "oncolor": "",
+    "offvalue": "0",
+    "offvalueType": "str",
+    "officon": "",
+    "offcolor": "",
+    "animate": true,
+    "className": "",
+    "x": 140,
+    "y": 1660,
+    "wires": [
+      [
+        "out_ctrl"
+      ]
+    ]
+  },
+  {
+    "id": "sw_control_sampling_mode",
+    "type": "ui_switch",
+    "z": "f_rprms",
+    "name": "Adaptive Sampling",
+    "label": "Adaptive Sampling",
+    "tooltip": "",
+    "group": "g_ctrl",
+    "order": 6,
+    "width": "6",
+    "height": "1",
+    "passthru": false,
+    "decouple": "false",
+    "topic": "rprms/feeds/control.sampling-mode",
+    "topicType": "str",
+    "style": "",
+    "onvalue": "1",
+    "onvalueType": "str",
+    "onicon": "",
+    "oncolor": "",
+    "offvalue": "0",
+    "offvalueType": "str",
+    "officon": "",
+    "offcolor": "",
+    "animate": true,
+    "className": "",
+    "x": 140,
+    "y": 1720,
+    "wires": [
+      [
+        "out_ctrl"
+      ]
+    ]
+  },
+  {
+    "id": "btn_sleep",
+    "type": "ui_button",
+    "z": "f_rprms",
+    "name": "Sleep 10deg",
+    "group": "g_ctrl",
+    "order": 7,
+    "width": "4",
+    "height": "1",
+    "passthru": false,
+    "label": "Sleep 10deg",
+    "tooltip": "",
+    "color": "",
+    "bgcolor": "",
+    "className": "",
+    "icon": "",
+    "payload": "sleep",
+    "payloadType": "str",
+    "topic": "rprms/feeds/control.bed-preset",
+    "topicType": "str",
+    "x": 140,
+    "y": 1780,
+    "wires": [
+      [
+        "out_ctrl"
+      ]
+    ]
+  },
+  {
+    "id": "btn_breathing",
+    "type": "ui_button",
+    "z": "f_rprms",
+    "name": "Breathing 45deg",
+    "group": "g_ctrl",
+    "order": 8,
+    "width": "4",
+    "height": "1",
+    "passthru": false,
+    "label": "Breathing 45deg",
+    "tooltip": "",
+    "color": "",
+    "bgcolor": "",
+    "className": "",
+    "icon": "",
+    "payload": "breathing",
+    "payloadType": "str",
+    "topic": "rprms/feeds/control.bed-preset",
+    "topicType": "str",
+    "x": 140,
+    "y": 1840,
+    "wires": [
+      [
+        "out_ctrl"
+      ]
+    ]
+  },
+  {
+    "id": "btn_emergency",
+    "type": "ui_button",
+    "z": "f_rprms",
+    "name": "EMERGENCY 90deg",
+    "group": "g_ctrl",
+    "order": 9,
+    "width": "4",
+    "height": "1",
+    "passthru": false,
+    "label": "EMERGENCY 90deg",
+    "tooltip": "",
+    "color": "",
+    "bgcolor": "#c0392b",
+    "className": "",
+    "icon": "",
+    "payload": "emergency",
+    "payloadType": "str",
+    "topic": "rprms/feeds/control.bed-preset",
+    "topicType": "str",
+    "x": 140,
+    "y": 1900,
+    "wires": [
+      [
+        "out_ctrl"
+      ]
+    ]
+  },
+  {
+    "id": "in_medical_alerts",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "medical.alerts",
+    "topic": "rprms/feeds/medical.alerts",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 1960,
+    "wires": [
+      [
+        "fn_medical_alerts"
+      ]
+    ]
+  },
+  {
+    "id": "fn_medical_alerts",
+    "type": "function",
+    "z": "f_rprms",
+    "name": "clinical log (last 30)",
+    "func": "let log = context.get('log') || [];\nconst ts = new Date().toTimeString().slice(0,8);\nlog.unshift(ts + '  ' + msg.payload);\nif (log.length > 30) log = log.slice(0,30);\ncontext.set('log', log);\nmsg.payload = log;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 350,
+    "y": 1960,
+    "wires": [
+      [
+        "tpl_medical_alerts"
+      ]
+    ]
+  },
+  {
+    "id": "tpl_medical_alerts",
+    "type": "ui_template",
+    "z": "f_rprms",
+    "group": "g_medalert",
+    "name": "clinical alert log",
+    "order": 1,
+    "width": "12",
+    "height": "5",
+    "format": "<div style=\"max-height:200px;overflow-y:auto;font-family:Consolas,monospace;font-size:12px;line-height:1.6\">\n  <div ng-repeat=\"line in msg.payload track by $index\"\n       style=\"padding:2px 6px;border-bottom:1px solid rgba(255,255,255,.08)\">\n    {{line}}\n  </div>\n  <div ng-if=\"!msg.payload.length\" style=\"opacity:.6\">no alerts yet</div>\n</div>",
+    "storeOutMessages": true,
+    "fwdInMessages": true,
+    "resendOnRefresh": true,
+    "templateScope": "local",
+    "className": "",
+    "x": 580,
+    "y": 1960,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "in_facility_alerts",
+    "type": "mqtt in",
+    "z": "f_rprms",
+    "name": "facility.alerts",
+    "topic": "rprms/feeds/facility.alerts",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker1",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 2020,
+    "wires": [
+      [
+        "fn_facility_alerts"
+      ]
+    ]
+  },
+  {
+    "id": "fn_facility_alerts",
+    "type": "function",
+    "z": "f_rprms",
+    "name": "environmental log (last 30)",
+    "func": "let log = context.get('log') || [];\nconst ts = new Date().toTimeString().slice(0,8);\nlog.unshift(ts + '  ' + msg.payload);\nif (log.length > 30) log = log.slice(0,30);\ncontext.set('log', log);\nmsg.payload = log;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 350,
+    "y": 2020,
+    "wires": [
+      [
+        "tpl_facility_alerts"
+      ]
+    ]
+  },
+  {
+    "id": "tpl_facility_alerts",
+    "type": "ui_template",
+    "z": "f_rprms",
+    "group": "g_facalert",
+    "name": "environmental alert log",
+    "order": 1,
+    "width": "12",
+    "height": "5",
+    "format": "<div style=\"max-height:200px;overflow-y:auto;font-family:Consolas,monospace;font-size:12px;line-height:1.6\">\n  <div ng-repeat=\"line in msg.payload track by $index\"\n       style=\"padding:2px 6px;border-bottom:1px solid rgba(255,255,255,.08)\">\n    {{line}}\n  </div>\n  <div ng-if=\"!msg.payload.length\" style=\"opacity:.6\">no alerts yet</div>\n</div>",
+    "storeOutMessages": true,
+    "fwdInMessages": true,
+    "resendOnRefresh": true,
+    "templateScope": "local",
+    "className": "",
+    "x": 580,
+    "y": 2020,
+    "wires": [
+      []
+    ]
+  }
+]

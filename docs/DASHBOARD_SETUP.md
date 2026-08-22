@@ -79,9 +79,16 @@ screenshots, and the rubric requires all tasks fully integrated.
 Leave `ENABLE_EXTENDED_FEEDS 1`. Create all 27 feeds. Everything below works as written.
 One month is enough to record the demo and cancel.
 
-### Path C — Free unlimited: HiveMQ + Node-RED
+### Path C — Free unlimited: HiveMQ + Node-RED  ← recommended
 
-Also leave `ENABLE_EXTENDED_FEEDS 1`, then in `main.ino`:
+Free, no feed cap, and the **only free route that can evidence every clause of Task 2**.
+
+A complete pre-built dashboard ships with this project, so this path no longer costs the
+extra build time it used to: import `dashboards/node-red-flows.json` (78 nodes, all 27
+topics pre-wired, two role-separated tabs) and deploy. Full instructions in
+[`NODE_RED_SETUP.md`](NODE_RED_SETUP.md).
+
+Leave `ENABLE_EXTENDED_FEEDS 1` and change four lines in `main.ino`:
 
 ```c
 #define AIO_SERVER     "broker.hivemq.com"
@@ -90,9 +97,11 @@ Also leave `ENABLE_EXTENDED_FEEDS 1`, then in `main.ino`:
 #define IO_KEY         ""          // HiveMQ public broker needs no auth
 ```
 
-`Adafruit_MQTT` is a plain MQTT client, so no other code changes. Install Node-RED
-locally, add `node-red-dashboard`, and build gauges/sliders against the same topic
-strings. Unlimited topics, no cost. Slightly more setup work than Path A/B.
+`Adafruit_MQTT` is a plain MQTT client, not tied to Adafruit's service, so nothing else
+in the firmware changes.
+
+> `broker.hivemq.com` is public — pick a unique prefix (e.g. `rprms-hl-8842`) rather than
+> the default, and find-and-replace it in `node-red-flows.json` before importing.
 
 ---
 
