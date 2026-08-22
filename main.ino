@@ -44,16 +44,38 @@
 #define WIFI_SSID   "Wokwi-GUEST"
 #define WIFI_PASS   ""
 
-/* ---- Adafruit IO credentials -------------------------------------------------------
- * Replace with your own username and Active Key from https://io.adafruit.com/
- * (Profile -> My Key). The system still boots and runs fully offline without them,
- * which is exactly the behaviour Task 6 demonstrates.
+/* ---- MQTT broker selection ----------------------------------------------------------
+ * The portal mandates no dashboard platform, so either broker satisfies the brief.
+ *
+ *   USE_HIVEMQ 1  ->  public HiveMQ broker + the bundled Node-RED dashboard.
+ *                     Free, no feed limit. This is the only free route that can
+ *                     evidence every clause of Task 2 (see docs/NODE_RED_SETUP.md).
+ *
+ *   USE_HIVEMQ 0  ->  Adafruit IO, as used by the original training project.
+ *                     Free tier caps at 10 feeds; see docs/DASHBOARD_SETUP.md.
+ *
+ * The system boots and runs fully offline with either one unreachable, which is
+ * exactly the behaviour Task 6 demonstrates.
  * ----------------------------------------------------------------------------------- */
-#define IO_USERNAME "[Username]"
-#define IO_KEY      "[Key]"
+#define USE_HIVEMQ 1
 
-#define AIO_SERVER      "io.adafruit.com"
-#define AIO_SERVERPORT  1883
+#if USE_HIVEMQ
+  /* MQTT_PREFIX becomes the root of every topic: <prefix>/feeds/<group>.<feed>
+   * broker.hivemq.com is PUBLIC -- anyone may subscribe to your prefix, and anyone
+   * publishing to <prefix>/feeds/control.dosage would drive the simulated infusion
+   * pump. Nothing here is real patient data, but keep the prefix unique to you.
+   * If you change it, change it in dashboards/node-red-flows.json too. */
+  #define IO_USERNAME     "rprms-hl-8842"
+  #define IO_KEY          ""
+  #define AIO_SERVER      "broker.hivemq.com"
+  #define AIO_SERVERPORT  1883
+#else
+  /* Your Adafruit IO username and Active Key (Profile -> My Key). */
+  #define IO_USERNAME     "[Username]"
+  #define IO_KEY          "[Key]"
+  #define AIO_SERVER      "io.adafruit.com"
+  #define AIO_SERVERPORT  1883
+#endif
 
 /* ---- Adafruit IO free tier allows only 10 feeds. ------------------------------------
  * Set to 0 to publish only the 10 essential feeds (see docs/DASHBOARD_SETUP.md).

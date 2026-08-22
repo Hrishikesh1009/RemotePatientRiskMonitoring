@@ -117,6 +117,51 @@ If the gauges stay empty, check in this order:
 
 ---
 
+---
+
+## Verified working
+
+This dashboard was installed and run end-to-end, not just written:
+
+| Check | Result |
+|---|---|
+| Node-RED starts with the flow loaded | 78 nodes, **0 errors**, `Started flows` |
+| Dashboard served | `GET /ui/` → **HTTP 200** |
+| Device → dashboard | All gauges, text widgets, charts and both alert logs populated from live MQTT |
+| Dashboard → device | Button published `control.bed-preset = emergency`; toggles published `control.dosage-confirm = 1`, `control.bed-auto = 1` |
+| Payload format | Matches what `applyCommand()` parses (`c.value >= 1.0f` for toggles, preset strings for buttons) |
+
+Captured from the running dashboard during a deteriorating-patient run:
+
+```
+Heart Rate 165 bpm   SpO2 82 %   Body Temp 38.9 degC
+Blood Pressure 151/91 mmHg       Clinical Status: Severe hypoxaemia
+Delivered Dose 72 mg/hr          Actual Bed Angle 45 deg
+
+Clinical Alert Log
+  13:14:28 [CRITICAL] Severe hypoxaemia
+  13:14:10 [CRITICAL] High body temperature
+  13:14:07 [WARNING]  Mild fever
+```
+
+The bed angle moving to 45° on its own is Task 4's automatic mode; the WARNING →
+CRITICAL escalation in the log is Task 2's alert feed.
+
+### One bug this shook out
+
+The first version of the flow set the theme node's `id` to `ui_base` — which is also its
+`type`. Node-RED scans config-node properties for strings matching node ids, so it read
+the `type` field as a self-reference and refused to start:
+
+```
+Error: Circular config node dependency detected: ui_base
+```
+
+Renamed to `ui_base_rprms`. `tools/gen_flows.py` now checks that no node id collides
+with any node type.
+
+---
+
 ## Step 5 — Screenshots
 
 Everything in `docs/DASHBOARD_SETUP.md` Step 6 applies unchanged — same 12 screenshots,

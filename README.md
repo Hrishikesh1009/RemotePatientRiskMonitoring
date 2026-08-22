@@ -42,7 +42,12 @@ Global variables use 53840 bytes (16%) of dynamic memory, leaving 273840 bytes f
 0 errors, 0 sketch warnings on a clean rebuild with `--warnings all`.
 Full toolchain details and reproduction steps: [`docs/BUILD_VERIFICATION.md`](docs/BUILD_VERIFICATION.md).
 
-Runtime behaviour still needs the simulator — work through
+**Dashboard verified end-to-end.** Node-RED loads the bundled flow with 0 errors,
+serves `/ui`, receives live telemetry into every widget, and its sliders/buttons publish
+`control.*` messages in the exact format `applyCommand()` parses. Details in
+[`docs/NODE_RED_SETUP.md`](docs/NODE_RED_SETUP.md).
+
+Firmware runtime behaviour still needs the simulator — work through
 [`docs/TEST_PLAN.md`](docs/TEST_PLAN.md) TC-01…TC-12 in Wokwi before submitting.
 
 ---
