@@ -1,8 +1,10 @@
 # Remote Patient Risk Monitoring System
 
+**Live Wokwi project:** https://wokwi.com/projects/473060533558119425
+
 **ElevanceSkills Internship — Final Project**
 Intern: **Hrishikesh Lokhande** · Domain: IoT / Embedded Systems
-Platform: ESP32 + FreeRTOS + MQTT (Adafruit IO) + Wokwi
+Platform: ESP32 + FreeRTOS + MQTT (HiveMQ / Adafruit IO) + Wokwi
 
 A single integrated ESP32 system that continuously monitors a hospital patient and
 their room, scores clinical risk in real time, lets clinicians remotely control
@@ -74,30 +76,43 @@ RemotePatientRiskMonitoring/
 │   ├── architecture-diagram.svg System architecture
 │   └── workflow-diagram.svg     Runtime workflow / state machines
 ├── dashboards/
+│   ├── node-red-flows.json      Pre-built dashboard — import & deploy (78 nodes)
 │   ├── medical-dashboard.md     Medical Staff Dashboard block spec
 │   └── facility-dashboard.md    Facility Management Dashboard block spec
-└── screenshots/                 ← put your dashboard screenshots here
+├── tools/
+│   ├── start-dashboard.cmd      Launch the Node-RED dashboard
+│   ├── sim_esp32.py             Publish the ESP32's topics without Wokwi
+│   └── gen_flows.py             Regenerate the dashboard flow
+├── screenshots/                 7 captured, 5 Wokwi shots outstanding
+└── submission_pdfs/             Google Drive folder, ready to upload
 ```
 
 ---
 
-## Quick start (Wokwi, 5 minutes)
+## Quick start
 
-1. Go to **https://wokwi.com/projects/new/esp32**.
-2. Open the **`diagram.json`** tab → select all → paste this repo's `diagram.json`.
-3. Open the **`sketch.ino`** tab → select all → paste this repo's `main.ino`.
-4. Click the **Library Manager** tab (or the `+` next to the file tabs) and add every
-   library listed in `libraries.txt`.
-5. In `sketch.ino`, replace `[Username]` and `[Key]` with your Adafruit IO credentials
-   (Profile → **My Key** on io.adafruit.com).
-6. Press **▶ Play**.
+The project is already published and runs as-is:
 
-The OLED shows `RPRMS booting...`, then starts cycling five status pages.
-The serial monitor prints `[BOOT] 9 FreeRTOS tasks started`.
+**▶ https://wokwi.com/projects/473060533558119425** — open it and press Play.
 
-> **Without Adafruit IO credentials the project still runs** — it boots straight into
-> OFFLINE mode, shows the `LOGGING OFFLINE` banner and buffers samples. That is Task 6
-> demonstrating itself, and it is a legitimate way to record part of the demo video.
+It ships pointed at the public `broker.hivemq.com` with topic prefix `rprms-hl-8842`,
+so no account or API key is needed.
+
+For the dashboard, start Node-RED and open `http://127.0.0.1:1880/ui`:
+
+```bash
+tools/start-dashboard.cmd
+```
+
+The OLED shows `RPRMS booting...` then cycles five status pages; serial prints
+`[BOOT] 9 FreeRTOS tasks started`. Within ~15 s `system.state` reads **ONLINE**.
+
+> **Switching brokers.** `main.ino` has a `USE_HIVEMQ` switch at the top. Set it to `0`
+> to use Adafruit IO instead and fill in your username/key — see
+> [`docs/DASHBOARD_SETUP.md`](docs/DASHBOARD_SETUP.md).
+
+> **With no broker reachable the project still runs** — it boots into OFFLINE mode, shows
+> the `LOGGING OFFLINE` banner and buffers samples. That is Task 6 demonstrating itself.
 
 ---
 

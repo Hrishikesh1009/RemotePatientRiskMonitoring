@@ -93,7 +93,7 @@ def nextxy(step=60):
 # ----------------------------------------------------------------- gauges
 # (feed, label, unit, group, order, min, max, seg1, seg2, colors, chart_series)
 GAUGES = [
-    ("medical.heart-rate",       "Heart Rate",  "bpm", "g_vitals", 1, 40, 180, 60,   120,  [GREEN, AMBER, RED], "Heart Rate"),
+    ("medical.heart-rate",       "Heart Rate",  "bpm", "g_vitals", 1, 40, 180, 60,   120,  [AMBER, GREEN, RED], "Heart Rate"),
     ("medical.spo2",             "SpO2",        "%",   "g_vitals", 2, 70, 100, 85,   90,   [RED, AMBER, GREEN], "SpO2"),
     ("medical.body-temperature", "Body Temp",   "degC","g_vitals", 3, 33, 42,  37.5, 38.0, [GREEN, AMBER, RED], "Body Temp"),
     ("facility.room-temperature","Room Temp",   "degC","g_env",    1, 10, 35,  26,   30,   [GREEN, AMBER, RED], "Room Temp"),
