@@ -9,6 +9,13 @@ readback captured by an independent Python client subscribed to the live broker.
 This is a real run, not a simulation of one — timestamps, log lines and readback values
 below are copied verbatim from that session.
 
+**All 12 required submission screenshots are captured and verified** (see
+`screenshots/`, `01-` through `12-`, plus three bonus files `13-15-`). Every dashboard
+shot was checked against its required content (correct tab, correct gauge colours,
+correct alert-log entries) and every Wokwi-only shot (OLED banners, circuit view,
+serial log) was captured via a high-resolution CDP clip against the actual running
+device, not a mockup.
+
 ---
 
 ## PASS — verified directly
@@ -46,6 +53,18 @@ sampling period — see ARCHITECTURE.md for the ramp-rate code path).
 ```
 Readback: `system.dosage = 80.00` — capped, not 95. **PASS.**
 
+Also captured directly off the OLED itself (not just serial/MQTT), via a high-resolution
+CDP clip on the THERAPY CONTROL page — `screenshots/06-dosage-critical-confirm.png`:
+```
+THERAPY CONTROL
+Dose: 80.0 mg/hr
+>CONFIRM 95 mg/hr
+Bed : 10 deg -> 10
+Auto bed: ON
+```
+Three independent signals now agree: serial log, MQTT readback, and the physical
+display. **PASS**, triple-confirmed.
+
 **Part B**, published `control.dosage=95` again, then `control.dosage-confirm=1` within
 the window. Serial:
 ```
@@ -55,9 +74,12 @@ the window. Serial:
 Readback: `system.dosage = 95.00` — released to the confirmed value. **PASS.**
 
 ### TC-09 · Bed smooth transition
-Published `control.bed-angle=90`. OLED THERAPY CONTROL page updated to show the bed
-target changing to 90 with the current value ramping toward it (not an instant jump —
-consistent with the coded 1°/25ms ramp). **PASS.**
+Published `control.bed-angle=70`. OLED THERAPY CONTROL page updated to show the bed
+target changing with the current value ramping toward it (not an instant jump —
+consistent with the coded 1°/25ms ramp). Independently confirmed visually in the Wokwi
+circuit view too — `screenshots/07-bed-control.png` shows the servo horn rotated to a
+clearly non-zero, non-resting angle at 100% simulator CPU (healthy run, not a stalled
+frame). **PASS.**
 
 ### TC-10 · Automatic bed adjustment (manual-override half)
 Same command as TC-09: OLED's `Auto bed:` field flipped from `ON` (the correct firmware
