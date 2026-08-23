@@ -199,9 +199,17 @@
  *    system.*    -> device telemetry / actuator readback
  *    control.*   -> INBOUND commands from dashboard sliders and buttons
  *
- *  Because the three read groups use distinct topic prefixes, Adafruit IO (or any
- *  broker with topic ACLs) can grant clinical staff and facilities staff access to
- *  only their own subtree -- that is the "role-based access" the task asks for.
+ *  The three read groups use distinct topic prefixes, which is the PRECONDITION for
+ *  role-based access -- a broker configured with topic ACLs (Mosquitto ACL file,
+ *  HiveMQ Cloud per-credential permissions, AWS IoT Core policies, ...) could grant
+ *  clinical staff and facilities staff access to only their own subtree.
+ *
+ *  That ACL configuration is NOT part of this firmware and is not shipped. As
+ *  configured by default (USE_HIVEMQ 1, the public broker.hivemq.com below), there is
+ *  no access control at all: any client can subscribe to any prefix, including
+ *  medical.*. Do not read this section as "role-based access implemented" -- it is
+ *  "role-based access made possible, given broker-side ACLs this project does not
+ *  configure." See docs/TASK_MAPPING.md Task 2 for the full caveat.
  * ===================================================================================== */
 
 #define F_MED_TEMP    IO_USERNAME "/feeds/medical.body-temperature"

@@ -83,9 +83,13 @@ RemotePatientRiskMonitoring/
 │   ├── start-dashboard.cmd      Launch the Node-RED dashboard
 │   ├── sim_esp32.py             Publish the ESP32's topics without Wokwi
 │   └── gen_flows.py             Regenerate the dashboard flow
-├── screenshots/                 All 12 required + 3 bonus, captured against the live device
-└── submission_pdfs/             Google Drive folder, ready to upload
+└── screenshots/                 All 12 required + 3 bonus, captured against the live device
 ```
+
+> **Not in this repo:** a `submission_pdfs/` folder exists locally as the staging area
+> for the Google Drive upload the portal requires (rendered PDFs of the docs above, plus
+> the screenshots). It's deliberately `.gitignore`d — it's packaging for the Drive
+> submission, not project source — so don't expect to find it on GitHub.
 
 ---
 
@@ -147,12 +151,12 @@ managed by separate FreeRTOS tasks."
 
 ---
 
-## MQTT topic map — role-based access (Task 2)
+## MQTT topic map — role-separated dashboards (Task 2)
 
 ```
 <user>/feeds/medical.body-temperature     ┐
 <user>/feeds/medical.heart-rate           │  Medical Staff Dashboard
-<user>/feeds/medical.spo2                 │  (clinical staff only)
+<user>/feeds/medical.spo2                 │  (patient vitals)
 <user>/feeds/medical.blood-pressure       │
 <user>/feeds/medical.ecg                  │
 <user>/feeds/medical.patient-status       │
@@ -161,7 +165,7 @@ managed by separate FreeRTOS tasks."
 
 <user>/feeds/facility.room-temperature    ┐
 <user>/feeds/facility.humidity            │  Facility Management Dashboard
-<user>/feeds/facility.oxygen-level        │  (maintenance staff only)
+<user>/feeds/facility.oxygen-level        │  (environmental data)
 <user>/feeds/facility.aqi                 │
 <user>/feeds/facility.motion              │
 <user>/feeds/facility.alerts              │
@@ -178,9 +182,16 @@ managed by separate FreeRTOS tasks."
 <user>/feeds/control.sampling-mode    ← toggle auto/manual        (T5)
 ```
 
-Because the three read-side groups sit under distinct topic prefixes, a broker with
-topic ACLs grants each role only its own subtree — that is the "role-based access"
-the task asks for, implemented at the transport layer rather than in the UI.
+> **What's actually enforced, and what isn't.** The two dashboards read from disjoint
+> topic prefixes, which is genuinely necessary groundwork for role-based access — but
+> **it is not role-based access by itself**, and none is enforced by this project as
+> shipped. The default broker (`broker.hivemq.com`, public) has no ACLs: any client can
+> subscribe to `medical.*` regardless of which dashboard it's meant to use. Turning this
+> into real access control means configuring topic ACLs on whichever broker is actually
+> deployed (Mosquitto ACL file, HiveMQ Cloud per-credential permissions, AWS IoT Core
+> policies, ...) — that's infrastructure this firmware doesn't include, and is listed as
+> future work in `docs/PROJECT_REPORT.md` §13. See `docs/TASK_MAPPING.md` Task 2 for the
+> full caveat.
 
 ### ⚠️ Adafruit IO free tier allows only 10 feeds
 

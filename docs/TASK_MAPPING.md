@@ -66,7 +66,7 @@ watchdog between each. Worst-case starvation is therefore 1 s at any configured 
 | Facility Dashboard — oxygen level | `facility.oxygen-level` | §3, §15 |
 | Facility Dashboard — AQI | `facility.aqi` | §3, §15 |
 | Separate MQTT topics | Four disjoint prefixes: `medical.` `facility.` `system.` `control.` | §3 |
-| Role-based access | Topic-prefix ACLs at the broker — a `facility.#` subscriber cannot receive patient data | §3 header comment |
+| Role-based access | **Not enforced in the shipped build — see caveat below.** The topic separation is the *precondition* for role-based access, not the access control itself. | §3 |
 | Gauge widgets with safe thresholds | 6 gauges, thresholds tabulated | `DASHBOARD_SETUP.md` |
 | Alert feeds for abnormal conditions | `medical.alerts` / `facility.alerts`, published only when risk ≠ NORMAL | §15 `publishAll()` |
 | Periodic data aggregation | 60 s avg/min/max JSON to `medical.summary` / `facility.summary` | §15 `aggAdd()`, `aggPublish()` |
@@ -74,6 +74,29 @@ watchdog between each. Worst-case starvation is therefore 1 s at any configured 
 **Why aggregation matters.** At 5 s sampling one bed emits 17,280 messages/day; a 200-bed
 ward emits 3.5 M. Summarising on-device is what makes the architecture scale, which is
 the task's "closer to enterprise IoT architecture" clause.
+
+**Role-based access — what is and isn't actually enforced.** The firmware publishes
+`medical.*` and `facility.*` as genuinely disjoint topic namespaces, and that separation
+is a real, necessary precondition for role-based access. But **no access control exists
+in this repo, and the shipped default does not enforce separation**:
+
+- `USE_HIVEMQ 1` (the default in `main.ino`) points at the public `broker.hivemq.com`.
+  Its own header comment says so plainly: *"broker.hivemq.com is PUBLIC -- anyone may
+  subscribe to your prefix."* Under this default, a client subscribed to `facility.#`
+  **can** also subscribe to `medical.#` — nothing stops it.
+- Making the separation real requires configuring ACLs on whatever broker is actually
+  deployed (Mosquitto with a password/ACL file, HiveMQ Cloud with per-credential topic
+  permissions, AWS IoT Core policies, etc.) so that a facilities-role credential is
+  denied `medical.#` at the broker level. That configuration is **infrastructure, not
+  firmware** — it lives outside `main.ino` and is not part of this submission.
+
+**Bottom line for evaluation:** the *architecture* is role-separation-ready (correct
+topic design, and the two Node-RED dashboard tabs only subscribe to their own prefix by
+convention). *Role-based access itself* — the actual guarantee that one role cannot read
+another's data — is not implemented or demonstrated by this project as shipped, and
+should not be claimed as complete. If a graded rubric requires the access control itself
+(not just topic separation), that is the one clause in this task that is genuinely
+incomplete.
 
 ---
 

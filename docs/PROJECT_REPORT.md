@@ -474,35 +474,51 @@ interrupted resync never scrambles or loses the timeline.
 ## 10. Testing
 
 Twelve test cases with step-by-step procedures and expected results are documented in
-`TEST_PLAN.md`. Summary:
+`TEST_PLAN.md`. **8 of 12 were independently confirmed against the live Wokwi device**
+this session (serial log, MQTT readback, and/or OLED screenshot, cross-checked against
+each other); the remaining 4 were not exercised or were inconclusive, honestly and for
+disclosed reasons (mostly: they need a precise mouse action inside the Wokwi circuit
+view — dragging a small potentiometer or toggling one specific slide switch — which
+wasn't attempted this run). This table matches `TEST_RESULTS.md` exactly; see that file
+for the full evidence behind every row.
 
 | # | Test | Result |
 |---|------|--------|
-| 1 | Boot — 9 tasks start, OLED cycles 5 pages | Pass |
-| 2 | Concurrency — display refresh does not delay alarms | Pass |
-| 3 | Sensor disconnect via slide switch → DEGRADED + `--` on OLED | Pass |
-| 4 | Both dashboards receive only their own feeds | Pass |
-| 5 | Gauge thresholds change colour at documented limits | Pass |
-| 6 | 60 s aggregation JSON arrives on both summary feeds | Pass |
-| 7 | Dosage 0→100 ramps over 20 s, never steps | Pass |
-| 8 | Dosage >80 pins at 80 until confirmed; expires safely at 15 s | Pass |
-| 9 | Bed 0→90° travels smoothly in ≈2.3 s | Pass |
-| 10 | Auto-bed raises to 45° when SpO₂ < 90 | Pass |
-| 11 | Auto sampling drops to 5 s on abnormal, 30 s after 3 stable cycles | Pass |
-| 12 | Wi-Fi cut → OFFLINE banner + buffering; restore → backlog replayed in order | Pass |
+| 1 | Boot — 9 tasks start, OLED cycles 5 pages | **Pass** |
+| 2 | Concurrency — display refresh does not delay alarms | Not exercised — needs a simultaneous temp-alarm + network-stall setup; see `TEST_RESULTS.md` |
+| 3 | Sensor disconnect via slide switch → DEGRADED + `--` on OLED | Not exercised — needs precise in-circuit switch toggling |
+| 4 | Both dashboards receive only their own feeds | **Pass** |
+| 5 | Gauge thresholds change colour at documented limits | Not exercised — needs precise in-circuit potentiometer dragging |
+| 6 | 60 s aggregation JSON arrives on both summary feeds | **Pass** |
+| 7 | Dosage 0→100 ramps over time, never steps | **Pass** (settling value confirmed via MQTT readback; sub-second ramp timing not re-measured this run) |
+| 8 | Dosage >80 pins at 80 until confirmed; expires safely at 15 s | **Pass**, triple-confirmed (serial + MQTT + OLED screenshot agree) |
+| 9 | Bed 0→90° travels smoothly, not an instant jump | **Pass** |
+| 10 | Auto-bed raises to 45°/90° when SpO₂ drops; manual overrides auto | **Pass** for the manual-override direction (`Auto bed: ON → OFF` observed live); the auto-adjust direction itself was exercised earlier via the Node-RED simulator, not re-confirmed against the live device this run |
+| 11 | Auto sampling drops to 5 s on abnormal, recovers after 3 stable cycles | Inconclusive — command was published but MQTT's once-per-sampling-period readback cadence meant the change wasn't confirmed within the observation window |
+| 12 | Wi-Fi cut → OFFLINE banner + buffering; restore → backlog replayed in order | **Pass** for the backoff sequence (1→2→4→8→16 s, exact doubling, observed live); the full resync/replay loop was independently observed in a separate boot within the same session |
 
 ---
 
 ## 11. Results
 
-- **Nine FreeRTOS tasks** running concurrently across both cores with no observed
-  priority inversion or missed alarm.
+- **Nine FreeRTOS tasks** running concurrently across both cores; boot and steady-state
+  operation confirmed live (TC-01). Priority-inversion/missed-alarm behaviour during a
+  simultaneous alarm-plus-network-stall is a reasoned architectural guarantee (§1-2 of
+  `ARCHITECTURE.md`: `alertTask` at priority 6 never shares a core with anything that
+  blocks on network I/O) — **not yet independently observed live** (TC-02 unconfirmed;
+  see `TEST_RESULTS.md`).
 - **Ten monitored parameters** (6 patient, 4 facility) versus 4 in the training build.
-- **27 MQTT topics** across four role-scoped groups.
-- **Alarm latency** bounded by `alertTask`'s 500 ms timeout even during network stalls.
-- **Zero data loss** across simulated outages up to 30 minutes at the default rate.
-- **Free heap** stable at ≈180 KB after all tasks start, with no growth over extended
-  runs — no leak in the buffer or aggregation paths.
+- **27 MQTT topics** across four distinct topic-prefix groups. These groups are a
+  *precondition* for role-based dashboard separation, not role-based access control
+  itself — see the Task 2 caveat in `TASK_MAPPING.md`.
+- **Alarm latency** bounded by `alertTask`'s 500 ms timeout by design; not independently
+  timed under a live network stall this session (see TC-02 above).
+- **Offline buffer sized for ~30 minutes** at the default sampling rate
+  (`OFFLINE_BUFFER_DEPTH=120` records) — a capacity figure from the code, not a 30-minute
+  outage that was actually run. The backoff sequence and a short resync (1 buffered
+  record) were confirmed live this session (TC-12).
+- **Free heap** stable at ≈180 KB after all tasks start in the sessions observed, with no
+  growth noticed — not run over an extended (multi-hour) duration this session.
 
 ---
 
