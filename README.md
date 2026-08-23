@@ -83,7 +83,7 @@ RemotePatientRiskMonitoring/
 │   ├── start-dashboard.cmd      Launch the Node-RED dashboard
 │   ├── sim_esp32.py             Publish the ESP32's topics without Wokwi
 │   └── gen_flows.py             Regenerate the dashboard flow
-├── screenshots/                 7 captured, 5 Wokwi shots outstanding
+├── screenshots/                 All 12 required + 3 bonus, captured against the live device
 └── submission_pdfs/             Google Drive folder, ready to upload
 ```
 
@@ -195,13 +195,19 @@ The full build above uses 20 publish feeds + 7 control feeds. Options:
 
 ---
 
-## What to change before you submit
+## Submission status
 
-1. `IO_USERNAME` / `IO_KEY` → your Adafruit IO credentials.
-2. Build the two dashboards using [`docs/DASHBOARD_SETUP.md`](docs/DASHBOARD_SETUP.md).
-3. Capture screenshots into `screenshots/`.
-4. Record the demo using [`docs/DEMO_VIDEO_SCRIPT.md`](docs/DEMO_VIDEO_SCRIPT.md).
-5. Work through [`docs/SUBMISSION_CHECKLIST.md`](docs/SUBMISSION_CHECKLIST.md).
+- [x] Firmware compiles clean and runs on the real Wokwi device (project link above)
+- [x] Node-RED dashboard built, imported, verified bidirectionally against the live device
+- [x] All 12 required screenshots captured against the live device — see `screenshots/`
+- [x] Test cases run against the real device — see [`docs/TEST_RESULTS.md`](docs/TEST_RESULTS.md)
+- [x] Pushed to GitHub
+- [ ] Demo video — see [`docs/DEMO_VIDEO_SCRIPT.md`](docs/DEMO_VIDEO_SCRIPT.md)
+- [ ] Final portal submission (GitHub link + live URL + report) — one-time, irreversible;
+      see [`docs/SUBMISSION_CHECKLIST.md`](docs/SUBMISSION_CHECKLIST.md)
+
+If you switch to Adafruit IO instead of the bundled HiveMQ setup, set `IO_USERNAME` /
+`IO_KEY` in `main.ino` and see [`docs/DASHBOARD_SETUP.md`](docs/DASHBOARD_SETUP.md).
 
 ---
 
