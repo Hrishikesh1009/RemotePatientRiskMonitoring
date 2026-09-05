@@ -4,7 +4,8 @@ Shot-by-shot recording plan. Every one of the six tasks gets visible, on-camera 
 
 **Setup before recording**
 - Wokwi simulation running, OLED readable.
-- Both Adafruit IO dashboards open in browser tabs.
+- Both Node-RED dashboards open in browser tabs — `http://127.0.0.1:1880/ui/#!/0`
+  (Medical Staff) and `#!/1` (Facility Management). Tabs are 0-indexed.
 - Serial monitor visible.
 - Screen recorder at 1080p; enable microphone.
 
