@@ -4,7 +4,7 @@
 **Intern:** Hrishikesh Lokhande
 **Programme:** ElevanceSkills Internship — IoT / Embedded Systems
 **Project:** Learn to Build a Real World Remote Patient Risk Monitoring System
-**Platform:** ESP32 (dual-core Xtensa LX6) · FreeRTOS · MQTT · Adafruit IO · Wokwi
+**Platform:** ESP32 (dual-core Xtensa LX6) · FreeRTOS · MQTT (HiveMQ public broker; Adafruit IO optional) · Node-RED · Wokwi
 **Date:** August 2026
 
 ---
@@ -186,8 +186,8 @@ aggregation.
 
 ### 5.2 Topic-level role separation
 
-Rather than filtering in the UI — which any client can bypass — separation is enforced
-at the transport layer using Adafruit IO feed groups:
+Rather than filtering a single mixed stream in the UI, each role's data is published under
+its own topic prefix, so the separation exists at the MQTT topic level:
 
 ```
 medical.*    → clinical staff        (8 feeds)
@@ -196,10 +196,17 @@ system.*     → biomedical engineering (5 feeds)
 control.*    → inbound commands       (7 feeds)
 ```
 
-A broker with topic ACLs (Mosquitto, HiveMQ, AWS IoT) grants each role a subscription
-to only its own prefix. A facilities technician subscribed to `facility.#` is
-cryptographically unable to receive `medical.heart-rate`. This is the property that
-makes the separation a genuine access-control boundary rather than a cosmetic one.
+The two Node-RED dashboard tabs subscribe only to their own prefix, so the Medical Staff
+view never shows facility data and vice versa (TC-04, Pass).
+
+**What this does and does not provide.** Disjoint prefixes are the precondition for
+role-based access, not the access control itself. The shipped default (`USE_HIVEMQ 1`)
+uses the public `broker.hivemq.com`, which has no ACLs: any client can subscribe to
+`medical.#`. Turning the separation into an enforced boundary requires per-role
+credentials and topic ACLs on the deployed broker (Mosquitto ACL file, HiveMQ Cloud
+per-credential permissions, AWS IoT Core policies), so that a facilities credential is
+denied `medical.#`. That is broker configuration outside the firmware and is not part
+of this submission; see the Task 2 caveat in `TASK_MAPPING.md` and §13.
 
 ### 5.3 Gauge thresholds
 
@@ -531,11 +538,15 @@ for the full evidence behind every row.
    other layer is unchanged.
 2. **Not a medical device.** No clinical validation, no IEC 60601 or ISO 13485
    compliance, no redundancy in the alarm path. This is an educational demonstrator.
-3. **Transport security.** Adafruit IO over port 1883 is unencrypted. A real deployment
+3. **Transport security and access control.** MQTT runs over port 1883 without TLS, on
+   the public HiveMQ broker by default (and on Adafruit IO if `USE_HIVEMQ 0`). Traffic is
+   unencrypted and the broker enforces no per-role topic ACLs, so role separation is by
+   topic convention only (§5.2). A real deployment
    requires TLS on 8883 with certificate pinning; the ESP32 supports this via
    `WiFiClientSecure` and it is a drop-in change to the client object.
-4. **Free-tier feed limit.** The full 20-feed build exceeds Adafruit IO's 10-feed free
-   tier. `ENABLE_EXTENDED_FEEDS 0` provides a conforming reduced build; the trade-off is
+4. **Free-tier feed limit (Adafruit IO option only).** If the optional Adafruit IO
+   transport is used, the full 20-feed build exceeds its 10-feed free tier; the default
+   HiveMQ broker has no such limit. `ENABLE_EXTENDED_FEEDS 0` provides a conforming reduced build; the trade-off is
    documented rather than hidden.
 5. **Wall-clock time.** Buffered records are stamped with `millis()`, which resets on
    reboot. Production would use SNTP and a battery-backed RTC.
