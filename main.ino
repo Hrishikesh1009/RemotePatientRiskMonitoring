@@ -192,7 +192,7 @@
 #define AGGREGATION_PERIOD_S   60    // [T2] periodic summary publication
 
 /* =====================================================================================
- *  SECTION 3 -- MQTT FEED TOPICS  [T2] role-based separation via Adafruit IO groups
+ *  SECTION 3 -- MQTT FEED TOPICS  [T2] role separation by topic prefix (not ACLs)
  *
  *    medical.*   -> Medical Staff Dashboard   (patient vitals, clinical alerts)
  *    facility.*  -> Facility Management Dashboard (environment, air, occupancy)
