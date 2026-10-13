@@ -55,11 +55,12 @@ had the pre-fix wiring (BUG_LOG B-14 – B-16, B-23).
       the three files hash-match the repository, the build is HTTP 200 / 1,600,201 bytes, serial
       prints `[BOOT] firmware 2026-10-13 final …` and `[BOOT] 10 FreeRTOS tasks started` —
       `docs/evidence/wokwi_public_project_verification.txt` and `…_logged_out.png`.
-- [ ] **GitHub `main` updated** — the work is committed locally; publish it with
-      `git push` from the repository folder (Git Credential Manager opens a browser window the
-      first time: sign in as the repository owner).
-- [ ] **Verify GitHub logged out** after the push — the README renders, both diagrams display,
-      `docs/evidence/` and `tools/verification/` are present.
+- [x] **GitHub `main` updated** (13 Oct, `f0234f4..741608f`): `main.ino`, `diagram.json` and
+      `libraries.txt` on `main` hash-match the tested files.
+- [x] **Verified logged out** (clean browser, no cookies, 13 Oct): the README and
+      `docs/TECHNICAL_REPORT.md` render (all 4 images load); `docs/evidence/` (69 files) and
+      `tools/verification/` (8 files) are present; the committed diagrams and all 15 screenshots are
+      byte-identical to the local files.
 - [ ] *(optional)* **Drive folder refreshed** — `submission_pdfs/` holds up-to-date PDFs and a
       `00_START_HERE.txt`; upload its contents (the folder is git-ignored staging).
 
