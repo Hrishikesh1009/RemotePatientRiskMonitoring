@@ -35,6 +35,9 @@
     { "type": "wokwi-slide-switch", "id": "swSpo2",   "top": -240, "left": 180, "attrs": {} },
     { "type": "wokwi-slide-switch", "id": "swMotion", "top": -240, "left": 260, "attrs": {} },
 
+    { "type": "wokwi-slide-switch", "id": "swWifiCut",   "top": -240, "left": 360, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "swBrokerCut", "top": -240, "left": 440, "attrs": {} },
+
     { "type": "wokwi-servo", "id": "bedServo", "top": 200, "left": 400,
       "attrs": { "horn": "double", "hornColor": "#ccc" } },
 
@@ -77,39 +80,46 @@
     [ "pir:VCC", "esp:3V3",   "red",   [ "v0" ] ],
     [ "pir:OUT", "esp:D12",   "purple",[ "v0" ] ],
 
-    [ "potEcg:GND", "esp:GND.3", "black", [ "v0" ] ],
+    [ "potEcg:GND", "esp:GND.2", "black", [ "v0" ] ],
     [ "potEcg:VCC", "esp:3V3",   "red",   [ "v0" ] ],
     [ "potEcg:SIG", "esp:VP",    "cyan",  [ "v0" ] ],
 
-    [ "potO2:GND", "esp:GND.3", "black", [ "v0" ] ],
+    [ "potO2:GND", "esp:GND.2", "black", [ "v0" ] ],
     [ "potO2:VCC", "esp:3V3",   "red",   [ "v0" ] ],
     [ "potO2:SIG", "esp:D34",   "cyan",  [ "v0" ] ],
 
-    [ "potAqi:GND", "esp:GND.3", "black", [ "v0" ] ],
+    [ "potAqi:GND", "esp:GND.2", "black", [ "v0" ] ],
     [ "potAqi:VCC", "esp:3V3",   "red",   [ "v0" ] ],
     [ "potAqi:SIG", "esp:D35",   "cyan",  [ "v0" ] ],
 
     [ "bzTemp:1",   "esp:GND.1", "black", [ "v0" ] ],
     [ "bzTemp:2",   "esp:D4",    "green", [ "v0" ] ],
     [ "bzHr:1",     "esp:GND.1", "black", [ "v0" ] ],
-    [ "bzHr:2",     "esp:D16",   "green", [ "v0" ] ],
+    [ "bzHr:2",     "esp:RX2",   "green", [ "v0" ] ],
     [ "bzSpo2:1",   "esp:GND.1", "black", [ "v0" ] ],
-    [ "bzSpo2:2",   "esp:D17",   "green", [ "v0" ] ],
+    [ "bzSpo2:2",   "esp:TX2",   "green", [ "v0" ] ],
     [ "bzSystem:1", "esp:GND.1", "black", [ "v0" ] ],
     [ "bzSystem:2", "esp:D5",    "green", [ "v0" ] ],
 
-    [ "swTemp:1",   "esp:GND.3", "black", [ "v0" ] ],
+    [ "swTemp:1",   "esp:GND.2", "black", [ "v0" ] ],
     [ "swTemp:2",   "esp:D32",   "gold",  [ "v0" ] ],
     [ "swTemp:3",   "esp:3V3",   "red",   [ "v0" ] ],
-    [ "swHr:1",     "esp:GND.3", "black", [ "v0" ] ],
+    [ "swHr:1",     "esp:GND.2", "black", [ "v0" ] ],
     [ "swHr:2",     "esp:D33",   "gold",  [ "v0" ] ],
     [ "swHr:3",     "esp:3V3",   "red",   [ "v0" ] ],
-    [ "swSpo2:1",   "esp:GND.3", "black", [ "v0" ] ],
+    [ "swSpo2:1",   "esp:GND.2", "black", [ "v0" ] ],
     [ "swSpo2:2",   "esp:D25",   "gold",  [ "v0" ] ],
     [ "swSpo2:3",   "esp:3V3",   "red",   [ "v0" ] ],
-    [ "swMotion:1", "esp:GND.3", "black", [ "v0" ] ],
+    [ "swMotion:1", "esp:GND.2", "black", [ "v0" ] ],
     [ "swMotion:2", "esp:D26",   "gold",  [ "v0" ] ],
     [ "swMotion:3", "esp:3V3",   "red",   [ "v0" ] ],
+
+    [ "swWifiCut:1",   "esp:GND.2", "black",   [ "v0" ] ],
+    [ "swWifiCut:2",   "esp:D23",   "magenta", [ "v0" ] ],
+    [ "swWifiCut:3",   "esp:3V3",   "red",     [ "v0" ] ],
+    [ "swBrokerCut:1", "esp:GND.2", "black",   [ "v0" ] ],
+    [ "swBrokerCut:2", "esp:VN",    "magenta", [ "v0" ] ],
+    [ "swBrokerCut:3", "esp:3V3",   "red",     [ "v0" ] ],
 
     [ "bedServo:GND", "esp:GND.1", "black", [ "v0" ] ],
     [ "bedServo:V+",  "esp:3V3",   "red",   [ "v0" ] ],
@@ -117,7 +127,7 @@
 
     [ "ledDose:C", "esp:GND.1", "black", [ "v0" ] ],
     [ "ledDose:A", "rDose:1",   "red",   [ "v0" ] ],
-    [ "rDose:2",   "esp:D15",   "red",   [ "v0" ] ],
+    [ "rDose:2",   "esp:D19",   "red",   [ "v0" ] ],
 
     [ "ledOk:C", "esp:GND.1", "black", [ "v0" ] ],
     [ "ledOk:A", "rOk:1",     "green", [ "v0" ] ],
