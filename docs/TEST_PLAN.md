@@ -1,241 +1,164 @@
 # Test Plan
 
-Twelve test cases covering all six tasks. Each is reproducible in Wokwi with no extra
-hardware. Run them in order; several set up state the next one uses.
+Sixteen test cases covering all six tasks. Each can be followed by hand in the public Wokwi
+project with no extra hardware; the same cases were also run automatically and measured
+(see [`TEST_RESULTS.md`](TEST_RESULTS.md) and [`../tools/verification/README.md`](../tools/verification/README.md)).
 
-**Legend** — SW1 = GPIO32 (body temp), SW2 = GPIO33 (heart rate), SW3 = GPIO25 (SpO₂),
-SW4 = GPIO26 (motion). Switch **closed to GND** = sensor enabled.
+**Conventions.** Commands are MQTT messages to `rprms-hl-8842/feeds/<feed>` (use the Node-RED
+sliders or any MQTT client). The six slide switches sit in the top row of the circuit,
+**left → right: Temp · HR · SpO₂ · PIR · Wi-Fi cut · Broker cut**; sliding a switch to the
+right applies the fault. Durations are read from the serial `t=… ms` stamps (simulated time).
 
 ---
 
-## TC-01 · Boot and task creation  *(Task 1)*
+## TC-01 · Boot, tasks, watchdog, OLED pages  *(Task 1)*
 
-**Steps**
-1. Start the Wokwi simulation.
-2. Watch the serial monitor at 115200 baud.
-3. Watch the OLED for 20 seconds.
-
+**Steps** Press Play; watch the serial monitor and the OLED for 30 s.
 **Expected**
-- Serial prints `=== Remote Patient Risk Monitoring System ===` then
-  `[BOOT] 9 FreeRTOS tasks started`.
-- OLED shows `RPRMS booting...`, then cycles five pages at 3 s each:
-  PATIENT VITALS → EXTENDED VITALS → FACILITY / ROOM → THERAPY CONTROL → SYSTEM STATUS.
-- Green LED (GPIO2) blinks once the link is up.
-- No watchdog reset within 2 minutes.
+- `=== Remote Patient Risk Monitoring System ===`, `[BOOT] firmware …`, `[BOOT] task watchdog armed: 20 s timeout`, `[BOOT] 10 FreeRTOS tasks started` (once).
+- One boot banner only (no resets); no `task_wdt`, `Guru Meditation`, `abort()`, `Backtrace`.
+- OLED cycles five pages 3 s each — PATIENT VITALS → EXTENDED VITALS → FACILITY / ROOM → THERAPY CONTROL → SYSTEM STATUS — each ending with the `DOSE … mg/hr …` footer.
+- No phantom Wi-Fi fault at boot and no `[RATE] auto-adapt: 15 s -> 5 s` before the first sample.
 
-**Pass criteria** All five pages appear in order; heap on page 5 is stable across
-several rotations.
+**Pass** All five pages appear; exactly one boot banner.
 
----
+## TC-02 · Alarms are not blocked by a network outage  *(Task 1)*
 
-## TC-02 · Concurrency — alarms are not blocked by other work  *(Task 1)*
+**Steps** `control.dosage` = 95 (starts the critical alarm). While the red LED is blinking,
+slide **Wi-Fi cut** right.
+**Expected** The LED blink cadence and the dose ramp are unchanged while the supervisor is
+retrying — alarms live on core 1 at priority 6; the network is on core 0.
+**Pass** The period of the critical-alarm pass (5 red-LED blinks + 2 buzzer beeps, ≈ 1 s) during
+the outage is within ±30 % of the period before it. (Measured by counting pass *starts* in two
+simulated-time windows; the Wi-Fi beep pattern shares the alert task and lengthens one pass in
+five by ≈ 0.5 s, so a ratio of ≈ 1.1 is expected.)
 
-**Steps**
-1. Raise the DS18B20 above 38 °C (click it in Wokwi, set 39).
-2. While buzzer 1 is sounding, watch the OLED continue its rotation.
-3. Disconnect Wi-Fi (see TC-12) so `mqttTask` starts retrying.
+## TC-03 · Probe disconnect → DEGRADED  *(Tasks 1, 6)*
 
-**Expected** Buzzer cadence stays constant while the display refreshes and the network
-retries.
+**Steps** Slide the **HR** (then Temp, then SpO₂) switch right; later back.
+**Expected** `[SENSOR] probe change -> … hr:OFF …`, `[NET] state ONLINE -> DEGRADED (fault: SENSOR)`
+**within about 3 s even at the 30 s stable rate**, amber LED, a single chirp every ~5 s,
+OLED `HR : -- bpm`; patient status never reads "Patient stable" while a probe is off.
+Releasing the switch returns the system to ONLINE.
+**Pass** DEGRADED reported ≤ 4 s after the switch moves.
 
-**Pass criteria** No audible stutter or gap in the alarm pattern during a network stall.
-This is the defect in the original single-task design that the priority split fixes.
+## TC-04 · Role separation (topic level)  *(Task 2)*
 
----
+**Steps** Run 2 minutes; compare the topics each dashboard tab uses.
+**Expected** The device publishes disjoint `medical.*` and `facility.*` groups; the Facility
+tab contains no `medical.*` widget.
+**Pass** Both groups populated, disjoint. *(This shows topic separation; broker-enforced
+access control is not part of the project — see `TASK_MAPPING.md` Task 2.)*
 
-## TC-03 · Sensor disconnect → DEGRADED  *(Tasks 1, 6)*
+## TC-05 · Facility inputs, gauges and alert feeds  *(Tasks 1, 2)*
 
-**Steps**
-1. Open SW2 (heart-rate).
-2. Observe OLED page 1 and page 5.
-3. Close SW2 again.
-
-**Expected**
-- Page 1 shows `HR : -- bpm`.
-- Clinical status becomes `Sensor disconnected`, risk WARNING.
-- Page 5 shows `Link: DEGRADED`.
-- Buzzer 4 emits a single 60 ms chirp roughly every 5 s; yellow LED lit.
-- Closing SW2 returns the system to ONLINE within ~2 s.
-
-**Pass criteria** The system never reports "Patient stable" while a probe is
-disconnected.
-
----
-
-## TC-04 · Role separation  *(Task 2)*
-
-**Steps**
-1. Open both dashboards side by side.
-2. Let the system run for 2 minutes.
-
-**Expected** Medical dashboard populates HR/SpO₂/temp/BP/ECG. Facility dashboard
-populates room temp/O₂/AQI/humidity. Neither shows the other's data.
-
-**Pass criteria** No patient identifier or vital appears anywhere on the Facility
-dashboard.
-
----
-
-## TC-05 · Gauge thresholds  *(Task 2)*
-
-**Steps**
-1. Turn the AQI pot (GPIO35) slowly from minimum to maximum.
-2. Watch the `facility.aqi` gauge.
-
-**Expected** Green below 150, amber 150–300, red above 300. `facility.alerts` receives
-`[WARNING] Air quality poor` then `[CRITICAL] Air quality hazardous`.
-
-**Pass criteria** Colour transitions occur at the documented values.
-
----
+**Steps** Drag the AQI pot (bottom) to ~650/1023, then ~400; the O₂ pot (middle) to ~60; the
+ECG pot (top) to full scale.
+**Expected** AQI > 300 → `[CRITICAL] Air quality hazardous` on `facility.alerts`; AQI
+150–300 → `[WARNING] Air quality poor`; O₂ < 19.5 % → `[CRITICAL] Oxygen level unsafe`;
+ECG ≈ 5.00 mV on `medical.ecg` (read by `ecgTask`).
+**Pass** Each alert text and value appears within one environment period (≤ ~15 s).
 
 ## TC-06 · Periodic aggregation  *(Task 2)*
 
-**Steps**
-1. Let the system run for 3 minutes.
-2. Open the `medical.summary` and `facility.summary` feeds.
-
-**Expected** One JSON record per minute on each, e.g.
-`{"n":4,"hr_avg":82.5,"hr_min":74,"hr_max":91,"spo2_avg":96.8,"spo2_min":95,"temp_avg":36.91}`
-
-**Pass criteria** `n` matches the number of samples in the window; `hr_min ≤ hr_avg ≤ hr_max`.
-
----
+**Steps** Let the system run 90 s.
+**Expected** One JSON record per minute per role, e.g.
+`{"n":12,"hr_avg":80.5,"hr_min":74,"hr_max":91,"spo2_avg":96.8,"spo2_min":95,"temp_avg":36.81}`.
+**Pass** `n` is the number of samples in the window; `hr_min ≤ hr_avg ≤ hr_max`.
 
 ## TC-07 · Dosage rate limiting  *(Task 3)*
 
-**Steps**
-1. Drag `control.dosage` from 0 to 60 in one motion.
-2. Start a stopwatch and watch the `system.dosage` readback gauge and OLED page 4.
-
-**Expected** The delivered dose climbs at 5 mg/hr per second, reaching 60 after ≈12 s.
-It never jumps.
-
-**Pass criteria** Measured ramp time is 12 s ± 2 s. A 0→100 drag takes ≈20 s.
-
----
+**Steps** `control.dosage` = 60 from 0.
+**Expected** The delivered dose (serial `[DOSE] t=… delivered …`, OLED footer) climbs at
+5 mg/hr per second, reaching 60 after ≈ 12 s. It never jumps.
+**Pass** Slope 5.00 ± 0.15 mg/hr/s computed from the first and last `[DOSE]` lines.
 
 ## TC-08 · Dosage critical confirmation  *(Task 3)*
 
-**Part A — timeout**
-1. Set `control.dosage` to 95.
-2. Do nothing for 20 seconds.
+**A — timeout.** `control.dosage` = 95; do nothing for 20 s.
+**Expected** Delivered dose rises to 80 and **stops**; OLED THERAPY page shows
+`>CONFIRM 95 mg/hr`, footer `DOSE 80.0 mg/hr CONF`; red LED blinks 5 × 60 ms and buzzer 3
+sounds; after 15 s the prompt clears and the dose **stays at 80**.
+**B — confirm.** `control.dosage` = 95, then within 15 s `control.dosage-confirm` = 1.
+**Expected** `[DOSE] confirmed 95.0 mg/hr`; dose ramps 80 → 95 at 5 mg/hr/s; footer `CRIT`.
+**Pass** Inaction never produces more than 80; confirmation releases 95 by ramp.
 
-**Expected** OLED page 4 shows `>CONFIRM 95 mg/hr`. Delivered dose ramps to 80 and
-**stops**. After 15 s the prompt clears and the dose stays at 80. Serial prints
-`[DOSE] 95.0 mg/hr exceeds 80 -- awaiting confirmation`.
+## TC-09 · Bed: smooth ramp, presets, manual  *(Task 4)*
 
-**Part B — confirm**
-1. Set `control.dosage` to 95 again.
-2. Within 15 s, toggle `control.dosage-confirm` on.
+**Steps** `control.bed-angle` = 90 from 0; then presets `sleep`, `breathing`, `emergency`.
+**Expected** `[BED]` lines show 1° per 25 ms (0 → 90° ≈ 2.3 s); the servo horn sweeps
+visibly; presets reach 10° / 45° / 90° (horn within ±3°); emergency ramps in ≈ 0.75 s but is
+still a ramp; a manual command turns **Auto bed: OFF** (OLED THERAPY page).
+**Pass** No instantaneous jump on any path.
 
-**Expected** Serial prints `[DOSE] confirmed 95.0 mg/hr`. Dose ramps from 80 to 95 over
-3 s. Red LED blinks rapidly (5 × 60 ms); buzzer 3 sounds twice.
+## TC-10 · Automatic bed from patient condition  *(Task 4)*
 
-**Pass criteria** Inaction produces the *safe* outcome. There is no path from silence to
-95 mg/hr.
-
----
-
-## TC-09 · Bed smooth transition  *(Task 4)*
-
-**Steps**
-1. Set `control.bed-angle` to 90.
-2. Watch the servo horn in Wokwi and time the travel.
-
-**Expected** The horn sweeps continuously and visibly; ≈2.3 s from 0° to 90°.
-`system.bed-angle` climbs through intermediate values.
-
-**Then** publish `emergency` to `control.bed-preset` from 0°: travel completes in
-≈0.75 s — faster, but still a visible ramp, not a snap.
-
-**Pass criteria** No instantaneous jump on any path.
-
----
-
-## TC-10 · Automatic bed adjustment  *(Task 4)*
-
-**Steps**
-1. Toggle `control.bed-auto` on.
-2. Wait for the simulated SpO₂ to drop below 90 (or open SW3 briefly then close it and
-   wait for a low reading — the simulation drifts and desaturates when HR is high).
-3. Then drag `control.bed-angle` manually.
-
-**Expected**
-- SpO₂ < 90 → bed ramps to 45°; below 85 with CRITICAL risk → 90°.
-- Risk returns to NORMAL → bed returns to 10°.
-- The manual drag sets auto off (OLED page 4 shows `Auto bed: OFF`) and the automation
-  stops moving the bed.
-
-**Pass criteria** Automatic control never overrides a manual command.
-
----
+**Steps** `control.bed-auto` = 1; `control.sim-spo2` = 88, then 82, then 0. Then
+`control.bed-angle` = 70 and `control.sim-spo2` = 82 again.
+**Expected** 88 → bed 45°; 82 (CRITICAL) → 90°; 0 (normal) → back to 10°; after the manual
+70°, SpO₂ 82 does **not** move the bed (automation never overrides a manual command).
+**Pass** Each angle reached within ±3°; manual wins.
 
 ## TC-11 · Adaptive sampling  *(Task 5)*
 
-**Steps**
-1. Ensure `control.sampling-mode` is on (auto).
-2. Watch OLED page 5 `Rate:` while the patient is stable.
-3. Raise the DS18B20 to 39 °C.
-4. Return it to 36.8 °C and wait.
-5. Then move `control.sampling-rate` to 45 manually.
+**Steps** (a) `control.sampling-rate` = 5; read `[SAMPLE]` timestamps. (b) Set 60, wait
+~14 s, then set 5. (c) `control.sampling-mode` = 1 with a stable patient; then
+`control.sim-hr` = 130; then 0.
+**Expected** (a) samples ≈ 5.0 s apart, one publish per sample. (b) a new sample appears
+within ≈ 1.5 s of the command, not up to 60 s later. (c) `[RATE] auto-adapt: … -> 30 s` when
+stable, `… -> 5 s` when abnormal, and back to 30 s only after **3 fresh stable samples**.
+**Pass** All three observations; hysteresis counted in samples, not loop ticks.
 
+## TC-12 · Wi-Fi outage: offline, buffer, restore, resync  *(Task 6)*
+
+**Steps** Set a 5 s rate. Slide **Wi-Fi cut** right; wait ~60 s; slide it back.
 **Expected**
-- Stable → `30s (auto)` after 3 normal cycles.
-- Abnormal → drops to `5s (auto)` within one cycle.
-- Recovery → returns to 30 s only after 3 consecutive normal cycles (hysteresis).
-- Manual slider → `45s (man)`, auto disabled, and the change takes effect
-  **immediately** rather than after the current sleep expires.
+- Within ~2 s: `[FAULT] SW_WIFI_CUT ON`, `[NET] state ONLINE -> OFFLINE (fault: WIFI)`, OLED banner
+  `*** LINK FAILURE ***` / `LOGGING OFFLINE` / `Cause: WIFI` / `Buffered: n` / `Retry in Ns` (a live countdown), amber LED, `[ALERT] buzzer 4, WIFI fault: 3 short beeps`.
+- `[NET] recovery attempt, backoff=` 1, 2, 4, 8, 16, 32, 60 (capped).
+- `Buffered:` rises by one per sampling period.
+- On release: `[NET] Wi-Fi re-associated …`, `[NET] state OFFLINE -> ONLINE`, `restored -- replaying n buffered samples`, `resynced n records`; `system.backlog` receives n JSON records, oldest first, spaced as sampled.
+**Pass** records out = records in, chronological, each exactly once; ONLINE again within ~25 s of release.
 
-**Pass criteria** The rate change is visible in under 2 s — proof that the wake queue is
-waking the sleeping task rather than the task waiting out its full sleep.
+## TC-13 · Broker outage  *(Task 6)*
 
-**Also verify all three sampling tasks respond, not just one.** Set the slider to 5 s
-while stable and watch the serial monitor / dashboard: `medical.heart-rate`,
-`medical.blood-pressure` **and** `facility.room-temperature` must all start updating at
-the new cadence. If BP or room temperature keeps updating at the old rate, the per-task
-wake queues have been collapsed back into one shared queue — a token consumed by the
-first waiter starves the others.
+**Steps** Slide **Broker cut** right for ~30 s, then back.
+**Expected** As TC-12 with `fault: MQTT`, `Cause: MQTT`, `2 long beeps`; replay on release.
+**Pass** OFFLINE within ~2 s, resync complete after release.
+
+## TC-14 · OLED shows the dose in real time  *(Task 3)*
+
+**Steps** Change `control.dosage` and watch several different OLED pages.
+**Expected** The footer `DOSE nn.n mg/hr NORM|WARN|CRIT|CONF` is on **every** screen
+including the offline banner and updates about once a second.
+**Pass** Footer present on all five pages and the banner; value follows the ramp.
+
+## TC-15 · Command reliability  *(Tasks 3–5)*
+
+**Steps** Publish `control.sampling-rate` = 10, 11, …, 21 at 1.5 s intervals.
+**Expected** Twelve `[RATE] manual: N s` lines, one per command, none missing.
+**Pass** 12 of 12 applied.
+
+## TC-16 · Stability
+
+**Steps** Run the whole plan; then read the serial log and the OLED SYSTEM page.
+**Expected** A single boot banner; no watchdog/panic/abort; free heap steady (SYSTEM page).
+**Pass** No unplanned reset; heap within ±2 KB of its post-boot value.
 
 ---
 
-## TC-12 · Offline detection, buffering and resync  *(Task 6)*
+## Extra checks
 
-**Steps**
-1. With the system ONLINE and buffering empty, break the link. In Wokwi the simplest
-   method is to edit `WIFI_SSID` to a wrong value and restart; to break it *mid-run*,
-   pause the simulation, or set `AIO_SERVER` to an unreachable host to isolate the MQTT
-   failure path specifically.
-2. Observe the OLED for 60 seconds.
-3. Restore the correct value and let it reconnect.
-4. Watch `system.backlog` and the serial monitor.
-
-**Expected**
-- Within ~2 s: OLED shows the fixed banner
-  ```
-  *** LINK FAILURE ***
-  LOGGING OFFLINE
-  Cause: WIFI          (or MQTT)
-  Buffered: n
-  Retry in 8s
-  ```
-- `Buffered:` increments once per sampling period.
-- `Retry in` counts 1 → 2 → 4 → 8 → 16 → 32 → 60 and caps at 60.
-- Buzzer 4: three 80 ms shorts for Wi-Fi, two 400 ms longs for MQTT. Yellow LED lit.
-- On restore: serial prints `[NET] restored -- replaying n buffered samples` then
-  `[NET] resynced n records`. `system.backlog` fills with JSON at ~600 ms intervals.
-- OLED page 5 `Sync:` counter matches the number of records buffered.
-
-**Pass criteria** Record count out equals record count in, in chronological order, with
-no gap in the timeline.
-
----
+- **Fever path** (needs a restart): set the DS18B20 to 39 °C → `High body temperature`
+  CRITICAL, buzzer 1, rate 5 s; set back to 36.8 °C → "Patient stable".
+- **Probe PIR**: the PIR switch only hides movement; it is not a patient-parameter probe, so
+  it does not cause DEGRADED.
 
 ## Regression checklist after any code change
 
-- [ ] All 9 tasks still start (TC-01)
-- [ ] No watchdog reset over a 10-minute run
-- [ ] Free heap stable — no growth over 10 minutes (page 5)
-- [ ] Alarms still sound during a network stall (TC-02)
-- [ ] Dosage still cannot step (TC-07)
-- [ ] Buffer still replays in order (TC-12)
+- [ ] All 10 tasks start (TC-01)
+- [ ] No watchdog reset over a 10-minute run (TC-16)
+- [ ] Alarms keep their cadence during an outage (TC-02)
+- [ ] Dosage still cannot step (TC-07); gate still fails safe (TC-08)
+- [ ] Buffer still replays in order, once each (TC-12)
+- [ ] Docs, diagrams and the Wokwi project updated together

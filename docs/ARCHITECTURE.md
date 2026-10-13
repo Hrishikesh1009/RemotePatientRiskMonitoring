@@ -6,7 +6,7 @@ genuinely contested.
 
 ---
 
-## 1. Why nine tasks instead of one loop
+## 1. Why ten tasks instead of one loop
 
 The training build ran two tasks, with MQTT, OLED rendering and alarm generation all on
 the same one. That structure has a specific failure mode: `mqtt.connect()` blocks. When
@@ -23,7 +23,7 @@ share a task with anything that can block on the network.**
 |---|---|---|
 | **Can block on network** | `mqttTask`, `connectivityTask` | — |
 | **Compute only** | `processingTask` | — |
-| **Physical timing obligation** | — | `alertTask`, `vitalsSensorTask`, `advancedVitalsTask`, `actuatorTask`, `envSensorTask`, `displayTask` |
+| **Physical timing obligation** | — | `alertTask`, `vitalsSensorTask`, `bloodPressureTask`, `ecgTask`, `actuatorTask`, `envSensorTask`, `displayTask` |
 
 `processingTask` sits on core 0 because it is pure computation with a soft 1 Hz deadline;
 putting it there leaves core 1 entirely for real-time work.
@@ -38,11 +38,12 @@ putting it there leaves core 1 entirely for real-time work.
 | 5 | `processingTask` | Risk score gates alarms, bed angle and sampling rate |
 | 4 | `vitalsSensorTask` | Patient data; late data is stale data |
 | 4 | `actuatorTask` | 25 ms servo/dosage ramp cadence — jitter is visible motion |
-| 3 | `advancedVitalsTask` | BP/ECG are diagnostic context, not the primary alarm trigger |
+| 3 | `bloodPressureTask` | BP is diagnostic context, derived from heart rate, not the primary alarm trigger |
+| 3 | `ecgTask` | ECG amplitude, same reasoning; its own task because Task 1 asks for each added parameter to be separately managed |
 | 3 | `envSensorTask` | Room conditions change over minutes |
 | 3 | `mqttTask` | Best-effort; the offline buffer covers delay |
 | 3 | `connectivityTask` | 1 Hz supervision is fast enough |
-| 2 | `displayTask` | A 3 s stale OLED page harms nobody |
+| 2 | `displayTask` | A 1 s stale OLED harms nobody |
 
 **Priority inversion** is avoided by keeping mutex hold times short: every critical
 section is a struct copy or a handful of field assignments. No task holds `mState` across
@@ -100,18 +101,19 @@ so deadlock is impossible — not unlikely, impossible.
 | Queue | Depth | Semantics | Why |
 |-------|-------|-----------|-----|
 | `qVitals` | 1 | `xQueueOverwrite` | A slow consumer must get the *newest* vitals, never work through a backlog of stale ones |
-| `qAdvanced` | 1 | `xQueueOverwrite` | Same, for BP/ECG. Also the task-to-task link: `advancedVitalsTask` peeks `qVitals` for heart rate to derive BP |
+| `qBp` | 1 | `xQueueOverwrite` | Same, for blood pressure. Also the task-to-task link: `bloodPressureTask` peeks `qVitals` for heart rate to derive BP |
+| `qEcg` | 1 | `xQueueOverwrite` | Same, for the ECG amplitude read by `ecgTask` |
 | `qEnv` | 1 | `xQueueOverwrite` | Same, for facility parameters |
 | `qCommand` | 12 | FIFO | Every command must be executed; dropping one loses a doctor's instruction |
-| `qWakeVitals` / `qWakeAdvanced` / `qWakeEnv` | 1 each | `xQueueOverwrite` | Pure edge signal; two pending tokens mean the same as one |
+| `qWakeVitals` / `qWakeBp` / `qWakeEcg` / `qWakeEnv` | 1 each | `xQueueOverwrite` | Pure edge signal; two pending tokens mean the same as one |
 | `qOffline` | 120 | FIFO + manual ring | Chronological order matters for the resync; oldest dropped on overflow |
 
-**Why three wake queues and not one.** This was a real bug in the first cut. A single
+**Why four wake queues and not one.** This was a real bug in the first cut. A single
 shared `qSamplingWake` looks correct — publish one token when the rate changes — but
-`xQueueReceive` **consumes** the item. With three tasks waiting on it, only the first to
-wake receives the token; the other two sleep out their full period, up to 60 seconds.
-The dashboard slider would appear to work while two thirds of the system ignored it. One
-queue per waiter is the fix; `notifySamplingChanged()` overwrites all three.
+`xQueueReceive` **consumes** the item. With several tasks waiting on it, only the first to
+wake receives the token; the others sleep out their full period, up to 60 seconds.
+The dashboard slider would appear to work while most of the system ignored it. One
+queue per waiter is the fix; `notifySamplingChanged()` overwrites all four.
 
 The `qVitals` choice is the interesting one. A depth-8 FIFO would mean that after a
 network stall, `processingTask` works through eight-cycle-old vitals before reaching the
@@ -135,32 +137,40 @@ Three options were considered:
 3. **Chunk the sleep.** Chosen.
 
 ```c
+#define SAMPLING_SLICE_MS 100
+
 static void interruptibleDelay(uint32_t ms, QueueHandle_t wakeQueue) {
-  uint32_t left = ms;
   uint8_t  dummy;
-  while (left > 0) {
-    uint32_t slice = left > 1000 ? 1000 : left;
-    if (xQueueReceive(wakeQueue, &dummy, pdMS_TO_TICKS(slice)) == pdTRUE) {
-      wdtFeed();
-      return;                     // rate changed -- resample immediately
-    }
+  uint32_t waited = 0;
+  while (waited < ms) {
+    vTaskDelay(pdMS_TO_TICKS(SAMPLING_SLICE_MS));       // non-blocking: yields the CPU
+    waited += SAMPLING_SLICE_MS;
     wdtFeed();
-    left -= slice;
+    if (xQueueReceive(wakeQueue, &dummy, 0) == pdTRUE)  // dynamic update arrived via queue
+      return;                                           // rate changed -- resample now
   }
 }
 ```
 
-Each of the three sampling-driven tasks passes its **own** wake queue — see §5 for why a
-shared one silently breaks.
+Each of the four sampling-driven tasks (`vitalsSensorTask`, `bloodPressureTask`,
+`ecgTask`, `envSensorTask`) passes its **own** wake queue — see §5 for why a shared one
+silently breaks.
 
-The task blocks on a queue rather than spinning, so it uses zero CPU while waiting —
-`vTaskDelay` semantics preserved, which is what Task 5 asks for. Worst-case watchdog
-starvation is 1 second regardless of the configured period. And because it wakes on a
-queue token, a rate change from the dashboard takes effect in milliseconds instead of
-waiting out the remaining sleep.
+This is literally the pattern Task 5 names: *non-blocking delays (`vTaskDelay`) and dynamic
+updates through queues*. The wait is made of 100 ms `vTaskDelay()` slices, so the task is
+descheduled and uses no CPU, and between slices it polls its own queue **without blocking**.
+Worst-case watchdog starvation is one slice (100 ms) regardless of the configured period.
+Because a queue token ends the wait, a rate change from the dashboard takes effect within
+one slice instead of waiting out the remaining sleep — **measured 2026-10-13: a task asleep
+on a 60 s period resampled ≈1 s of simulated time after a 5 s command** (see
+`TEST_RESULTS.md` TC-11).
 
-One eleven-line helper satisfies a Task 1 requirement and a Task 5 requirement that
+One twelve-line helper satisfies a Task 1 requirement and a Task 5 requirement that
 initially looked contradictory. This is the piece of the design I'd point at first.
+
+The sampling task also subtracts the time its own work took (the DS18B20 conversion alone
+is ≈750 ms) from the period, so a "5 s" setting really is 5.0 s between samples — measured
+as 5.08 s in simulated time, from the `[SAMPLE]` trace.
 
 ---
 
@@ -244,7 +254,8 @@ present is what the clinician needs at handover.
 ```c
 if (!pSysBacklog.publish(payload)) {
   xQueueSendToFront(qOffline, &r, 0);   // put it back at the FRONT
-  break;
+  if (++failures >= 3) break;           // give up this round; retried later on a backoff
+  ...
 }
 ```
 
@@ -254,9 +265,12 @@ resumes exactly where it stopped. Using the normal tail-send would move that rec
 behind everything else and scramble the timeline — a subtle bug that would only show up
 in exactly the flaky-network scenario the feature exists to handle.
 
-Replay is throttled to one message per 600 ms to stay inside Adafruit IO's rate limit;
-without it, a 120-record burst would be throttled by the broker and the resync would fail
-in a way that looks like a code bug.
+Replay is throttled to one message per 600 ms to stay inside broker rate limits (Adafruit
+IO's in particular); without it, a 120-record burst would be throttled by the broker and
+the resync would fail in a way that looks like a code bug. If a replay does stall, the
+records are kept and the supervisor retries on its own exponential schedule while the link
+is healthy. **Measured 2026-10-13:** a 21-record backlog replayed 21 records, in order, at
+exactly the 5 s sampling spacing (`TEST_RESULTS.md` TC-12).
 
 ---
 
@@ -270,6 +284,12 @@ the broker down. Backoff with a cap is what stops the recovery from becoming the
 
 The cap at 60 s rather than unbounded growth means a device never becomes effectively
 unreachable after a long outage.
+
+**The streak resets when a layer recovers.** Recovery is two stages — Wi-Fi association,
+then the broker session. Once Wi-Fi re-associates the failure streak is over, so the
+backoff returns to 1 s and the broker is tried on the next tick. Without this the broker
+attempt inherited the 60 s delay earned by the Wi-Fi failures: measured, a restored link
+stayed OFFLINE for ≈65 s; with the reset it is back ONLINE in ≈10 s.
 
 ---
 
@@ -287,9 +307,11 @@ cannot subscribe to `medical.heart-rate`. The restriction is enforced by the bro
 before a byte reaches the client. Hiding widgets in a dashboard UI provides no such
 guarantee — anyone with the credential can subscribe to `#` with a CLI client.
 
-Adafruit IO's free tier does not expose per-topic ACLs, so on that platform the
-separation is structural rather than enforced. The design is correct and portable; the
-limitation is the platform's, and it is stated in the report rather than glossed over.
+The shipped default broker (`broker.hivemq.com`) is public and has no ACLs, and Adafruit
+IO's free tier does not expose per-topic ACLs either, so on both the separation is
+structural rather than enforced. The design is portable to a broker that does; ACL
+configuration is infrastructure outside this project, and the limitation is stated in
+`TASK_MAPPING.md` and the report rather than glossed over.
 
 ---
 
@@ -297,20 +319,72 @@ limitation is the platform's, and it is stated in the report rather than glossed
 
 | Consumer | Bytes |
 |----------|-------|
-| Task stacks (9 tasks) | 43,008 |
+| Task stacks (10 tasks) | 46,080 |
 | `qOffline` (120 × 32) | 3,840 |
 | `SystemState` | ≈200 |
 | Other queues | ≈300 |
 | SSD1306 framebuffer (128×64/8) | 1,024 |
-| **Total explicit** | **≈45 KB** |
+| **Total explicit** | **≈48 KB** |
 
 ESP32 has ~320 KB DRAM, leaving ample headroom for the Wi-Fi/TCP stack (~40 KB) and
-Arduino runtime. Measured free heap after boot: ≈180 KB, stable — the OLED page 5 heap
+Arduino runtime. Measured free heap after boot: **166 KB**, and **165 KB** after 506 s of simulated
+operation that included three outages and their replays (`docs/evidence/`) — the OLED page 5 heap
 readout exists specifically so a leak would be visible during a long demo run.
 
 ---
 
-## 14. What I would change with more time
+## 14. Fault injection: making Task 6 demonstrable
+
+Wokwi has no control for "pull the network cable", and editing `WIFI_SSID` and restarting
+wipes the RAM buffer — so the cycle the task is about (go offline, buffer, come back,
+replay) cannot be shown that way. Two slide switches fix that:
+
+| Switch | GPIO | HIGH means | Effect on the real link |
+|--------|------|-----------|-------------------------|
+| `swWifiCut` | 23 | Wi-Fi cut | `WiFi.disconnect()`, and the Wi-Fi recovery attempt fails while held |
+| `swBrokerCut` | 39 (VN) | broker unreachable | `mqtt.disconnect()`, and the broker recovery attempt fails while held |
+
+They act on the *real* connection, so detection, buffering, the buzzer pattern and the
+backoff are the production code paths, not a flag set for the demo. Releasing a switch is
+treated as a link-up event (one immediate retry, as a PHY interrupt would trigger).
+Every injection is written to the serial log (`[FAULT] ...`) so it can never be mistaken
+for a real outage in a log.
+
+## 15. Keepalive, publish cadence and the synthetic patient
+
+Four smaller decisions that came out of measuring the system rather than reading it:
+
+- **Keepalive only when idle.** `mqtt.ping()` is sent only after 10 s with nothing sent.
+  An earlier revision pinged on every 200 ms pass of the MQTT loop (≈5 PINGREQ/s, each
+  holding the client lock for up to 500 ms); combined with a separate publish timer, the
+  measured publish cadence was 2–3× the configured sampling period. The library's own
+  keepalive is 300 s, so the session never lapses and the ping exists only to notice a
+  silently dead connection (3 unanswered pings ⇒ drop and reconnect).
+  A burst of 12 distinct commands was applied 12 out of 12 (`TEST_RESULTS.md` TC-15).
+- **Publish per sample.** `mqttTask` publishes when a *new* vitals sample exists, not on a
+  second free-running timer. A separate timer is never in phase with the sampling task, so
+  it re-sends, skips or drifts whenever the rate changes. Dashboard cadence is now exactly
+  the sampling rate, and the aggregate's `n` is the true sample count.
+- **A synthetic patient that stays stable.** Heart rate and SpO₂ are software-generated
+  (no part exists in Wokwi). The first revision was an unbounded random walk that wandered
+  into the 150–175 bpm band and stayed there. They now mean-revert to 78 bpm / 97 % with
+  rare episodes, and `control.sim-hr` / `control.sim-spo2` can pin them to a chosen value so
+  the risk engine, adaptive sampling and automatic bed can be shown on demand.
+- **A stalled link must not reset the chip.** A publish round is ~15 blocking TCP writes
+  made while `mqttTask` holds the client lock. When the broker (or Wokwi's gateway) stops
+  reading, one write can block ~10 s; with the watchdog fed once per pass, two or three of
+  them tripped the 20 s task watchdog and rebooted the chip — losing the RAM buffer and
+  silencing the alarms for the reboot (BUG_LOG B-38, seen once in a long simulation
+  session). Now the watchdog is fed **before every write**, a round **ends at the first
+  failure**, and after a failed round the session is **probed every second**; three
+  unanswered probes drop it, the supervisor reports OFFLINE/MQTT and buffering starts.
+  The principle is the same as §1: nothing that can wait on the network may be allowed to
+  starve a supervisor or be the reason the whole device resets. (A stall cannot be produced
+  on demand in Wokwi, so this path is reviewed and regression-tested, not exercised.)
+
+---
+
+## 16. What I would change with more time
 
 1. **TLS.** Port 1883 is plaintext. `WiFiClientSecure` on 8883 with a pinned CA is a
    drop-in change to the client object and should be done before any real deployment.

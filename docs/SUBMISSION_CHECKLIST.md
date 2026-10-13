@@ -2,260 +2,113 @@
 
 ## ⚠️ Read this first
 
-The portal states: **"One-time submission only: Please ensure all your work is complete
-before submitting. You won't be able to make changes after submission."**
+The portal states that submission is **one-time**: *you cannot change, edit, replace or update
+anything afterwards*, and submitting also ends the internship (the end date becomes the day you
+submit). **Do not press Submit until every box in Parts B and C is ticked.**
 
-Do not press Submit until every box below is ticked.
+| | |
+|---|---|
+| **Deadline** | The task page shows **25 Oct 2026**; the submit dialog shows "October 26, 2026" with a countdown (12 d 4 h left on the evening of 13 Oct) that ends at **00:00 IST on 26 Oct — i.e. the end of 25 Oct**. Submit well before that; a late submission earns no stipend. |
+| **Submit form** (re-checked on 13 Oct 2026 by opening the dialog and cancelling) | **Website Hosted URL** · **GitHub Repository** · **Project report** (a rich-text box) · buttons *Cancel* / *Submit project* |
+| **Stipend rule** | 6 of 6 tasks → ₹3,000 · exactly 5 → ₹500 · fewer → ₹0; everyone gets the certificate. The portal counter should read **6/6** — check it. |
+| **Also required by the instructions dialog** | Technical report with the listed sections · mandatory screenshots · demonstration video · README, **Bug Log**, **Assumptions**, **Self-Attestation** · every link public and working *without logging in* |
+| **"Assignment document"** | The dialog says the folder structure and screenshot names must follow it. **No such document exists anywhere on the portal** (checked on 13 Oct). The repository keeps its existing layout and contains every file the dialog names. If a mentor sends you that document, compare names before submitting. |
 
-**Deadline:** 26 October 2026
-**Submission form asks for:** a Google Drive folder link containing PDFs and links, plus
-a project report field.
-**The instructions modal additionally requires:** GitHub repo, Wokwi link, project
-report, architecture diagram, workflow diagram, dashboard screenshots, and demo video.
+**Public links**
 
-**Status as of this writing:** everything below is complete and verified **except the
-demo video** (Phase 5) and the final portal submission (Phase 9). The Drive folder
-(Phase 8) is created, populated, and shared — only your own incognito sanity-check and
-the one-time Submit click remain.
-
----
-
-## Phase 0 — Portal housekeeping (do this now, not at the end)
-
-These come from the **Internship guidelines and policies** panel, not the task list, and
-they affect your evaluation independently of the code.
-
-- [ ] **Log daily reports.** Policy: *"Log a short work report for each active project…
-      Consistent reporting reflects professionalism."* Use **Daily report → Log today's
-      update** on the project card. This is a running obligation — a submission with an
-      empty report history reads badly regardless of code quality. Keep this current
-      through submission day.
-- [x] **Mark all 6 tasks complete** in **Tasks → 6 assigned · open checklist**. This was
-      done and the counter read **6/6** earlier in this session.
-- [ ] Confirm the counter still reads **6/6** before submitting — the portal session has
-      since expired (logged back out to the sign-in page), so this needs one fresh look
-      after you log back in. It should still read 6/6 since nothing un-marks a task on its
-      own, but verify rather than assume.
-
-> **Stipend is a cliff, not a slope:** 6 of 6 tasks → ₹3,000. Exactly 5 → ₹500. Fewer
-> than 5 → ₹0. Everyone receives a certificate either way. There is no partial credit
-> between 5 and 6, so the sixth task is worth ₹2,500 on its own.
-
-> **Rubric note:** *"All tasks must be fully integrated to meet the 100% completion
-> requirement."* This is why everything lives in one `main.ino` rather than six sketches.
-
-> **Originality note:** *"Maintain code quality, originality, and best practices."* Be
-> ready to explain any part of the design in your own words — the mentors may ask. The
-> rationale for every non-obvious decision is in `ARCHITECTURE.md`. Note also the honest
-> caveat on role-based access in `TASK_MAPPING.md` Task 2 — be ready to explain the
-> difference between topic separation (shipped) and broker-enforced ACLs (not shipped) if
-> asked, rather than overclaiming it.
+* Wokwi (live simulation): https://wokwi.com/projects/473060533558119425
+* GitHub: https://github.com/Hrishikesh1009/RemotePatientRiskMonitoring
+* Drive folder (optional mirror): https://drive.google.com/drive/folders/1tpl56Z8DgJtOQY_sncOU8mxls7EHA00L
 
 ---
 
-## Phase 1 — Code and simulation
+## Part A — Finished and verified (nothing for you to do)
 
-- [x] `main.ino` pasted into Wokwi; simulation runs without error
-- [x] `diagram.json` pasted; all 24 parts present, no floating wires
-- [x] All 9 libraries from `libraries.txt` added
-- [x] Default broker config verified — shipped default is `USE_HIVEMQ 1` (public
-      `broker.hivemq.com`, no credentials needed). The alternate `USE_HIVEMQ 0` path for
-      Adafruit IO exists in `main.ino` but is **not** the one exercised for this
-      submission; if you switch to it, `IO_USERNAME`/`IO_KEY` must be replaced first.
-- [x] Serial prints `[BOOT] 9 FreeRTOS tasks started`
-- [x] OLED cycles all five pages
-- [x] Ran 5+ minutes with no watchdog reset and stable free heap (~170 KB) — see
-      `TEST_RESULTS.md`
-- [x] Wokwi project **saved and set to public** — share URL below
-
-**Wokwi URL:** `https://wokwi.com/projects/473060533558119425`
-
----
-
-## Phase 2 — Dashboards
-
-- [x] MQTT topics live on `broker.hivemq.com` under prefix `rprms-hl-8842` (see
-      `DASHBOARD_SETUP.md` for the HiveMQ-vs-Adafruit-IO decision)
-- [x] Medical Staff Dashboard built — gauges + text + alert stream + chart + controls
-- [x] Facility Management Dashboard built — gauges + text + alert stream + chart
-- [x] **Verified: no `medical.*` block appears on the Facility dashboard** — this is
-      topic-level separation, not broker-enforced access control; see the caveat in
-      `TASK_MAPPING.md` Task 2 before describing this as "role-based access" to an
-      evaluator
-- [x] Sliders confirmed working end-to-end (drag → OLED changes)
-- [x] Aggregation JSON appearing on both `summary` feeds
+| ✔ | Item | Evidence |
+|---|------|----------|
+| ✔ | All six tasks implemented **inside one integrated `main.ino`** (10 FreeRTOS tasks), circuit `diagram.json` (26 parts), `libraries.txt` | `docs/TASK_MAPPING.md` |
+| ✔ | Builds on Wokwi's cloud toolchain from exactly the repository files (HTTP 200, image 1,600,201 bytes) | `docs/BUILD_VERIFICATION.md` |
+| ✔ | **16 test cases run as 49 automated checks — all pass**, plus 4 pixel-level supplementary checks, fever test, GPIO15 experiment; the full run history (including the failures and their causes) is kept | `docs/TEST_RESULTS.md`, `docs/evidence/` |
+| ✔ | Technical report with Overview, Architecture, Design, State-Machine Design, Verification Methodology, Simulation Results, Challenges, Conclusions | `docs/TECHNICAL_REPORT.md` |
+| ✔ | **Bug Log** (38 defects + 5 test-rig defects, each with cause, fix, measurement), **Assumptions** (A1–E) | `docs/BUG_LOG.md`, `docs/ASSUMPTIONS.md` |
+| ✔ | **Self-Attestation** drafted with the evidence column filled in — *the boxes and the signature are yours* (Part C) | `docs/SELF_ATTESTATION.md` |
+| ✔ | 15 screenshots (12 required + 3 bonus), taken on the final build | `screenshots/README.md` |
+| ✔ | Architecture and workflow diagrams (SVG and PNG) | `docs/architecture-diagram.svg`, `docs/workflow-diagram.svg` |
+| ✔ | Two role-separated Node-RED dashboards (84-node flow), setup guides, topic map | `dashboards/`, `docs/NODE_RED_SETUP.md` |
+| ✔ | Demo-video script that covers overview → implementation → simulation → verification → working demonstration | `docs/DEMO_VIDEO_SCRIPT.md` |
+| ✔ | Measurement rig and how to re-run every number | `tools/verification/README.md` |
 
 ---
 
-## Phase 3 — Testing
+## Part B — Public copies that must match the repository
 
-Work through `TEST_PLAN.md`. Actual results are in `TEST_RESULTS.md` and are reproduced
-verbatim in `PROJECT_REPORT.md` §10 — several are genuinely confirmed, a few are honestly
-marked as not (yet) exercised or inconclusive rather than rubber-stamped Pass:
+The final firmware is `main.ino` SHA-256 `9e69da719afebbf68aa48637d9e12146e0f486461ead55e3a46ef7f892e43739`
+(2066 lines). **The live Wokwi project must contain exactly these three files.** An evaluator who
+presses Play on the Wokwi link otherwise runs an older sketch — the previous public project still
+had the pre-fix wiring (BUG_LOG B-14 – B-16, B-23).
 
-- [x] TC-01 Boot and task creation — **Pass**
-- [ ] TC-02 Alarms unblocked during network stall — not exercised (needs a simultaneous
-      temp-alarm + network-stall setup)
-- [ ] TC-03 Sensor disconnect → DEGRADED — not exercised (needs precise in-circuit switch
-      toggling)
-- [x] TC-04 Role separation (topic-level) — **Pass**
-- [ ] TC-05 Gauge thresholds — not exercised (needs precise in-circuit potentiometer
-      dragging)
-- [x] TC-06 Periodic aggregation — **Pass**
-- [x] TC-07 Dosage rate limiting — **Pass**
-- [x] TC-08 Dosage critical confirmation (both timeout and confirm paths) — **Pass**,
-      triple-confirmed
-- [x] TC-09 Bed smooth transition — **Pass**
-- [x] TC-10 Automatic bed adjustment — **Pass** for manual override; auto-adjust
-      direction confirmed via Node-RED simulator, not re-confirmed against the live
-      device this run
-- [ ] TC-11 Adaptive sampling — inconclusive (MQTT's once-per-period readback cadence
-      didn't confirm the change within the observation window)
-- [x] TC-12 Offline detection, buffering and resync — **Pass** for the backoff sequence;
-      full resync/replay loop independently observed in a separate boot, same session
-
-If more time is available before the deadline, re-running TC-02/03/05/11 against the live
-device (rather than leaving them as documented gaps) would strengthen the submission, but
-none of them block it — the gaps are disclosed, not hidden.
+- [x] **Wokwi project updated and saved** (13 Oct, in your logged-in browser): `sketch.ino`,
+      `diagram.json` and `libraries.txt` now hold the final files. The previous live content
+      (the old 4-switch circuit) was backed up first. *`libraries.txt` was already identical; it
+      holds one library per line without the `#` comment lines of the repository copy.*
+- [x] **Verified logged out** (a fresh anonymous browser opened the public link, nothing injected):
+      the three files hash-match the repository, the build is HTTP 200 / 1,600,201 bytes, serial
+      prints `[BOOT] firmware 2026-10-13 final …` and `[BOOT] 10 FreeRTOS tasks started` —
+      `docs/evidence/wokwi_public_project_verification.txt` and `…_logged_out.png`.
+- [ ] **GitHub `main` updated** — the work is committed locally; publish it with
+      `git push` from the repository folder (Git Credential Manager opens a browser window the
+      first time: sign in as the repository owner).
+- [ ] **Verify GitHub logged out** after the push — the README renders, both diagrams display,
+      `docs/evidence/` and `tools/verification/` are present.
+- [ ] *(optional)* **Drive folder refreshed** — `submission_pdfs/` holds up-to-date PDFs and a
+      `00_START_HERE.txt`; upload its contents (the folder is git-ignored staging).
 
 ---
 
-## Phase 4 — Screenshots
+## Part C — Only you can do these
 
-All 12 required + 3 bonus, captured against the live device — **done**:
+- [ ] **Record the demo video** (about 7 minutes) following `docs/DEMO_VIDEO_SCRIPT.md`, in your
+      own words. Say plainly what is simulated (heart rate, SpO₂, blood pressure) and that role
+      separation is by topic only. Upload it (Drive "Anyone with the link" or YouTube unlisted),
+      open the link in a private window, then **add the link** to: `README.md` (status list),
+      `docs/TECHNICAL_REPORT.md` (table at the top) and the Drive `00_START_HERE.txt`.
+- [ ] **Complete `docs/SELF_ATTESTATION.md`** — tick only what is true, write the *Disclosure of
+      assistance* in your own words (this project was built with AI coding assistants; the policy
+      treats misrepresenting authorship as a disqualifying offence), sign and date it, commit it.
+- [ ] **Log your daily report(s)** on the portal ("Log today's update" on the project card). The
+      guidelines treat consistent reporting as part of the evaluation.
+- [ ] **Be able to explain it.** Read `docs/ARCHITECTURE.md` and the limits below; mentors may ask.
+- [ ] **Final link test**, all in a private window: Wokwi · GitHub · video · (Drive).
+- [ ] **Submit** (below), then screenshot the confirmation.
 
-- [x] 01 Medical dashboard, normal
-- [x] 02 Medical dashboard, critical + alert stream
-- [x] 03 Facility dashboard, normal
-- [x] 04 Facility dashboard, AQI alert
-- [x] 05 Dosage slider mid-ramp
-- [x] 06 OLED `>CONFIRM` + red LED
-- [x] 07 Bed control + servo horn
-- [x] 08 Adaptive sampling at 5 s
-- [x] 09 OLED `LOGGING OFFLINE`
-- [x] 10 `system.backlog` resync
-- [x] 11 Full Wokwi circuit
-- [x] 12 Serial monitor boot lines
-- [x] 13 (bonus) Node-RED flow editor
-- [x] 14 (bonus) Architecture diagram
-- [x] 15 (bonus) Workflow diagram
+### What to paste into the portal
 
-Stored in `screenshots/` (repo) and `submission_pdfs/15_Screenshots/` (Drive staging).
-
----
-
-## Phase 5 — Demo video — NOT DONE (out of scope for this pass)
-
-- [ ] Recorded following `DEMO_VIDEO_SCRIPT.md` (~6 minutes)
-- [ ] All six tasks visibly demonstrated
-- [ ] Audio clear; OLED readable when referenced
-- [ ] Uploaded to Google Drive (or YouTube unlisted) with link sharing **on**
-
-**Video URL:** `_______________________________________________`
-
-This is the one required deliverable deliberately left for you to do yourself — everything
-else in this checklist is ready. `DEMO_VIDEO_SCRIPT.md` has the shot-by-shot script.
+| Field | Value |
+|---|---|
+| Website Hosted URL | `https://wokwi.com/projects/473060533558119425` |
+| GitHub Repository | `https://github.com/Hrishikesh1009/RemotePatientRiskMonitoring` |
+| Project report | the content of `docs/TECHNICAL_REPORT.md`. Easiest: open the file on GitHub, select the rendered text, copy, paste into the box, then check headings, tables and code blocks survived. Put the video link in the first table first. |
 
 ---
 
-## Phase 6 — GitHub repository
+## Part D — Limits to be ready to explain (all disclosed in the repository)
 
-- [x] Public repo created: `RemotePatientRiskMonitoring`
-- [x] Pushed: `main.ino`, `diagram.json`, `libraries.txt`, `wokwi.toml`, `README.md`,
-      `docs/`, `dashboards/`, `screenshots/`
-- [x] README renders correctly on GitHub
-- [x] Both SVG diagrams display in the browser
-- [x] Wokwi link added to the README
-- [ ] Demo video link added to the README — pending Phase 5
-
-**GitHub URL:** `https://github.com/Hrishikesh1009/RemotePatientRiskMonitoring`
-
----
-
-## Phase 7 — PDFs for the Drive folder
-
-The submission form asks for **PDFs**. All rendered and current in `submission_pdfs/`:
-
-- [x] `PROJECT_REPORT.md` → `01_Project_Report.pdf`
-- [x] `architecture-diagram.svg` → `02_Architecture_Diagram.pdf`
-- [x] `workflow-diagram.svg` → `03_Workflow_Diagram.pdf`
-- [x] `TASK_MAPPING.md` → `04_Task_Mapping.pdf`
-- [x] `ARCHITECTURE.md` → `05_Architecture_Design.pdf`
-- [x] `TEST_PLAN.md` → `06_Test_Plan.pdf`
-- [x] `DASHBOARD_SETUP.md` → `07_Dashboard_Setup.pdf`
-- [x] `DEMO_VIDEO_SCRIPT.md` → `08_Demo_Video_Script.pdf`
-- [x] `SUBMISSION_CHECKLIST.md` (this file) → `09_Submission_Checklist.pdf`
-- [x] `README.md` → `10_README.pdf`
-- [x] `BUILD_VERIFICATION.md` → `11_Build_Verification.pdf`
-- [x] `NODE_RED_SETUP.md` → `12_Node_RED_Setup.pdf`
-- [x] `TEST_RESULTS.md` → `13_Test_Results.pdf`
-
-All regenerated from current source as of the last doc edits (role-based-access caveat,
-synced test results) — none are stale relative to the `.md` sources.
-
----
-
-## Phase 8 — Google Drive folder — remaining step
-
-Structure it so an evaluator finds everything in under a minute. `submission_pdfs/`
-locally already mirrors this layout — it just needs uploading:
-
-```
-Hrishikesh_Lokhande_RPRMS/
-├── 00_START_HERE.txt          ← GitHub + Wokwi + video links
-├── 01_Project_Report.pdf
-├── 02_Architecture_Diagram.pdf
-├── 03_Workflow_Diagram.pdf
-├── 04_Task_Mapping.pdf
-├── 05_Architecture_Design.pdf
-├── 06_Test_Plan.pdf
-├── 07_Dashboard_Setup.pdf
-├── 08_Demo_Video_Script.pdf
-├── 09_Submission_Checklist.pdf
-├── 10_README.pdf
-├── 11_Build_Verification.pdf
-├── 12_Node_RED_Setup.pdf
-├── 13_Test_Results.pdf
-├── 14_Source_Code/             ← main.ino, diagram.json, libraries.txt, node-red-flows.json
-└── 15_Screenshots/              ← all 15 PNGs
-```
-
-`00_START_HERE.txt` already exists in `submission_pdfs/` with GitHub + Wokwi links; add
-the video link once Phase 5 is done.
-
-- [x] Folder created on Google Drive and populated (all 14 top-level files plus
-      `14_Source_Code/` and `15_Screenshots/` uploaded and verified present)
-- [x] **Sharing set to "Anyone with the link — Viewer"** (confirmed in the Share dialog)
-- [ ] Verified in a private/incognito window that the link opens without sign-in — do
-      this one yourself before submitting, since it needs a logged-out browser session
-
-**Drive URL:** `https://drive.google.com/drive/folders/1tpl56Z8DgJtOQY_sncOU8mxls7EHA00L?usp=sharing`
-
----
-
-## Phase 9 — Submit — do this yourself, last
-
-- [ ] Every box above ticked (Phase 5 demo video is the one intentional exception until
-      you record it)
-- [ ] Drive link opens in incognito (verify yourself — needs a logged-out session)
-- [x] GitHub repo is public
-- [x] Wokwi project is public
-- [ ] Video plays from the shared link
-
-Then on the portal: **Submit your final project → Submit →** paste the Google Drive URL
-and the project report field → **Submit project**.
-
-This is a one-time, irreversible action — it is left for you to click yourself.
-
-- [ ] Screenshot the confirmation for your records
+* **Role-based access is topic separation only** — the public broker has no ACLs (`TASK_MAPPING.md` Task 2).
+* **Heart rate, SpO₂ and blood pressure are simulated** (Wokwi has no such parts); ECG, O₂ and AQI come from potentiometers.
+* **Thresholds are illustrative**, not clinically validated; this is not a medical device.
+* **Not exercised in simulation:** DEGRADED caused by publish failures, the failing-write branch of the
+  B-38 watchdog fix (the simulator cannot stall the link on demand), the optional SPIFFS mirror.
+* **The public broker / Wokwi gateway sometimes stops answering the simulated device** after ~10–15
+  simulated minutes. The firmware shows `LOGGING OFFLINE` and keeps retrying (it behaved correctly in
+  the natural outage in `docs/evidence/supplementary_S3_…`); pressing **Restart** in Wokwi clears it.
+* **Flash/RAM usage of the final revision was not measured** (Wokwi does not report it).
+* **Dashboards are local** (`http://127.0.0.1:1880/ui`), evidenced by screenshots and the importable flow.
 
 ---
 
 ## Optional — email the mentors
 
-The instructions modal says queries go to **training@elevanceskills.com** with name,
-domain, GitHub repository link, and Wokwi project link. Sending this alongside your
-submission costs nothing and creates a second record of your work:
+Queries go to **training@elevanceskills.com** with name, domain, GitHub link and Wokwi link:
 
 ```
 Subject: Final Project Submission - Hrishikesh Lokhande - IoT Domain
@@ -265,8 +118,7 @@ Domain : IoT / Embedded Systems
 Project: Remote Patient Risk Monitoring System
 GitHub : https://github.com/Hrishikesh1009/RemotePatientRiskMonitoring
 Wokwi  : https://wokwi.com/projects/473060533558119425
-Drive  : https://drive.google.com/drive/folders/1tpl56Z8DgJtOQY_sncOU8mxls7EHA00L?usp=sharing
 
-All six internship tasks are implemented in a single integrated Wokwi project
-as required. Task-by-task evidence is in docs/TASK_MAPPING.md.
+All six internship tasks are implemented in a single integrated Wokwi project.
+Task-by-task evidence: docs/TASK_MAPPING.md. Measured results: docs/TEST_RESULTS.md.
 ```

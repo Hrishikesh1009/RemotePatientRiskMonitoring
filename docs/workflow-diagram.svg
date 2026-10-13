@@ -24,26 +24,32 @@
   <rect x="24" y="76" width="1192" height="286" rx="10" fill="#f7f9fb" stroke="#b9c7d4"/>
   <text x="44" y="100" font-size="14" font-weight="700" fill="#12212e">A · MAIN MONITORING PIPELINE  (every sampling period, 5–60 s)</text>
 
-  <rect x="44" y="112" width="150" height="56" rx="8" fill="#eef4fa" stroke="#a9c4de"/>
-  <text x="119" y="132" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1f5f9e">vitalsSensorTask</text>
-  <text x="119" y="148" text-anchor="middle" font-size="9" fill="#40546a">temp · HR · SpO₂</text>
-  <text x="119" y="161" text-anchor="middle" font-size="9" fill="#40546a">motion</text>
+  <rect x="44" y="106" width="150" height="50" rx="8" fill="#eef4fa" stroke="#a9c4de"/>
+  <text x="119" y="123" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1f5f9e">vitalsSensorTask</text>
+  <text x="119" y="137" text-anchor="middle" font-size="9" fill="#40546a">temp · HR · SpO₂</text>
+  <text x="119" y="149" text-anchor="middle" font-size="9" fill="#40546a">motion</text>
 
-  <rect x="44" y="176" width="150" height="56" rx="8" fill="#e8f0fb" stroke="#1f7ae0" stroke-width="1.5"/>
-  <text x="119" y="196" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1f5f9e">advancedVitalsTask</text>
-  <text x="119" y="212" text-anchor="middle" font-size="9" fill="#40546a">blood pressure · ECG</text>
-  <text x="119" y="225" text-anchor="middle" font-size="8.5" font-style="italic" fill="#5b6b7c">own task — T1</text>
+  <rect x="44" y="162" width="150" height="50" rx="8" fill="#e8f0fb" stroke="#1f7ae0" stroke-width="1.5"/>
+  <text x="119" y="179" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1f5f9e">bloodPressureTask</text>
+  <text x="119" y="193" text-anchor="middle" font-size="9" fill="#40546a">blood pressure (from HR)</text>
+  <text x="119" y="205" text-anchor="middle" font-size="8.5" font-style="italic" fill="#5b6b7c">own task — T1</text>
 
-  <rect x="44" y="240" width="150" height="56" rx="8" fill="#eefaf2" stroke="#9fd3ae"/>
-  <text x="119" y="260" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f7a42">envSensorTask</text>
-  <text x="119" y="276" text-anchor="middle" font-size="9" fill="#40546a">room temp · RH</text>
-  <text x="119" y="289" text-anchor="middle" font-size="9" fill="#40546a">O₂ · AQI</text>
+  <rect x="44" y="218" width="150" height="50" rx="8" fill="#e8f0fb" stroke="#1f7ae0" stroke-width="1.5"/>
+  <text x="119" y="235" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1f5f9e">ecgTask</text>
+  <text x="119" y="249" text-anchor="middle" font-size="9" fill="#40546a">ECG amplitude (ADC1)</text>
+  <text x="119" y="261" text-anchor="middle" font-size="8.5" font-style="italic" fill="#5b6b7c">own task — T1</text>
 
-  <rect x="228" y="146" width="118" height="98" rx="8" fill="#f4eefb" stroke="#c0a8e0"/>
-  <text x="287" y="170" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5b32a8">qVitals</text>
-  <text x="287" y="188" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5b32a8">qAdvanced</text>
-  <text x="287" y="206" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5b32a8">qEnv</text>
-  <text x="287" y="226" text-anchor="middle" font-size="9" fill="#6b4a8a">depth 1 · overwrite</text>
+  <rect x="44" y="274" width="150" height="50" rx="8" fill="#eefaf2" stroke="#9fd3ae"/>
+  <text x="119" y="291" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f7a42">envSensorTask</text>
+  <text x="119" y="305" text-anchor="middle" font-size="9" fill="#40546a">room temp · RH</text>
+  <text x="119" y="317" text-anchor="middle" font-size="9" fill="#40546a">O₂ · AQI</text>
+
+  <rect x="228" y="140" width="118" height="116" rx="8" fill="#f4eefb" stroke="#c0a8e0"/>
+  <text x="287" y="162" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5b32a8">qVitals</text>
+  <text x="287" y="180" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5b32a8">qBp</text>
+  <text x="287" y="198" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5b32a8">qEcg</text>
+  <text x="287" y="216" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5b32a8">qEnv</text>
+  <text x="287" y="240" text-anchor="middle" font-size="9" fill="#6b4a8a">depth 1 · overwrite</text>
 
   <rect x="380" y="140" width="164" height="110" rx="8" fill="#ffffff" stroke="#9fd3ae" stroke-width="2"/>
   <text x="462" y="163" text-anchor="middle" font-size="11" font-weight="700" fill="#0f7a42">processingTask</text>
@@ -59,7 +65,7 @@
 
   <rect x="578" y="184" width="150" height="58" rx="8" fill="#eef4fa" stroke="#a9c4de"/>
   <text x="653" y="206" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1f5f9e">displayTask</text>
-  <text x="653" y="224" text-anchor="middle" font-size="9.5" fill="#40546a">OLED 5 pages</text>
+  <text x="653" y="224" text-anchor="middle" font-size="9.5" fill="#40546a">OLED 5 pages + dose footer</text>
 
   <rect x="578" y="256" width="150" height="58" rx="8" fill="#eefaf2" stroke="#9fd3ae"/>
   <text x="653" y="278" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0f7a42">mqttTask</text>
@@ -79,17 +85,19 @@
   <text x="887" y="273" text-anchor="middle" font-size="9.5" fill="#40546a">gauges · alerts · trend</text>
   <text x="887" y="292" text-anchor="middle" font-size="9" font-style="italic" fill="#5b6b7c">maintenance staff only</text>
 
-  <rect x="1004" y="150" width="190" height="122" rx="8" fill="#fff6e5" stroke="#e8c37a"/>
+  <rect x="1004" y="150" width="190" height="138" rx="8" fill="#fff6e5" stroke="#e8c37a"/>
   <text x="1099" y="172" text-anchor="middle" font-size="10.5" font-weight="700" fill="#8a5c00">control.* (INBOUND)</text>
   <text x="1016" y="192" font-size="9.5" fill="#4a3a10">dosage slider 0–100 mg/hr</text>
   <text x="1016" y="208" font-size="9.5" fill="#4a3a10">dosage confirm button</text>
   <text x="1016" y="224" font-size="9.5" fill="#4a3a10">bed slider 0–90°</text>
   <text x="1016" y="240" font-size="9.5" fill="#4a3a10">bed preset + auto toggle</text>
   <text x="1016" y="256" font-size="9.5" fill="#4a3a10">sampling 5–60 s + mode</text>
+  <text x="1016" y="272" font-size="9.5" fill="#4a3a10">sim HR / SpO₂ (demo aid)</text>
 
-  <path d="M 194 140 L 224 168" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
-  <path d="M 194 204 L 224 190" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
-  <path d="M 194 268 L 224 214" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  <path d="M 194 131 L 224 160" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  <path d="M 194 187 L 224 180" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  <path d="M 194 243 L 224 200" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  <path d="M 194 299 L 224 218" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
   <path d="M 232 152 L 208 128 L 194 128" stroke="#1f7ae0" stroke-width="1.5" fill="none" marker-end="url(#a)" stroke-dasharray="4,3" opacity="0"/>
   <path d="M 346 195 L 376 195" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
   <path d="M 544 180 L 574 145" stroke="#c0392b" stroke-width="2" fill="none" marker-end="url(#ar)"/>
@@ -97,7 +105,7 @@
   <path d="M 544 224 L 574 275" stroke="#5b6b7c" stroke-width="2" fill="none" marker-end="url(#a)"/>
   <text x="556" y="158" font-size="8.5" fill="#c0392b" transform="rotate(-42 556 158)">semAlert</text>
 
-  <path d="M 1099 272 L 1099 330 L 462 330 L 462 254" stroke="#e0a020" stroke-width="2" fill="none" marker-end="url(#a)" stroke-dasharray="5,4"/>
+  <path d="M 1099 288 L 1099 330 L 462 330 L 462 254" stroke="#e0a020" stroke-width="2" fill="none" marker-end="url(#a)" stroke-dasharray="5,4"/>
   <text x="790" y="345" text-anchor="middle" font-size="9.5" fill="#c08010">dashboard commands ▸ qCommand ▸ applyCommand() ▸ actuatorTask</text>
 
   <!-- ================= B: DOSAGE ================= -->
@@ -140,7 +148,7 @@
 
   <rect x="496" y="524" width="98" height="138" rx="7" fill="#ffffff" stroke="#e0aaaa"/>
   <text x="545" y="548" text-anchor="middle" font-size="10" font-weight="700" fill="#4a2a2a">OUTPUT</text>
-  <text x="545" y="570" text-anchor="middle" font-size="9" fill="#6b4444">OLED value</text>
+  <text x="545" y="570" text-anchor="middle" font-size="9" fill="#6b4444">OLED footer</text>
   <text x="545" y="588" text-anchor="middle" font-size="9" fill="#6b4444">&lt;60 normal</text>
   <text x="545" y="606" text-anchor="middle" font-size="9" fill="#c08010">60–80 warning</text>
   <text x="545" y="624" text-anchor="middle" font-size="9" font-weight="700" fill="#c0392b">&gt;80 red LED</text>
@@ -150,6 +158,7 @@
   <!-- ================= C: CONNECTIVITY ================= -->
   <rect x="630" y="378" width="586" height="300" rx="10" fill="#fffbf0" stroke="#e8c37a"/>
   <text x="650" y="402" font-size="14" font-weight="700" fill="#8a5c00">C · CONNECTIVITY STATE MACHINE  (Task 6, 1 Hz)</text>
+  <text x="650" y="416" font-size="9" font-style="italic" fill="#8a5c00">Slide switches SW_WIFI_CUT / SW_BROKER_CUT break the real link on demand (fault injection).</text>
 
   <rect x="666" y="424" width="140" height="56" rx="28" fill="#e6f7ec" stroke="#0f9d58" stroke-width="2"/>
   <text x="736" y="448" text-anchor="middle" font-size="12" font-weight="700" fill="#0f7a42">ONLINE</text>
@@ -164,7 +173,7 @@
   <text x="918" y="616" text-anchor="middle" font-size="9" fill="#40546a">buffering locally</text>
 
   <path d="M 806 442 L 1026 442" stroke="#e0a020" stroke-width="2" fill="none" marker-end="url(#a)"/>
-  <text x="916" y="435" text-anchor="middle" font-size="9" fill="#8a5c00">≥2 publish fails · or sensor fault</text>
+  <text x="916" y="435" text-anchor="middle" font-size="9" fill="#8a5c00">≥2 publish fails · or probe fault</text>
 
   <path d="M 1026 466 L 806 466" stroke="#0f9d58" stroke-width="2" fill="none" marker-end="url(#ag)"/>
   <text x="916" y="481" text-anchor="middle" font-size="9" fill="#0f7a42">publishes succeed again</text>
@@ -195,14 +204,14 @@
   <text x="172" y="754" text-anchor="middle" font-size="11" font-weight="700" fill="#1f5f9e">SAMPLING RATE — Task 5</text>
   <text x="56" y="774" font-size="9.5" fill="#2c3d4e">MANUAL  slider 5–60 s ▸ applyCommand()</text>
   <text x="56" y="792" font-size="9.5" fill="#2c3d4e">AUTO   risk ≠ NORMAL ▸ 5 s (watch closely)</text>
-  <text x="56" y="810" font-size="9.5" fill="#2c3d4e">       3 stable cycles ▸ 30 s (save power)</text>
-  <text x="56" y="830" font-size="9.5" font-weight="700" fill="#1f5f9e">3-cycle hysteresis stops rate flapping</text>
+  <text x="56" y="810" font-size="9.5" fill="#2c3d4e">       3 stable samples ▸ 30 s (save power)</text>
+  <text x="56" y="830" font-size="9.5" font-weight="700" fill="#1f5f9e">3-sample hysteresis stops rate flapping</text>
   <text x="56" y="846" font-size="9" font-style="italic" fill="#5b6b7c">any manual change ▸ auto mode off</text>
 
   <rect x="44" y="862" width="256" height="110" rx="8" fill="#f4eefb" stroke="#c0a8e0"/>
   <text x="172" y="882" text-anchor="middle" font-size="10.5" font-weight="700" fill="#5b32a8">interruptibleDelay()</text>
-  <text x="56" y="901" font-size="9.5" fill="#3c2c56">sleep in 1 s slices on the task's OWN wake queue</text>
-  <text x="56" y="918" font-size="9.5" fill="#3c2c56">token arrives ▸ wake instantly (3 queues, 1 per waiter)</text>
+  <text x="56" y="901" font-size="9.5" fill="#3c2c56">vTaskDelay() in 100 ms slices; polls OWN wake queue</text>
+  <text x="56" y="918" font-size="9.5" fill="#3c2c56">token arrives ▸ resample now (4 queues, 1 per waiter)</text>
   <text x="56" y="935" font-size="9.5" fill="#3c2c56">feed watchdog every slice</text>
   <text x="56" y="954" font-size="9.5" font-weight="700" fill="#5b32a8">one helper solves T1 watchdog + T5 response</text>
 
@@ -238,22 +247,22 @@
   <text x="662" y="882" font-size="10" fill="#2c3d4e">4 · Servo attach · write 0°</text>
 
   <rect x="650" y="902" width="240" height="34" rx="6" fill="#f4eefb" stroke="#c0a8e0"/>
-  <text x="662" y="924" font-size="10" fill="#3c2c56">5 · Create 5 queues · 3 mutexes · 1 sem</text>
+  <text x="662" y="924" font-size="10" fill="#3c2c56">5 · Create 10 queues · 3 mutexes · 1 sem</text>
 
   <rect x="928" y="734" width="276" height="34" rx="6" fill="#ffffff" stroke="#b9c7d4"/>
-  <text x="940" y="756" font-size="10" fill="#2c3d4e">6 · Seed qVitals / qEnv (no stale reads)</text>
+  <text x="940" y="756" font-size="10" fill="#2c3d4e">6 · Seed the data queues (no stale reads)</text>
 
   <rect x="928" y="776" width="276" height="34" rx="6" fill="#fff6e5" stroke="#e8c37a"/>
-  <text x="940" y="798" font-size="10" fill="#4a3a10">7 · Wi-Fi connect — 10 s cap, non-blocking</text>
+  <text x="940" y="798" font-size="10" fill="#4a3a10">7 · Wi-Fi connect — 10 s cap, failure not fatal</text>
 
   <rect x="928" y="818" width="276" height="34" rx="6" fill="#ffffff" stroke="#b9c7d4"/>
-  <text x="940" y="840" font-size="10" fill="#2c3d4e">8 · Subscribe 7 control.* topics</text>
+  <text x="940" y="840" font-size="10" fill="#2c3d4e">8 · Subscribe 9 control.* topics</text>
 
   <rect x="928" y="860" width="276" height="34" rx="6" fill="#fff6e5" stroke="#e8c37a"/>
   <text x="940" y="882" font-size="10" fill="#4a3a10">9 · Task watchdog 20 s · panic reset</text>
 
   <rect x="928" y="902" width="276" height="34" rx="6" fill="#e6f7ec" stroke="#0f9d58"/>
-  <text x="940" y="924" font-size="10" font-weight="700" fill="#0f7a42">10 · Start 9 tasks · delete loop() task</text>
+  <text x="940" y="924" font-size="10" font-weight="700" fill="#0f7a42">10 · Start 10 tasks · delete loop() task</text>
 
   <text x="650" y="962" font-size="9.5" font-style="italic" fill="#5b6b7c">Wi-Fi failure at step 7 is not fatal — the system boots straight into OFFLINE and buffers.</text>
   <text x="650" y="978" font-size="9.5" font-style="italic" fill="#5b6b7c">loop() is unsubscribed from the watchdog and deleted; parking it forever would look like a hang.</text>

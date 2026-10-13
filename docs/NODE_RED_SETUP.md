@@ -4,8 +4,8 @@ The alternative to Adafruit IO. Free, no feed cap, and therefore the only route 
 can evidence **every** clause of Task 2 — including the periodic aggregation the
 10-feed free tier cannot support.
 
-`dashboards/node-red-flows.json` is a **complete, pre-built dashboard**: 78 nodes, all
-27 MQTT topics already wired to the right widget. You import it; you do not build it.
+`dashboards/node-red-flows.json` is a **complete, pre-built dashboard**: 84 nodes, all
+29 MQTT topics already wired to the right widget. You import it; you do not build it.
 
 Budget ~25 minutes, most of which is installing Node-RED.
 
@@ -125,7 +125,7 @@ This dashboard was installed and run end-to-end, not just written:
 
 | Check | Result |
 |---|---|
-| Node-RED starts with the flow loaded | 78 nodes, **0 errors**, `Started flows` |
+| Node-RED starts with the flow loaded | 84 nodes, **0 errors**, `Started flows` |
 | Dashboard served | `GET /ui/` → **HTTP 200** |
 | Device → dashboard | All gauges, text widgets, charts and both alert logs populated from live MQTT |
 | Dashboard → device | Button published `control.bed-preset = emergency`; toggles published `control.dosage-confirm = 1`, `control.bed-auto = 1` |

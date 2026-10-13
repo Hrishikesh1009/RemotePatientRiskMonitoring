@@ -1,4 +1,4 @@
-# Dashboard Setup Guide — Adafruit IO
+# Dashboard Setup Guide — three routes (Node-RED recommended)
 
 Build the two role-separated dashboards the project requires, then capture the
 screenshots for submission. Budget about 30 minutes.
@@ -20,7 +20,7 @@ screenshots for submission. Budget about 30 minutes.
 
 ## Step 1 — Decide your feed budget
 
-> **The free tier allows 10 feeds.** The full build uses 20 publish feeds + 7 control
+> **The free tier allows 10 feeds.** The full build uses 20 publish feeds + 9 control
 > feeds. Pick one path before you start creating feeds.
 
 ### Path A — Free tier (10 feeds)
@@ -76,7 +76,7 @@ screenshots, and the rubric requires all tasks fully integrated.
 
 ### Path B — Adafruit IO Plus (~$10/month)
 
-Leave `ENABLE_EXTENDED_FEEDS 1`. Create all 27 feeds. Everything below works as written.
+Leave `ENABLE_EXTENDED_FEEDS 1`. Create all 29 feeds. Everything below works as written.
 One month is enough to record the demo and cancel.
 
 ### Path C — Free unlimited: HiveMQ + Node-RED  ← recommended
@@ -84,17 +84,19 @@ One month is enough to record the demo and cancel.
 Free, no feed cap, and the **only free route that can evidence every clause of Task 2**.
 
 A complete pre-built dashboard ships with this project, so this path no longer costs the
-extra build time it used to: import `dashboards/node-red-flows.json` (78 nodes, all 27
+extra build time it used to: import `dashboards/node-red-flows.json` (84 nodes, all 29
 topics pre-wired, two role-separated tabs) and deploy. Full instructions in
 [`NODE_RED_SETUP.md`](NODE_RED_SETUP.md).
 
-Leave `ENABLE_EXTENDED_FEEDS 1` and change four lines in `main.ino`:
+This is the **shipped default** (`#define USE_HIVEMQ 1` in `main.ino`): nothing to edit.
+To use your own prefix, change `IO_USERNAME` (and the same prefix in `tools/gen_flows.py`, then
+re-run it):
 
 ```c
 #define AIO_SERVER     "broker.hivemq.com"
 #define AIO_SERVERPORT 1883
-#define IO_USERNAME    "rprms"     // any unique prefix — becomes your topic root
-#define IO_KEY         ""          // HiveMQ public broker needs no auth
+#define IO_USERNAME    "rprms-hl-8842"   // any unique prefix — becomes your topic root
+#define IO_KEY         ""                // HiveMQ public broker needs no auth
 ```
 
 `Adafruit_MQTT` is a plain MQTT client, not tied to Adafruit's service, so nothing else
@@ -131,10 +133,12 @@ firmware publishes to):
 </details>
 
 <details>
-<summary><b>control</b> — 7 feeds</summary>
+<summary><b>control</b> — 9 feeds</summary>
 
 `dosage`, `dosage-confirm`, `bed-angle`, `bed-preset`, `bed-auto`,
-`sampling-rate`, `sampling-mode`
+`sampling-rate`, `sampling-mode`, `sim-hr`, `sim-spo2`  (the last two are the
+synthetic-patient override: 0 = automatic, otherwise the value the simulated heart rate /
+SpO₂ is pinned to)
 </details>
 
 > **Feed key ≠ feed name.** Adafruit IO derives the key from the name. Verify each
@@ -170,6 +174,8 @@ Add blocks with the ⚙ / **+** button:
 | **Slider** | `control.sampling-rate` | Min 5, Max 60, Step 1, Label "Sampling Interval s" |
 | **Toggle** | `control.sampling-mode` | On = `1`, Off = `0`, Label "Adaptive Sampling" |
 | **Text input** | `control.bed-preset` | Send `sleep`, `breathing` or `emergency` |
+| **Slider** | `control.sim-hr` | Min 0, Max 220, "Simulated HR (0 = auto)" — demo aid |
+| **Slider** | `control.sim-spo2` | Min 0, Max 100, "Simulated SpO₂ (0 = auto)" — demo aid |
 | **Gauge** | `system.dosage` | Min 0, Max 100, "Delivered Dose" — high crit 80 |
 | **Gauge** | `system.bed-angle` | Min 0, Max 90, "Actual Bed Angle" |
 | **Text** | `system.state` | Label "Link State" |
@@ -208,10 +214,13 @@ and it is the thing to point at in the demo video.
 
 Screenshot both dashboards side by side and state in your report:
 
-> The Facility dashboard subscribes only to `facility.#`. On a broker with topic ACLs
-> (Mosquitto, HiveMQ, AWS IoT Core), a facilities credential scoped to `facility.#`
-> is cryptographically unable to receive `medical.heart-rate`. Separation is enforced
-> at the transport layer, not by hiding widgets in the UI.
+> The Facility dashboard subscribes only to `facility.*`; the Medical dashboard to
+> `medical.*` and `system.*`. The data is published to disjoint topic prefixes, which is
+> the precondition for role-based access. **It is not role-based access by itself:** the
+> default broker (`broker.hivemq.com`) and Adafruit IO's free tier have no per-credential
+> topic ACLs, so any client could subscribe to either prefix. Enforcing the separation means
+> configuring ACLs on the deployed broker (Mosquitto ACL file, HiveMQ Cloud, AWS IoT Core) —
+> infrastructure outside this project. State it that way in the report.
 
 ---
 
@@ -232,7 +241,7 @@ Save into `screenshots/`:
 | `09-offline-banner.png` | Wokwi OLED showing `LOGGING OFFLINE` + buffered count |
 | `10-backlog-resync.png` | `system.backlog` feed filling with JSON after reconnect |
 | `11-wokwi-circuit.png` | Full circuit view |
-| `12-serial-monitor.png` | `[BOOT] 9 FreeRTOS tasks started` and `[NET]` lines |
+| `12-serial-monitor.png` | `[BOOT] 10 FreeRTOS tasks started` and `[NET]` lines |
 
 ---
 

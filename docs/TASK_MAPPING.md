@@ -1,8 +1,15 @@
 # Task Mapping — Evidence for Evaluation
 
 Each of the six internship tasks, quoted verbatim from the portal, with the exact
-implementation that satisfies every clause. Section numbers (§) refer to the banner
-comments in `main.ino`.
+implementation that satisfies every clause and the test that demonstrates it. Section
+numbers (§) refer to the banner comments in `main.ino`; `TC-nn` refers to
+[`TEST_RESULTS.md`](TEST_RESULTS.md) (procedures in [`TEST_PLAN.md`](TEST_PLAN.md)).
+
+> **How to see each task working in 30 seconds** — open the Wokwi project, press Play, and:
+> T1 serial shows `[BOOT] 10 FreeRTOS tasks started` · T2 open the Node-RED dashboards
+> (`docs/NODE_RED_SETUP.md`) · T3 publish `control.dosage = 95` · T4 publish
+> `control.bed-preset = emergency` · T5 publish `control.sim-hr = 130` · T6 slide
+> `swWifiCut` (the 5th switch from the left). Details in the README.
 
 ---
 
@@ -13,38 +20,40 @@ comments in `main.ino`.
 > sensor reading, environment monitoring, MQTT communication, alert handling, and display
 > updates—run concurrently using priority-based scheduling. Inter-task communication is
 > handled using queues, semaphores, and mutexes to ensure data consistency and avoid race
-> conditions. A watchdog timer is implemented for system reliability."*
+> conditions. A watchdog timer is implemented for system reliability, ensuring that the
+> system remains stable, responsive, and capable of handling real-time healthcare
+> monitoring without failure."*
 
-| Clause | Implementation | Location |
-|--------|----------------|----------|
-| Additional health parameters — blood pressure | `bpSystolic` / `bpDiastolic`, HR-correlated | §7b `advancedVitalsTask` |
-| Additional health parameters — ECG | `ecgMv` from ADC1 pot on GPIO36 | §7b `advancedVitalsTask` |
-| **"each managed by separate FreeRTOS tasks"** | BP and ECG are **not** in the core vitals loop — they have their own task, fed from `qVitals` and producing `qAdvanced` | §7b |
-| Environment parameters | DHT22 room temp/RH + O₂ + AQI pots | §8 `envSensorTask` |
-| Sensor reading task | `vitalsSensorTask`, prio 4, core 1 | §7 |
-| Environment monitoring task | `envSensorTask`, prio 3, core 1 | §8 |
-| MQTT communication task | `mqttTask`, prio 3, core 0 | §15 |
-| Alert handling task | `alertTask`, prio 6, core 1 | §10 |
-| Display update task | `displayTask`, prio 2, core 1 | §11 |
-| *(plus)* risk engine | `processingTask`, prio 5, core 0 | §9 |
-| *(plus)* actuator ramp | `actuatorTask`, prio 4, core 1 | §12 |
-| *(plus)* link supervision | `connectivityTask`, prio 3, core 0 | §14 |
-| Priority-based scheduling | 6 distinct priority levels, both cores | §17 `setup()` |
-| Queues | `qVitals`, `qAdvanced`, `qEnv`, `qCommand`, `qOffline` + 3 wake queues (8 total) | §5 |
-| Semaphores | `semAlert` binary semaphore | §5, §9, §10 |
-| Mutexes | `mState`, `mI2C`, `mMqtt` | §5 |
-| Data consistency | Whole-struct copy under `mState` — no torn reads | §6 `lockState()` |
-| Race conditions avoided | Every shared field lives in `SystemState`, lock-guarded | §4, §6 |
-| Watchdog timer | `esp_task_wdt` 20 s, panic reset, all 9 tasks subscribed | §17 `initWatchdog()` |
+| Clause | Implementation | Location | Test |
+|--------|----------------|----------|------|
+| Additional parameter — blood pressure | `systolic` / `diastolic`, derived from heart rate | §7b `bloodPressureTask` | TC-01 |
+| Additional parameter — ECG | `mv` from the ADC1 pot on GPIO36 | §7c `ecgTask` | TC-05d |
+| **"each managed by separate FreeRTOS tasks"** | Blood pressure and ECG each have **their own task and their own queue** (`qBp`, `qEcg`); neither is in the core vitals loop and they do not share a task | §7b, §7c | TC-01 |
+| Sensor reading task | `vitalsSensorTask`, prio 4, core 1 | §7 | TC-01 |
+| Environment monitoring task | `envSensorTask`, prio 3, core 1 | §8 | TC-05 |
+| MQTT communication task | `mqttTask`, prio 3, core 0 | §15 | TC-06, TC-15 |
+| Alert handling task | `alertTask`, prio 6, core 1 | §10 | TC-08 |
+| Display update task | `displayTask`, prio 2, core 1 | §11 | TC-01, TC-14 |
+| *(plus)* risk engine | `processingTask`, prio 5, core 0 | §9 | TC-10, TC-11 |
+| *(plus)* actuator ramp | `actuatorTask`, prio 4, core 1 | §12 | TC-07, TC-09 |
+| *(plus)* link supervision | `connectivityTask`, prio 3, core 0 | §14 | TC-12, TC-13 |
+| Priority-based scheduling | 5 distinct priority levels (6/5/4/3/2), split across both cores | §17 `setup()` | TC-02 |
+| Queues | 6 data/command queues (`qVitals`, `qBp`, `qEcg`, `qEnv`, `qCommand`, `qOffline`) + 4 wake queues = **10** | §5 | TC-01 |
+| Semaphores | `semAlert` binary semaphore (risk engine → alert task) | §5, §9, §10 | TC-08 |
+| Mutexes | `mState`, `mI2C`, `mMqtt` | §5 | TC-01 |
+| Data consistency | Whole-struct copy under `mState` — no torn reads | §6 `lockState()` | — |
+| Race conditions avoided | Every shared field lives in `SystemState`, lock-guarded | §4, §6 | — |
+| Watchdog timer | `esp_task_wdt` 20 s, panic reset, all 10 tasks subscribed; boot log prints `task watchdog armed: 20 s` | §17 `initWatchdog()` | TC-01, TC-16 |
+| "system … responsive" | Probe switches watched at 1 Hz; a disconnect is reported in ≈ 3 s | §9 | TC-03 |
 
 **Deadlock argument.** Only one nesting exists — `mMqtt` then `mState` — and it occurs in
 exactly two places (`mqttTask → publishAll()`, `connectivityTask → drainOfflineBuffer()`).
 Both acquire in the same order and no path acquires `mState` first, so the circular-wait
 condition cannot form.
 
-**Watchdog vs. long sleeps.** `vitalsSensorTask` may sleep 60 s, which would starve a
-20 s watchdog. `interruptibleDelay()` (§6) chunks the sleep into 1 s slices and feeds the
-watchdog between each. Worst-case starvation is therefore 1 s at any configured rate.
+**Watchdog vs. long sleeps.** A sampling task may wait 60 s, which would starve a 20 s
+watchdog. `interruptibleDelay()` (§6) waits in 100 ms `vTaskDelay()` slices and feeds the
+watchdog every slice, so worst-case starvation is 100 ms at any configured rate.
 
 ---
 
@@ -57,46 +66,36 @@ watchdog between each. Worst-case starvation is therefore 1 s at any configured 
 > Gauge widgets are used with predefined safe thresholds, and additional alert feeds are
 > implemented for abnormal conditions. The system also performs periodic data aggregation."*
 
-| Clause | Implementation | Location |
-|--------|----------------|----------|
-| Medical Staff Dashboard — heart rate | `medical.heart-rate` | §3, §15 |
-| Medical Staff Dashboard — SpO₂ | `medical.spo2` | §3, §15 |
-| Medical Staff Dashboard — body temperature | `medical.body-temperature` | §3, §15 |
-| Facility Dashboard — room temperature | `facility.room-temperature` | §3, §15 |
-| Facility Dashboard — oxygen level | `facility.oxygen-level` | §3, §15 |
-| Facility Dashboard — AQI | `facility.aqi` | §3, §15 |
-| Separate MQTT topics | Four disjoint prefixes: `medical.` `facility.` `system.` `control.` | §3 |
-| Role-based access | **Not enforced in the shipped build — see caveat below.** The topic separation is the *precondition* for role-based access, not the access control itself. | §3 |
-| Gauge widgets with safe thresholds | 6 gauges, thresholds tabulated | `DASHBOARD_SETUP.md` |
-| Alert feeds for abnormal conditions | `medical.alerts` / `facility.alerts`, published only when risk ≠ NORMAL | §15 `publishAll()` |
-| Periodic data aggregation | 60 s avg/min/max JSON to `medical.summary` / `facility.summary` | §15 `aggAdd()`, `aggPublish()` |
+| Clause | Implementation | Location | Test |
+|--------|----------------|----------|------|
+| Medical Staff Dashboard — heart rate, SpO₂, body temperature | `medical.heart-rate`, `medical.spo2`, `medical.body-temperature` (+ BP, ECG, status) | §3, §15 | TC-04 |
+| Facility Dashboard — room temperature, oxygen level, AQI | `facility.room-temperature`, `facility.oxygen-level`, `facility.aqi` (+ humidity, motion) | §3, §15 | TC-04, TC-05 |
+| Separate MQTT topics | Disjoint prefixes `medical.` `facility.` `system.` `control.` — 29 topics | §3 | TC-04 |
+| Role-based access | **Topic separation only — broker-enforced access control is not part of this project.** See the caveat below. | §3 | — |
+| Gauge widgets with safe thresholds | 6 threshold-banded gauges (Node-RED) | `dashboards/node-red-flows.json`, `DASHBOARD_SETUP.md` | TC-05 |
+| Alert feeds for abnormal conditions | `medical.alerts` / `facility.alerts`, published when risk ≠ NORMAL | §15 `publishAll()` | TC-05 |
+| Periodic data aggregation | 60 s avg/min/max JSON to `medical.summary` / `facility.summary`; `n` = samples in the window | §15 `aggAdd()`, `aggPublish()` | TC-06 |
 
 **Why aggregation matters.** At 5 s sampling one bed emits 17,280 messages/day; a 200-bed
-ward emits 3.5 M. Summarising on-device is what makes the architecture scale, which is
-the task's "closer to enterprise IoT architecture" clause.
+ward emits 3.5 M. Summarising on-device is what makes the architecture scale — the task's
+"closer to enterprise IoT architecture" clause.
 
 **Role-based access — what is and isn't actually enforced.** The firmware publishes
-`medical.*` and `facility.*` as genuinely disjoint topic namespaces, and that separation
-is a real, necessary precondition for role-based access. But **no access control exists
-in this repo, and the shipped default does not enforce separation**:
+`medical.*` and `facility.*` as genuinely disjoint topic namespaces, and that separation is
+a real, necessary precondition for role-based access. But **no access control exists in
+this repo and the shipped default does not enforce separation**:
 
-- `USE_HIVEMQ 1` (the default in `main.ino`) points at the public `broker.hivemq.com`.
-  Its own header comment says so plainly: *"broker.hivemq.com is PUBLIC -- anyone may
-  subscribe to your prefix."* Under this default, a client subscribed to `facility.#`
-  **can** also subscribe to `medical.#` — nothing stops it.
-- Making the separation real requires configuring ACLs on whatever broker is actually
-  deployed (Mosquitto with a password/ACL file, HiveMQ Cloud with per-credential topic
-  permissions, AWS IoT Core policies, etc.) so that a facilities-role credential is
-  denied `medical.#` at the broker level. That configuration is **infrastructure, not
-  firmware** — it lives outside `main.ino` and is not part of this submission.
+- `USE_HIVEMQ 1` (the default in `main.ino`) points at the public `broker.hivemq.com`, which
+  has no ACLs: a client subscribed to `facility.#` **can** also subscribe to `medical.#`.
+- Making the separation real needs ACLs on whatever broker is actually deployed (Mosquitto
+  ACL file, HiveMQ Cloud per-credential permissions, AWS IoT Core policies) so that a
+  facilities credential is denied `medical.#`. That is infrastructure, not firmware, and is
+  not part of this submission.
 
-**Bottom line for evaluation:** the *architecture* is role-separation-ready (correct
-topic design, and the two Node-RED dashboard tabs only subscribe to their own prefix by
-convention). *Role-based access itself* — the actual guarantee that one role cannot read
-another's data — is not implemented or demonstrated by this project as shipped, and
-should not be claimed as complete. If a graded rubric requires the access control itself
-(not just topic separation), that is the one clause in this task that is genuinely
-incomplete.
+**Bottom line:** the *architecture* is role-separation-ready and the two Node-RED tabs
+subscribe only to their own prefix by convention. *Role-based access itself* is not
+implemented or demonstrated and should not be claimed as complete. If the rubric requires
+the access control itself, that is the one clause in this task that is genuinely open.
 
 ---
 
@@ -108,25 +107,25 @@ incomplete.
 > buzzer alerts for safety. To prevent sudden changes, rate-limiting logic restricts abrupt
 > dosage increases, and critical values may require confirmation."*
 
-| Clause | Implementation | Location |
-|--------|----------------|----------|
-| Dashboard slider 0–100 mg/hr | `control.dosage`, clamped to `[0,100]` | §16 `CMD_DOSAGE` |
-| Remote control by doctors | MQTT subscribe → `qCommand` → `applyCommand()` | §15, §16 |
-| Real-time OLED display | Page 3 "THERAPY CONTROL" shows `dosageCurrent` | §11 |
-| Safety level — normal | < 60 mg/hr, LED off, silent | §10 |
-| Safety level — warning | 60–80 mg/hr, steady LED pulse | §10 |
-| Safety level — critical | > 80 mg/hr | §10 |
-| Red LED blinks rapidly above 80 | 5 blinks at 60 ms on/off, GPIO15 | §10 |
-| Buzzer alerts above 80 | 2 × 120 ms on buzzer 3 (GPIO17) | §10 |
-| Rate limiting on abrupt increases | `DOSAGE_RAMP_MGH_S = 5.0` mg/hr per second in `actuatorTask` | §12 |
-| Critical values require confirmation | `dosageConfirmPending`, 15 s window, `control.dosage-confirm` | §16, §12 |
+| Clause | Implementation | Location | Test |
+|--------|----------------|----------|------|
+| Dashboard slider 0–100 mg/hr | `control.dosage`, clamped to `[0,100]` | §16 `CMD_DOSAGE` | TC-07 |
+| Remote control by doctors | MQTT subscribe → `qCommand` → `applyCommand()` | §15, §16 | TC-15 |
+| Displayed in real time on the OLED | **Persistent footer on every OLED screen** (`DOSE 60.0 mg/hr WARN`), whole screen redrawn at 1 Hz; page 4 also shows it with the level word | §11 `oledFooter()` | TC-14 |
+| Safety level — normal | < 60 mg/hr, LED off, silent (`NORM`) | §10, §11 | TC-07 |
+| Safety level — warning | 60–80 mg/hr, slow LED pulse (`WARN`) | §10, §11 | TC-07 |
+| Safety level — critical | > 80 mg/hr (`CRIT`), or a > 80 request awaiting confirmation (`CONF`) | §10, §11 | TC-08 |
+| Red LED blinks rapidly above 80 | 5 blinks at 60 ms on/off, **GPIO19** — also while a > 80 request awaits confirmation | §10 | TC-08 |
+| Buzzer alerts above 80 | 2 × 120 ms on buzzer 3 (GPIO17) | §10 | TC-08 |
+| Rate limiting on abrupt increases | `DOSAGE_RAMP_MGH_S = 5.0` mg/hr per second in `actuatorTask` — **measured 5.00 mg/hr/s** | §12 | TC-07 |
+| Critical values require confirmation | `dosageConfirmPending`, 15 s window, `control.dosage-confirm` | §16, §12 | TC-08 |
 
 **Three-stage pipeline.** `dosageSetpoint` (raw slider) → `dosageTarget` (after the
 confirmation gate) → `dosageCurrent` (after the rate limiter). The slider value is never
 the infused dose.
 
 **Fails safe.** If the doctor never confirms, the request expires *downward* to the 80
-mg/hr ceiling. There is no path where inaction produces a dangerous dose.
+mg/hr ceiling. There is no path where inaction produces a dangerous dose (TC-08 A).
 
 ---
 
@@ -139,20 +138,20 @@ mg/hr ceiling. There is no path where inaction produces a dangerous dose.
 > support (45°), and emergency (90°) are included. Additionally, the system can
 > automatically adjust the bed angle based on patient condition."*
 
-| Clause | Implementation | Location |
-|--------|----------------|----------|
-| Remote adjustment 0–90° | `control.bed-angle`, clamped `[0,90]` | §16 `CMD_BED_ANGLE` |
-| Dashboard slider → servo | SG90 on GPIO13 via ESP32Servo | §5, §17 |
-| Smooth transitions, not abrupt | 1° per 25 ms in `actuatorTask` → 0–90° in ≈2.3 s | §12 |
-| Safety constraints on large moves | The ramp *is* the constraint; every path goes through it | §12 |
-| Preset — sleeping 10° | `BED_PRESET_SLEEP` | §2, §16 |
-| Preset — breathing support 45° | `BED_PRESET_BREATH` | §2, §16 |
-| Preset — emergency 90° | `BED_PRESET_EMERGENCY`, 3°/step faster ramp | §2, §12, §16 |
-| Automatic adjustment by condition | SpO₂ < 85 + CRITICAL → 90°; SpO₂ < 90 → 45°; NORMAL → 10° | §9 |
+| Clause | Implementation | Location | Test |
+|--------|----------------|----------|------|
+| Remote adjustment 0–90° | `control.bed-angle`, clamped `[0,90]` | §16 `CMD_BED_ANGLE` | TC-09 |
+| Slider → servo | SG90 on GPIO13 via ESP32Servo; pulse range calibrated to Wokwi's SG90 (horn shows the commanded angle within +2/−1°) | §5, §17 | TC-09 |
+| Smooth transitions, not abrupt | 1° per 25 ms in `actuatorTask` — 0→90° in ≈ 2.3 s (measured) | §12 | TC-09a |
+| Safety constraints on large moves | The ramp *is* the constraint; every path (slider, preset, auto) goes through it | §12 | TC-09 |
+| Preset — sleeping 10° / breathing 45° / emergency 90° | `BED_PRESET_SLEEP/BREATH/EMERGENCY`; emergency ramps 3°/step (≈ 0.75 s) but is still a ramp | §2, §16, §12 | TC-09c, TC-09d |
+| Automatic adjustment by condition | SpO₂ < 85 + CRITICAL → 90°; SpO₂ < 90 → 45°; NORMAL → 10° | §9 | TC-10 |
 
-**Manual overrides automatic.** Any manual slider or preset command sets
-`bedAuto = false`. Auto mode is re-armed only by an explicit `control.bed-auto` publish.
-A clinician's instruction is never silently reversed by the automation.
+**Manual overrides automatic.** Any manual slider or preset command sets `bedAuto = false`.
+Auto mode is re-armed only by an explicit `control.bed-auto` publish — a clinician's
+instruction is never silently reversed (TC-10d). Because Wokwi has no pulse-oximeter part,
+`control.sim-hr` / `control.sim-spo2` pin the simulated vitals so the automatic mode can be
+shown on demand (TC-10a–c).
 
 ---
 
@@ -165,20 +164,20 @@ A clinician's instruction is never silently reversed by the automation.
 > frequency during stable periods to optimize battery life. This is implemented using
 > FreeRTOS with non-blocking delays (vTaskDelay) and dynamic updates through queues."*
 
-| Clause | Implementation | Location |
-|--------|----------------|----------|
-| Slider 5–60 seconds | `control.sampling-rate`, clamped `[5,60]` | §16 `CMD_SAMPLING_RATE` |
-| Manual adjustment by doctors | Setting a rate also sets `samplingAuto = false` | §16 |
-| Automatic mode | `control.sampling-mode` toggle | §16 `CMD_SAMPLING_MODE` |
-| High frequency (5 s) when abnormal | `worst != RISK_NORMAL → SAMPLING_ABNORMAL_S` | §9 |
-| Reduced frequency when stable | 3 consecutive normal cycles → `SAMPLING_STABLE_S` (30 s) | §9 |
-| Battery-life optimisation | Fewer wakeups, fewer radio transmissions, fewer sensor reads | §9 |
-| Non-blocking delays (`vTaskDelay`) | `vTaskDelay()` used directly in 6 tasks; the 3 sampling tasks use `interruptibleDelay()`, which blocks on a queue with a timeout — the same descheduled, zero-CPU wait, but wakeable | §6 |
-| Dynamic updates through queues | `notifySamplingChanged()` posts a token to `qWakeVitals`, `qWakeAdvanced` and `qWakeEnv`; all three wake in ms | §6 |
+| Clause | Implementation | Location | Test |
+|--------|----------------|----------|------|
+| Slider 5–60 seconds | `control.sampling-rate`, clamped `[5,60]` | §16 `CMD_SAMPLING_RATE` | TC-11a |
+| Manual adjustment by doctors | Setting a rate also sets `samplingAuto = false` | §16 | TC-11 |
+| Automatic mode | `control.sampling-mode` toggle | §16 `CMD_SAMPLING_MODE` | TC-11d/e |
+| High frequency (5 s) when abnormal | `worst != RISK_NORMAL → SAMPLING_ABNORMAL_S` | §9 | TC-11d |
+| Reduced frequency when stable | 3 consecutive **fresh** normal samples → `SAMPLING_STABLE_S` (30 s) | §9 | TC-11e |
+| Battery-life optimisation | Fewer wakeups, sensor reads and radio transmissions; one publish per sample, keepalive only when idle | §9, §15 | TC-11b |
+| **Non-blocking delays (`vTaskDelay`)** | The sampling wait is built from 100 ms `vTaskDelay()` slices — the task is descheduled, no busy-wait | §6 `interruptibleDelay()` | TC-11 |
+| **Dynamic updates through queues** | `notifySamplingChanged()` posts a token to each task's wake queue; the task polls its own queue without blocking and resamples within ≤ 100 ms (measured ≈ 1 s end to end, vs up to 60 s un-woken) | §6 | TC-11c |
+| Exact cadence | The loop subtracts its own work time; measured **5.08 s** between samples at "5 s" | §7 | TC-11a |
 
-**Hysteresis.** Three stable cycles are required before slowing down. Without it a
-patient hovering at a threshold would flap the rate every second, wasting power and
-making the dashboard trend unreadable.
+**Hysteresis.** Three fresh stable samples are required before slowing down, so a patient
+hovering at a threshold cannot flap the rate.
 
 ---
 
@@ -192,28 +191,30 @@ making the dashboard trend unreadable.
 > automatically synchronizes all missed data to the cloud using a retry mechanism with
 > exponential backoff."*
 
-| Clause | Implementation | Location |
-|--------|----------------|----------|
-| Continuously monitors Wi-Fi | `WiFi.status()` polled at 1 Hz | §14 |
-| Continuously monitors MQTT | `mqtt.connected()` + publish-failure counter | §14, §15 |
-| Continuously monitors system health | `sensorFault` flag from the four slide switches | §9, §14 |
-| Three states ONLINE / DEGRADED / OFFLINE | `NetState` enum, full transition table | §4, §14 |
-| Wi-Fi or MQTT fails → offline mode | `!wifiUp` or `!mqttUp` → `NET_OFFLINE` | §14 |
-| "LOGGING OFFLINE" on OLED | Banner pre-empts page rotation; shows cause, buffered count, retry countdown | §11 |
-| Distinct buzzer per failure type | Wi-Fi 3×80 ms · MQTT 2×400 ms · sensor 1×60 ms | §10 |
-| Readings stored in a local buffer | `qOffline`, 120 records, ring (drops oldest) | §5, §13 |
-| ... using a queue or SPIFFS | FreeRTOS queue primary; optional SPIFFS mirror via `USE_SPIFFS` | §13 |
-| Automatic synchronisation on restore | `drainOfflineBuffer()` triggered on the OFFLINE → up transition | §14 |
-| Retry with exponential backoff | 1·2·4·8·16·32·60 s, capped | §14 |
+| Clause | Implementation | Location | Test |
+|--------|----------------|----------|------|
+| Continuously monitors Wi-Fi | `WiFi.status()` polled at 1 Hz | §14 | TC-12 |
+| Continuously monitors MQTT | `mqtt.connected()` + idle-only keepalive + publish-failure counter | §14, §15 | TC-13 |
+| Continuously monitors system health | Probe switches watched at 1 Hz → `sensorFault` | §9, §14 | TC-03 |
+| Three states ONLINE / DEGRADED / OFFLINE | `NetState` enum; every transition is logged as `[NET] state A -> B (fault: X)` | §4, §14 | TC-03, TC-12 |
+| Wi-Fi or MQTT fails → offline mode | `!wifiUp` or `!mqttUp` → `NET_OFFLINE` | §14 | TC-12, TC-13 |
+| **Repeatable fault injection** | `swWifiCut` (GPIO23) cuts the real Wi-Fi link, `swBrokerCut` (GPIO39) closes the real MQTT session; each is logged as `[FAULT] …` | §14 | TC-12, TC-13 |
+| "LOGGING OFFLINE" on OLED | Banner pre-empts page rotation; shows cause, buffered count, **live retry countdown**, plus the dose footer | §11 | TC-12 |
+| Distinct buzzer per failure type | Wi-Fi 3 × 80 ms · MQTT 2 × 400 ms · sensor 1 × 60 ms (each pattern also traced as `[ALERT] buzzer 4, … fault: …`) | §10 | TC-12c, TC-13b |
+| Readings stored in a local buffer | `qOffline`, 120 records, ring (drops oldest) | §5, §13 | TC-12e |
+| … using a queue or SPIFFS | FreeRTOS queue primary; optional SPIFFS mirror via `USE_SPIFFS` | §13 | — |
+| Automatic synchronisation on restore | `drainOfflineBuffer()` on the OFFLINE → up transition, in order, to `system.backlog` | §14 | TC-12e |
+| Retry with exponential backoff | 1·2·4·8·16·32·60 s, capped; reset when a layer recovers | §14 | TC-12b, TC-12f |
 
-**Why DEGRADED earns its place.** A link that is associated but silently dropping
-publishes is more dangerous than one that is plainly down, because the dashboard keeps
-showing the last value and looks alive. Counting consecutive publish failures catches
-exactly that.
+**Why DEGRADED earns its place.** A link that is associated but silently dropping publishes
+is more dangerous than one that is plainly down, because the dashboard keeps showing the
+last value and looks alive. DEGRADED via a disconnected probe is exercised (TC-03); the
+publish-failure branch is implemented but no simulator control can make publishes fail
+while the link stays up, so it is **not** exercised (see `BUG_LOG.md`, open items).
 
-**Ordering preserved across a failed resync.** If a publish fails mid-replay, the record
-is returned to the **front** of the queue with `xQueueSendToFront`, so an interrupted
-resync never scrambles the timeline.
+**Ordering preserved across a failed resync.** If a publish fails mid-replay the record
+goes back to the **front** of the queue (`xQueueSendToFront`), so an interrupted resync
+never scrambles the timeline.
 
 ---
 
@@ -225,5 +226,7 @@ The tasks are not six bolted-together features — several share machinery:
   rate-change response.
 - `actuatorTask` enforces the rate limits for both T3 (dosage) and T4 (bed angle).
 - `processingTask`'s risk score drives T5's adaptive rate *and* T4's automatic bed angle.
-- The `sensorFault` flag from T1's slide switches feeds T6's DEGRADED state.
+- The probe flags from T1's slide switches feed T6's DEGRADED state.
 - T2's `system.backlog` feed is the destination for T6's resync.
+- The OLED footer shows the T3 dose on every screen, including T6's offline banner, so
+  local control stays visible while the network is down.

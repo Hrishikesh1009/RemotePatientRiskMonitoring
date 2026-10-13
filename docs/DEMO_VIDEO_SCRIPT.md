@@ -1,241 +1,181 @@
-# Demo Video Script — 6 minutes
+# Demo Video Script — about 7 minutes
 
-Shot-by-shot recording plan. Every one of the six tasks gets visible, on-camera proof.
+The portal asks the video to show: **project overview, implementation, simulation,
+verification, functional explanation, working demonstration** — clear, structured,
+professional. This script covers each in that order. Speak in your own words; the quoted
+lines are a guide, not something to read out. **You must record this yourself** — it is
+your explanation of your own project.
 
-**Setup before recording**
-- Wokwi simulation running, OLED readable.
-- Both Node-RED dashboards open in browser tabs — `http://127.0.0.1:1880/ui/#!/0`
-  (Medical Staff) and `#!/1` (Facility Management). Tabs are 0-indexed.
-- Serial monitor visible.
-- Screen recorder at 1080p; enable microphone.
+## Before recording
 
-**Recommended layout** — Wokwi left half, dashboard right half, serial monitor as a
-narrow strip along the bottom. All three visible at once means you never cut away from
-the evidence.
+- Wokwi project open and **running** (https://wokwi.com/projects/473060533558119425);
+  zoom the browser so the OLED is readable. Serial monitor visible.
+- Node-RED running (`tools/start-dashboard.cmd`) with both dashboards open in two tabs:
+  `http://127.0.0.1:1880/ui/#!/0` (Medical Staff) and `#!/1` (Facility Management).
+- A way to publish MQTT (the dashboard sliders do it; or a web MQTT client open on
+  `rprms-hl-8842/feeds/#`).
+- Screen recorder at 1080p, microphone on. Recommended layout: Wokwi left half, dashboard
+  right half, serial strip along the bottom, so you never cut away from the evidence.
+- Do a silent rehearsal first — the ramps and the backoff countdown run in real time.
 
----
-
-## 0:00 – 0:30 · Introduction
-
-> "Hi, I'm Hrishikesh Lokhande. This is my ElevanceSkills internship project — a Remote
-> Patient Risk Monitoring System built on ESP32 with FreeRTOS. All six internship tasks
-> are implemented in one integrated project. It monitors six patient parameters and four
-> room parameters concurrently, scores clinical risk in real time, lets doctors remotely
-> control medication and bed position, adapts its own sampling rate to patient condition,
-> and keeps logging without data loss when the network drops."
-
-**On screen** Wokwi circuit, full view.
+> **Switch layout** (top row of the circuit, left → right): **Temp · HR · SpO₂ · PIR ·
+> Wi-Fi cut · Broker cut**. Sliding a switch to the right applies the fault.
 
 ---
 
-## 0:30 – 1:20 · Task 1 — FreeRTOS concurrency
+## 0:00 – 0:40 · Overview  *(project overview)*
 
-**Show** Serial monitor, then OLED cycling pages.
+> "I'm Hrishikesh Lokhande. This is my ElevanceSkills internship project: a Remote Patient
+> Risk Monitoring System on an ESP32 with FreeRTOS. It monitors six patient parameters and
+> four room parameters, scores clinical risk, publishes to two role-separated dashboards,
+> lets doctors control medication dosage and bed elevation remotely, adapts its own
+> sampling rate, and keeps logging when the network fails. All six internship tasks are
+> implemented in one integrated project."
 
-> "Nine FreeRTOS tasks run concurrently across both ESP32 cores. Alarm handling is the
-> highest priority on core 1 — the core that never blocks on the network. MQTT and link
-> supervision are on core 0. That split matters: in the original single-task design, a
-> stalled broker froze the alarms."
+**On screen** the Wokwi circuit, then `architecture-diagram.svg` for a few seconds.
 
-**Point at** Serial line `[BOOT] 9 FreeRTOS tasks started`.
+## 0:40 – 1:50 · Implementation  *(implementation / functional explanation)*
 
-> "They share data through five queues, three mutexes and a binary semaphore. Every
-> shared field lives in one struct behind one mutex, so a dashboard payload can never mix
-> a heart rate from one sample with an SpO₂ from the next. Only one lock nesting exists
-> in the whole system — MQTT then state — so deadlock is structurally impossible."
+**Show** the circuit, then `main.ino` scrolled to the task table / `setup()`.
 
-**Show** OLED pages 1 and 2.
+> "The circuit has a DS18B20 for body temperature, a DHT22 for the room, a PIR, three
+> potentiometers for ECG, oxygen and air quality, an OLED, a servo for the bed, three LEDs,
+> four buzzers, and six slide switches — four simulate a probe coming off, two are for
+> fault injection that I'll use in Task 6. Heart rate and SpO₂ are simulated because Wokwi
+> has no pulse-oximeter, and I'll say so honestly in the report."
 
-> "Page one is the original vitals. Page two is the expansion — blood pressure and ECG,
-> new for this task. A 20-second task watchdog supervises all nine tasks."
+> "The firmware is ten FreeRTOS tasks across both cores. Alarms are the highest priority
+> and sit on core 1, the core that never blocks on the network; MQTT and link supervision
+> are on core 0. They share data through queues, three mutexes and a binary semaphore, and
+> a 20-second task watchdog supervises all ten. Blood pressure and ECG each have their own
+> task, as Task 1 asks."
 
----
+**Point at** serial: `[BOOT] 10 FreeRTOS tasks started`, `task watchdog armed: 20 s`.
 
-## 1:20 – 2:10 · Task 2 — Role-based dashboards
+## 1:50 – 2:30 · Task 2 — role-based dashboards  *(simulation)*
 
-**Show** Both dashboards side by side.
+**Show** both dashboards side by side.
 
-> "Data is split into two dashboards on separate MQTT topic groups. Medical staff get
-> `medical.*` — heart rate, SpO₂, body temperature, blood pressure, ECG. Facility
-> management get `facility.*` — room temperature, oxygen, air quality."
+> "Data is published to separate topic groups — `medical.*` and `facility.*`. The facility
+> dashboard has no patient data on it at all. To be precise about what that means: this is
+> topic separation, the precondition for role-based access. Real enforcement needs ACLs on
+> the broker, which this project doesn't configure, and I say so in the report."
 
-**Point at** the Facility dashboard.
+**Drag the AQI potentiometer** past the red band.
 
-> "There is no patient data on this dashboard at all. That's not a hidden widget — the
-> two roles subscribe to different topic prefixes, so on a broker with topic ACLs a
-> facilities credential is cryptographically unable to receive patient vitals."
+> "Gauges have predefined thresholds — AQI goes amber at 150 and red at 300, and the alert
+> feed logs it. Every minute the device also publishes an aggregate — average, minimum and
+> maximum — so a ward of beds doesn't flood the cloud."
 
-**Turn the AQI potentiometer up past 300.**
+## 2:30 – 3:30 · Task 3 — medication dosage  *(working demonstration)*
 
-> "Gauges have clinical thresholds. Watch the AQI gauge go amber at 150, red at 300 — and
-> the alert stream logs it."
+**Show** the OLED footer and the dosage slider.
 
-**Show** `medical.summary`.
+> "The dosage slider is 0 to 100 milligrams per hour. Watch the OLED footer — the dose is on
+> every screen. I'll drag to 60."
 
-> "Every 60 seconds the device publishes an aggregate — average, min and max. At
-> five-second sampling one bed generates 17,000 messages a day; a 200-bed ward generates
-> three and a half million. Aggregating on-device is what makes this scale."
+**Slider → 60.**
 
----
+> "It ramps at five milligrams per hour per second — twelve seconds. A slider fling can
+> never become a step change in an infusion."
 
-## 2:10 – 3:10 · Task 3 — Medication dosage
+**Slider → 95.**
 
-**Show** OLED page 4 and the dosage slider.
+> "Above 80 is critical. The system holds the dose at 80, the OLED says CONFIRM 95, the red
+> LED blinks rapidly and the buzzer sounds. If nobody confirms, after fifteen seconds it
+> *stays* at 80 — the failure mode of doing nothing is the safe one."
 
-> "Doctors set medication dosage from a 0-to-100 milligram-per-hour slider. Watch what
-> happens when I drag it straight to 60."
+**Set 95 again and press CONFIRM within the window.**
 
-**Drag slider 0 → 60.**
+> "Confirm in time and it releases — still ramped, never a jump."
 
-> "The delivered dose ramps at five milligrams per hour per second — twelve seconds to
-> get there. The slider value is never the infused dose. A rate limiter sits between
-> them, so an accidental slider fling can't produce a step change in an infusion pump."
+## 3:30 – 4:10 · Task 4 — bed elevation
 
-**Drag slider to 95.**
+**Show** the servo close-up and the bed slider.
 
-> "Now above 80, the critical threshold. The red LED blinks rapidly, the buzzer sounds —
-> and look at the OLED: 'CONFIRM 95'. The system pins the dose at 80 and waits."
+> "Bed angle zero to ninety degrees on a servo — one degree every 25 milliseconds, about
+> two and a half seconds end to end. Three presets: sleeping 10°, breathing support 45°,
+> emergency 90°, which ramps faster but is still a ramp."
 
-**Wait 15 seconds without confirming.**
+**Press Emergency; then toggle Auto bed on and set the simulated SpO₂ slider to 88, then 82, then 0.**
 
-> "I'm not going to confirm. The request expires and the dose stays at 80. That's
-> deliberate — the failure mode of doing nothing is the *safe* one. There's no path from
-> silence to an overdose."
+> "In automatic mode the bed follows the patient: SpO₂ under 90 goes to 45°, under 85 and
+> critical goes to 90°, back to normal returns to 10°. And the moment I touch the manual
+> slider, automatic mode switches off — a clinician's instruction is never silently
+> reversed."
 
-**Set to 95 again, toggle confirm.**
+## 4:10 – 4:50 · Task 5 — adaptive sampling
 
-> "Confirm within the window and it releases — still ramped, never a jump."
+**Show** the serial `[SAMPLE]` / `[RATE]` lines and OLED SYSTEM page.
 
----
+> "The sampling interval is 5 to 60 seconds. In automatic mode a stable patient settles at
+> 30 seconds to save power."
 
-## 3:10 – 3:50 · Task 4 — Bed elevation
+**Set the simulated heart rate to 130.**
 
-**Show** Wokwi servo close-up, then the bed slider.
+> "An abnormal patient drops it straight to five seconds."
 
-> "Bed angle, zero to ninety degrees, on a servo."
+**Set it back to 0.**
 
-**Drag slider 0 → 90.**
+> "And it only returns to 30 after three consecutive stable samples, so a patient hovering
+> at a threshold can't make the rate flap. The delay is built from `vTaskDelay` slices that
+> poll a queue, so a rate change wakes a sleeping task within a fraction of a second."
 
-> "Smooth — one degree every 25 milliseconds, about 2.3 seconds of travel. Not a snap.
-> Patient comfort and safety."
+## 4:50 – 6:00 · Task 6 — offline fault tolerance
 
-**Publish `emergency` to `control.bed-preset`.**
+**Slide the Wi-Fi cut switch right.**
 
-> "Three presets: sleeping at 10 degrees, breathing support at 45, emergency at 90.
-> Emergency ramps faster — three degrees per step — because someone who can't breathe
-> needs the bed up now. But it still ramps."
-
-**Toggle auto mode on, let SpO₂ drop.**
-
-> "In automatic mode the bed follows patient condition. SpO₂ below 90 and it goes to 45
-> degrees for breathing support. Below 85 with critical risk, full upright at 90."
-
-**Drag the slider manually.**
-
-> "And the moment I touch the slider, auto mode switches off. Manual overrides automatic;
-> automatic never overrides manual. That's standard medical device practice — a
-> clinician's explicit instruction is never silently reversed."
-
----
-
-## 3:50 – 4:30 · Task 5 — Adaptive sampling
-
-**Show** OLED page 5, `Rate:` line.
-
-> "Sampling interval is adjustable from 5 to 60 seconds. Right now it's in automatic mode
-> and the patient is stable, so it's at 30 seconds — conserving battery."
-
-**Raise the DS18B20 to 39 °C.**
-
-> "Patient deteriorates — and it drops straight to 5 seconds. High-frequency monitoring
-> when it matters."
-
-**Return the temperature to normal.**
-
-> "Recovery takes three consecutive normal cycles before it slows back down. That
-> hysteresis stops a patient hovering at a threshold from flapping the rate every second."
-
-**Move the sampling slider to 45.**
-
-> "Manual override — and notice it takes effect immediately. The sensor task might be
-> halfway through a 30-second sleep, but it's blocked on a queue, not a plain delay. A
-> token wakes it in milliseconds. That same helper feeds the watchdog in one-second
-> slices, so one piece of code solves both the watchdog requirement and the
-> responsiveness requirement."
-
----
-
-## 4:30 – 5:40 · Task 6 — Offline fault tolerance
-
-**Break the network connection.**
-
-> "Now the important one. I'm killing the network."
+> "Now the important one — I'm cutting the Wi-Fi."
 
 **Show** the OLED banner.
 
-> "Within two seconds: 'LOGGING OFFLINE'. It names the cause — Wi-Fi or MQTT — shows how
-> many samples are buffered, and counts down to the next retry."
+> "Within two seconds: LOGGING OFFLINE, the cause, how many samples are buffered, and a
+> live countdown to the next retry. Three short beeps means Wi-Fi; two long beeps means the
+> broker — I'll show that next. The system keeps sampling into a 120-record buffer."
 
-**Point at** the buzzer / let it sound.
+**Let it run ~30 s so the retry counts 1, 2, 4, 8, 16.** Then **slide the switch back.**
 
-> "The buzzer patterns are distinct per failure type. Three short beeps means Wi-Fi is
-> gone. Two long beeps means the broker is gone. One chirp means a sensor is
-> disconnected. A technician can diagnose the failure class from the corridor without
-> looking at a screen."
+> "On restore it re-associates, reconnects to the broker, and replays every buffered record
+> in order to the backlog feed. Records out equal records in."
 
-**Show** the buffered counter incrementing.
+**Show** `system.backlog` filling, and serial `[NET] restored -- replaying N …` / `resynced N records`.
 
-> "Readings aren't lost — they go into a 120-record ring buffer, about 30 minutes of
-> data. When it fills, the oldest record is dropped, because at handover the recent data
-> is what matters."
+**Slide Broker cut right, then back; then slide the HR probe switch right.**
 
-**Show** the retry countdown.
+> "A broker failure shows cause MQTT. And a disconnected probe gives DEGRADED, not OFFLINE —
+> the link is fine but the data can't be trusted, so it never reports 'Patient stable'
+> from an unplugged lead, and it notices within about three seconds."
 
-> "Retries back off exponentially — 1, 2, 4, 8, 16, 32, capped at 60 seconds. In a ward
-> where 200 beds all reconnect after a switch reboot, backoff is what stops the recovery
-> becoming the outage."
+## 6:00 – 6:40 · Verification  *(verification / "waveforms")*
 
-**Restore the connection.**
+**Show** `docs/TEST_RESULTS.md` and one `docs/evidence/` log.
 
-> "And restoring it..."
+> "I verified this in the simulator by measurement, not by eye. Sixteen test cases, run as
+> forty-nine automated checks that all pass, using serial timestamps, the OLED framebuffer,
+> LED, buzzer and servo state, and an independent MQTT subscriber. For example: the dose
+> ramps at exactly 5.00 milligrams per hour per second; sampling is 5.08 seconds apart at a
+> 5-second setting; an outage with eight buffered samples replayed all eight, in order. The
+> bug log lists every defect I found — including a watchdog reset caused by a stalled
+> network — and how I fixed it, and the report is honest about what is not exercised."
 
-**Show** serial `[NET] restored -- replaying n buffered samples`, then `system.backlog`.
-
-> "It replays every buffered record in order. If a publish fails mid-replay the record
-> goes back to the *front* of the queue, so an interrupted resync never scrambles the
-> timeline. Zero data loss."
-
-**Open a slide switch.**
-
-> "One more state worth showing. If I disconnect a sensor — the link is fine, but the
-> system goes DEGRADED and reports 'Sensor disconnected' instead of 'Patient stable'. A
-> monitor that reports a healthy patient from an unplugged probe is worse than one that
-> reports nothing."
-
----
-
-## 5:40 – 6:00 · Close
+## 6:40 – 7:00 · Close
 
 > "All six tasks in one integrated project. The work that mattered most wasn't adding
-> features — it was the concurrency structure. Alarms at the highest priority on a core
-> that never blocks on the network. A single global lock order so deadlock can't happen.
-> And every actuator command routed through one rate-limited path, so no user interaction
-> can produce an abrupt physical change.
->
-> Source, circuit and full report are in the GitHub repo linked below. Thanks for
-> watching."
+> features — it was the structure: alarms that can't be blocked by the network, one lock
+> order so deadlock can't form, every actuator command through one rate-limited path, and
+> a recovery path I tested by breaking the real link. Source, circuit, report and logs are
+> in the GitHub repository linked below. Thanks for watching."
 
-**On screen** GitHub URL and Wokwi project URL.
+**On screen** the GitHub URL and the Wokwi URL.
 
 ---
 
 ## Recording tips
 
-- **Do a silent rehearsal first.** The dosage ramp and the backoff countdown are both
-  real-time; know how long you're waiting so the pauses don't feel dead.
-- **Don't cut during a ramp.** The whole point of Tasks 3 and 4 is that the change is
-  gradual — an edit destroys the evidence.
-- **Zoom the OLED** when reading it aloud. It's 128×64; at 1080p full-frame it's
-  unreadable.
-- **Trigger the offline test last** — it's the longest segment and the most impressive.
-- If you overrun, trim the Task 1 narration, not the Task 6 demonstration.
+- **Don't cut during a ramp** — the whole point of Tasks 3 and 4 is that the change is gradual.
+- **Zoom the OLED** when you read it aloud; at 1080p full-frame it's unreadable.
+- Do the **offline demo last** — it's the longest segment. If you overrun, trim the Task 1
+  narration, not Task 6.
+- Say plainly what is simulated (HR, SpO₂, BP) and what is not enforced (role-based access).
+  Evaluators reward accuracy over polish.
+- Upload with link sharing set to *Anyone with the link* and test it in a logged-out window.
