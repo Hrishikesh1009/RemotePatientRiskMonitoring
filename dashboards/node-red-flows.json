@@ -217,6 +217,17 @@
     "className": ""
   },
   {
+    "id": "g_sim",
+    "type": "ui_group",
+    "name": "Patient Simulation (demo aid)",
+    "tab": "tab_med",
+    "order": 7,
+    "disp": true,
+    "width": "12",
+    "collapse": false,
+    "className": ""
+  },
+  {
     "id": "g_env",
     "type": "ui_group",
     "name": "Room Environment",
@@ -535,12 +546,12 @@
     "min": 10,
     "max": "35",
     "colors": [
-      "#00b500",
       "#e6e600",
-      "#ca3838"
+      "#00b500",
+      "#e6e600"
     ],
-    "seg1": "26",
-    "seg2": "30",
+    "seg1": "18",
+    "seg2": "26",
     "diff": false,
     "className": "",
     "x": 540,
@@ -828,6 +839,25 @@
     "y": 680,
     "wires": [
       [
+        "fn_medical_summary"
+      ]
+    ]
+  },
+  {
+    "id": "fn_medical_summary",
+    "type": "function",
+    "z": "f_rprms",
+    "name": "compact summary",
+    "func": "try { const j = (typeof msg.payload === 'string') ? JSON.parse(msg.payload) : msg.payload;\n  msg.payload = 'n=' + j.n + '  HR ' + Math.round(j.hr_avg) + ' (' + j.hr_min + '-' + j.hr_max + ')' + '  SpO2 ' + Math.round(j.spo2_avg) + '  T ' + Number(j.temp_avg).toFixed(1); } catch (e) {}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 330,
+    "y": 680,
+    "wires": [
+      [
         "t_medical_summary"
       ]
     ]
@@ -849,7 +879,7 @@
     "font": "",
     "fontSize": 16,
     "color": "#000000",
-    "x": 440,
+    "x": 540,
     "y": 680,
     "wires": []
   },
@@ -954,6 +984,25 @@
     "y": 860,
     "wires": [
       [
+        "fn_facility_summary"
+      ]
+    ]
+  },
+  {
+    "id": "fn_facility_summary",
+    "type": "function",
+    "z": "f_rprms",
+    "name": "compact summary",
+    "func": "try { const j = (typeof msg.payload === 'string') ? JSON.parse(msg.payload) : msg.payload;\n  msg.payload = 'n=' + j.n + '  ' + Number(j.room_avg).toFixed(1) + ' C  O2 ' + Number(j.o2_avg).toFixed(1) + '%  AQI ' + j.aqi_avg + ' (max ' + j.aqi_max + ')'; } catch (e) {}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 330,
+    "y": 860,
+    "wires": [
+      [
         "t_facility_summary"
       ]
     ]
@@ -975,7 +1024,7 @@
     "font": "",
     "fontSize": 16,
     "color": "#000000",
-    "x": 440,
+    "x": 540,
     "y": 860,
     "wires": []
   },
@@ -1080,6 +1129,25 @@
     "y": 1040,
     "wires": [
       [
+        "fn_system_backlog"
+      ]
+    ]
+  },
+  {
+    "id": "fn_system_backlog",
+    "type": "function",
+    "z": "f_rprms",
+    "name": "compact backlog",
+    "func": "try { const j = (typeof msg.payload === 'string') ? JSON.parse(msg.payload) : msg.payload;\n  msg.payload = 't=' + Math.round(j.t / 1000) + ' s  HR ' + j.hr + '  SpO2 ' + j.spo2 + '  ' + Number(j.bt).toFixed(1) + ' C  risk ' + j.risk; } catch (e) {}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 330,
+    "y": 1040,
+    "wires": [
+      [
         "t_system_backlog"
       ]
     ]
@@ -1101,7 +1169,7 @@
     "font": "",
     "fontSize": 16,
     "color": "#000000",
-    "x": 440,
+    "x": 540,
     "y": 1040,
     "wires": []
   },
@@ -1429,6 +1497,60 @@
     ]
   },
   {
+    "id": "sl_control_sim_hr",
+    "type": "ui_slider",
+    "z": "f_rprms",
+    "name": "Simulated HR bpm (0 = auto)",
+    "label": "Simulated HR bpm (0 = auto)",
+    "tooltip": "",
+    "group": "g_sim",
+    "order": 1,
+    "width": "8",
+    "height": "1",
+    "passthru": false,
+    "outs": "end",
+    "topic": "rprms-hl-8842/feeds/control.sim-hr",
+    "topicType": "str",
+    "min": 0,
+    "max": "220",
+    "step": 1,
+    "className": "",
+    "x": 140,
+    "y": 1600,
+    "wires": [
+      [
+        "out_ctrl"
+      ]
+    ]
+  },
+  {
+    "id": "sl_control_sim_spo2",
+    "type": "ui_slider",
+    "z": "f_rprms",
+    "name": "Simulated SpO2 % (0 = auto)",
+    "label": "Simulated SpO2 % (0 = auto)",
+    "tooltip": "",
+    "group": "g_sim",
+    "order": 2,
+    "width": "8",
+    "height": "1",
+    "passthru": false,
+    "outs": "end",
+    "topic": "rprms-hl-8842/feeds/control.sim-spo2",
+    "topicType": "str",
+    "min": 0,
+    "max": "100",
+    "step": 1,
+    "className": "",
+    "x": 140,
+    "y": 1660,
+    "wires": [
+      [
+        "out_ctrl"
+      ]
+    ]
+  },
+  {
     "id": "sw_control_dosage_confirm",
     "type": "ui_switch",
     "z": "f_rprms",
@@ -1455,7 +1577,7 @@
     "animate": true,
     "className": "",
     "x": 140,
-    "y": 1600,
+    "y": 1720,
     "wires": [
       [
         "out_ctrl"
@@ -1489,7 +1611,7 @@
     "animate": true,
     "className": "",
     "x": 140,
-    "y": 1660,
+    "y": 1780,
     "wires": [
       [
         "out_ctrl"
@@ -1523,7 +1645,7 @@
     "animate": true,
     "className": "",
     "x": 140,
-    "y": 1720,
+    "y": 1840,
     "wires": [
       [
         "out_ctrl"
@@ -1551,7 +1673,7 @@
     "topic": "rprms-hl-8842/feeds/control.bed-preset",
     "topicType": "str",
     "x": 140,
-    "y": 1780,
+    "y": 1900,
     "wires": [
       [
         "out_ctrl"
@@ -1579,7 +1701,7 @@
     "topic": "rprms-hl-8842/feeds/control.bed-preset",
     "topicType": "str",
     "x": 140,
-    "y": 1840,
+    "y": 1960,
     "wires": [
       [
         "out_ctrl"
@@ -1607,7 +1729,7 @@
     "topic": "rprms-hl-8842/feeds/control.bed-preset",
     "topicType": "str",
     "x": 140,
-    "y": 1900,
+    "y": 2020,
     "wires": [
       [
         "out_ctrl"
@@ -1628,7 +1750,7 @@
     "rh": 0,
     "inputs": 0,
     "x": 140,
-    "y": 1960,
+    "y": 2080,
     "wires": [
       [
         "fn_medical_alerts"
@@ -1647,7 +1769,7 @@
     "finalize": "",
     "libs": [],
     "x": 350,
-    "y": 1960,
+    "y": 2080,
     "wires": [
       [
         "tpl_medical_alerts"
@@ -1670,7 +1792,7 @@
     "templateScope": "local",
     "className": "",
     "x": 580,
-    "y": 1960,
+    "y": 2080,
     "wires": [
       []
     ]
@@ -1689,7 +1811,7 @@
     "rh": 0,
     "inputs": 0,
     "x": 140,
-    "y": 2020,
+    "y": 2140,
     "wires": [
       [
         "fn_facility_alerts"
@@ -1708,7 +1830,7 @@
     "finalize": "",
     "libs": [],
     "x": 350,
-    "y": 2020,
+    "y": 2140,
     "wires": [
       [
         "tpl_facility_alerts"
@@ -1731,7 +1853,7 @@
     "templateScope": "local",
     "className": "",
     "x": 580,
-    "y": 2020,
+    "y": 2140,
     "wires": [
       []
     ]

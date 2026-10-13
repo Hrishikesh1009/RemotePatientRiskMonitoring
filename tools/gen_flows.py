@@ -6,7 +6,7 @@ firmware enforces at the transport layer is visible in the UI.
 """
 import json, pathlib
 
-PREFIX = "rprms"          # must equal IO_USERNAME in main.ino
+PREFIX = "rprms-hl-8842"  # must equal IO_USERNAME in main.ino
 BROKER = "broker.hivemq.com"
 PORT   = "1883"
 
@@ -31,7 +31,7 @@ add({"id": "broker1", "type": "mqtt-broker", "name": "RPRMS broker",
      "willTopic": "", "willQos": "0", "willPayload": "", "willMsg": {},
      "userProps": "", "sessionExpiry": ""})
 
-add({"id": "ui_base", "type": "ui_base",
+add({"id": "ui_base_rprms", "type": "ui_base",   # id != type (a clash looks like a circular dependency)
      "theme": {"name": "theme-dark",
                "lightTheme": {"default": "#0094CE", "baseColor": "#0094CE",
                               "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif",
@@ -73,6 +73,7 @@ GROUPS = [
     ("g_ctrl",    "Therapy Control (Tasks 3-5)", "tab_med", 4, "12"),
     ("g_ack",     "Actuator Readback",           "tab_med", 5, "12"),
     ("g_medalert","Clinical Alert Log",          "tab_med", 6, "12"),
+    ("g_sim",     "Patient Simulation (demo aid)", "tab_med", 7, "12"),
     ("g_env",     "Room Environment",            "tab_fac", 1, "12"),
     ("g_envx",    "Occupancy & Humidity",        "tab_fac", 2, "12"),
     ("g_envtrend","Environment Trend",           "tab_fac", 3, "12"),
@@ -96,7 +97,9 @@ GAUGES = [
     ("medical.heart-rate",       "Heart Rate",  "bpm", "g_vitals", 1, 40, 180, 60,   120,  [AMBER, GREEN, RED], "Heart Rate"),
     ("medical.spo2",             "SpO2",        "%",   "g_vitals", 2, 70, 100, 85,   90,   [RED, AMBER, GREEN], "SpO2"),
     ("medical.body-temperature", "Body Temp",   "degC","g_vitals", 3, 33, 42,  37.5, 38.0, [GREEN, AMBER, RED], "Body Temp"),
-    ("facility.room-temperature","Room Temp",   "degC","g_env",    1, 10, 35,  26,   30,   [GREEN, AMBER, RED], "Room Temp"),
+    # Two-sided safe band 18-26 degC (ROOM_TEMP_MIN_C/MAX_C in main.ino); outside it the
+    # firmware raises WARNING only, so both sides are amber rather than red.
+    ("facility.room-temperature","Room Temp",   "degC","g_env",    1, 10, 35,  18,   26,   [AMBER, GREEN, AMBER], "Room Temp"),
     ("facility.oxygen-level",    "Oxygen",      "%",   "g_env",    2, 15, 25,  19.5, 23.5, [RED, GREEN, RED],   "Oxygen"),
     ("facility.aqi",             "Air Quality", "AQI", "g_env",    3, 0,  500, 150,  300,  [GREEN, AMBER, RED], "AQI"),
 ]
@@ -133,17 +136,42 @@ TEXTS = [
     ("system.sampling-rate",   "Sampling Interval", "{{msg.payload}} s", "g_sys",   2),
     ("system.backlog",         "Last Resynced Record", "{{msg.payload}}","g_sys",   3),
 ]
+# JSON payloads (the 60 s aggregates and the replayed backlog record) are ~70-100 characters --
+# far wider than a dashboard text card, so the raw string spilled over the neighbouring panel.
+# A tiny function node turns each into one short line; the raw JSON is still on the broker.
+COMPACT = {
+    "medical.summary":
+        "try { const j = (typeof msg.payload === 'string') ? JSON.parse(msg.payload) : msg.payload;\n"
+        "  msg.payload = 'n=' + j.n + '  HR ' + Math.round(j.hr_avg) + ' (' + j.hr_min + '-' + j.hr_max + ')'"
+        " + '  SpO2 ' + Math.round(j.spo2_avg) + '  T ' + Number(j.temp_avg).toFixed(1); } catch (e) {}\n"
+        "return msg;",
+    "facility.summary":
+        "try { const j = (typeof msg.payload === 'string') ? JSON.parse(msg.payload) : msg.payload;\n"
+        "  msg.payload = 'n=' + j.n + '  ' + Number(j.room_avg).toFixed(1) + ' C  O2 ' + Number(j.o2_avg).toFixed(1)"
+        " + '%  AQI ' + j.aqi_avg + ' (max ' + j.aqi_max + ')'; } catch (e) {}\n"
+        "return msg;",
+    "system.backlog":
+        "try { const j = (typeof msg.payload === 'string') ? JSON.parse(msg.payload) : msg.payload;\n"
+        "  msg.payload = 't=' + Math.round(j.t / 1000) + ' s  HR ' + j.hr + '  SpO2 ' + j.spo2"
+        " + '  ' + Number(j.bt).toFixed(1) + ' C  risk ' + j.risk; } catch (e) {}\n"
+        "return msg;",
+}
 for feed, label, fmt, group, order in TEXTS:
     key = feed.replace(".", "_").replace("-", "_")
-    tid, mid = f"t_{key}", f"in_{key}"
+    tid, mid, fid = f"t_{key}", f"in_{key}", f"fn_{key}"
     cx, cy = nextxy()
+    nxt = fid if feed in COMPACT else tid
     add({"id": mid, "type": "mqtt in", "z": FLOW, "name": feed, "topic": T(feed),
          "qos": "0", "datatype": "auto-detect", "broker": "broker1", "nl": False,
-         "rap": True, "rh": 0, "inputs": 0, "x": cx, "y": cy, "wires": [[tid]]})
+         "rap": True, "rh": 0, "inputs": 0, "x": cx, "y": cy, "wires": [[nxt]]})
+    if feed in COMPACT:
+        add({"id": fid, "type": "function", "z": FLOW, "name": "compact " + feed.split(".")[-1],
+             "func": COMPACT[feed], "outputs": 1, "noerr": 0, "initialize": "", "finalize": "",
+             "libs": [], "x": cx + 190, "y": cy, "wires": [[tid]]})
     add({"id": tid, "type": "ui_text", "z": FLOW, "group": group, "order": order,
          "width": "6", "height": "1", "name": label, "label": label, "format": fmt,
          "layout": "row-spread", "className": "", "style": False, "font": "",
-         "fontSize": 16, "color": "#000000", "x": cx + 300, "y": cy, "wires": []})
+         "fontSize": 16, "color": "#000000", "x": cx + (400 if feed in COMPACT else 300), "y": cy, "wires": []})
 
 # ----------------------------------------------------------------- readback gauges
 for feed, label, group, order, mn, mx, s1, s2, colors in [
@@ -193,6 +221,10 @@ SLIDERS = [
     ("control.dosage",        "Medication mg/hr",   "g_ctrl", 1, 0, 100, 1),
     ("control.bed-angle",     "Bed Angle deg",      "g_ctrl", 3, 0, 90,  1),
     ("control.sampling-rate", "Sampling Interval s","g_ctrl", 5, 5, 60,  1),
+    # Synthetic-patient override (main.ino C_SIM_HR / C_SIM_SPO2): Wokwi has no pulse-oximeter
+    # part, so these pin the simulated vitals on demand. 0 = automatic random walk.
+    ("control.sim-hr",        "Simulated HR bpm (0 = auto)",   "g_sim", 1, 0, 220, 1),
+    ("control.sim-spo2",      "Simulated SpO2 % (0 = auto)",   "g_sim", 2, 0, 100, 1),
 ]
 for feed, label, group, order, mn, mx, step in SLIDERS:
     key = feed.replace(".", "_").replace("-", "_")
@@ -262,7 +294,9 @@ for feed, group, name in [("medical.alerts", "g_medalert", "clinical"),
          "resendOnRefresh": True, "templateScope": "local", "className": "",
          "x": cx + 440, "y": cy, "wires": [[]]})
 
-out = pathlib.Path(r"D:\elevanceskills\RemotePatientRiskMonitoring\dashboards\node-red-flows.json")
+import sys
+out = (pathlib.Path(sys.argv[1]) if len(sys.argv) > 1
+       else pathlib.Path(__file__).resolve().parent.parent / "dashboards" / "node-red-flows.json")
 out.write_text(json.dumps(nodes, indent=2), encoding="utf-8")
 
 # ---- validation ----
@@ -276,6 +310,8 @@ for n in nodes:
             if t not in known:
                 dangling.append((n["id"], t))
     for ref in ("group", "tab", "broker", "z"):
+        if n.get("type") == "mqtt-broker" and ref == "broker":
+            continue            # the broker config node's own 'broker' field is a hostname, not a node id
         v = n.get(ref)
         if isinstance(v, str) and v and v not in known:
             dangling.append((n["id"], f"{ref}={v}"))

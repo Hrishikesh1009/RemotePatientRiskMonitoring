@@ -1,7 +1,13 @@
 # tools/
 
-Helper scripts. Neither is required to build or run the project — they exist to make
-the dashboard verifiable and screenshottable without the Wokwi simulation attached.
+Helper scripts. None is required to build or run the project.
+
+| Item | What it is for |
+|---|---|
+| [`verification/`](verification/README.md) | The measurement rig behind `docs/TEST_RESULTS.md`: drives the real Wokwi simulation unattended and records 49 measured checks (serial, simulator clock, OLED framebuffer, LED/buzzer/servo, an independent MQTT subscriber) |
+| `start-dashboard.cmd` | Starts the Node-RED dashboard (`http://127.0.0.1:1880/ui`) |
+| `gen_flows.py` | Regenerates `dashboards/node-red-flows.json` |
+| `sim_esp32.py` | Publishes the ESP32's MQTT traffic from your PC, without Wokwi — for building and screenshotting the dashboard |
 
 ---
 
@@ -41,7 +47,7 @@ confirm the sliders and buttons are publishing.
 
 ## `gen_flows.py` — regenerate the Node-RED dashboard
 
-Emits `dashboards/node-red-flows.json` (78 nodes). Edit the `GAUGES` / `TEXTS` /
+Emits `dashboards/node-red-flows.json` (84 nodes). Edit the `GAUGES` / `TEXTS` /
 `SLIDERS` / `SWITCHES` tables at the bottom and re-run, rather than hand-editing 1,700
 lines of JSON.
 
