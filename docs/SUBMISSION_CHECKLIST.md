@@ -61,8 +61,11 @@ had the pre-fix wiring (BUG_LOG B-14 – B-16, B-23).
       `docs/TECHNICAL_REPORT.md` render (all 4 images load); `docs/evidence/` (69 files) and
       `tools/verification/` (8 files) are present; the committed diagrams and all 15 screenshots are
       byte-identical to the local files.
-- [ ] *(optional)* **Drive folder refreshed** — `submission_pdfs/` holds up-to-date PDFs and a
-      `00_START_HERE.txt`; upload its contents (the folder is git-ignored staging).
+- [x] **Drive folder refreshed** (13 Oct): the August/September files were replaced by the new set —
+      `00_START_HERE.txt`, 14 PDFs, `15_Source_Code/`, `16_Screenshots/`, `17_Evidence/` (48 files;
+      names and sizes checked, folder and files open without a login). When the demo-video link is
+      added, regenerate and re-upload `01_Technical_Report.pdf`, `14_README.pdf` and
+      `00_START_HERE.txt`. `submission_pdfs/` on your PC (git-ignored) is the local copy.
 
 ---
 
