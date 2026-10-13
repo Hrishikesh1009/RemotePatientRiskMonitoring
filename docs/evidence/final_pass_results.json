@@ -1,0 +1,296 @@
+﻿[
+    {
+        "id":  "TC-01a",
+        "name":  "firmware tag printed",
+        "pass":  true,
+        "detail":  "[BOOT] firmware 2026-10-13 final"
+    },
+    {
+        "id":  "TC-01b",
+        "name":  "10 FreeRTOS tasks started (once)",
+        "pass":  true,
+        "detail":  "serial: [BOOT] 10 FreeRTOS tasks started"
+    },
+    {
+        "id":  "TC-01c",
+        "name":  "task watchdog armed 20 s",
+        "pass":  true,
+        "detail":  ""
+    },
+    {
+        "id":  "TC-01d",
+        "name":  "no panic/WDT/abort lines",
+        "pass":  true,
+        "detail":  "count=0"
+    },
+    {
+        "id":  "TC-01e",
+        "name":  "exactly one boot banner (no resets)",
+        "pass":  true,
+        "detail":  "boot banners=1"
+    },
+    {
+        "id":  "TC-01f",
+        "name":  "no phantom Wi-Fi fault at boot (B-34)",
+        "pass":  true,
+        "detail":  "Wi-Fi associated at boot"
+    },
+    {
+        "id":  "TC-01g",
+        "name":  "no boot-time rate flip 15-\u003e5 s (B-30)",
+        "pass":  true,
+        "detail":  ""
+    },
+    {
+        "id":  "TC-01h",
+        "name":  "all five OLED pages appear",
+        "pass":  true,
+        "detail":  "pages seen after 13.0 simulated s (first seen at sim +s): SYSTEM@0.1, PATIENT@2.4, EXTENDED@5.5, FACILITY@8.8, THERAPY@12.8"
+    },
+    {
+        "id":  "TC-15",
+        "name":  "12/12 commands applied",
+        "pass":  true,
+        "detail":  "applied: 10,11,12,13,14,15,16,17,18,19,20,21"
+    },
+    {
+        "id":  "TC-11a",
+        "name":  "manual 5 s: samples ~5.0 s apart (sim time)",
+        "pass":  true,
+        "detail":  "mean spacing 5.08 s over 7 intervals"
+    },
+    {
+        "id":  "TC-11b",
+        "name":  "one publish per sample, none repeated (publish-per-sample, B-32)",
+        "pass":  true,
+        "detail":  "8 of 8 samples published exactly once; repeated publishes: 0"
+    },
+    {
+        "id":  "TC-11c",
+        "name":  "rate change wakes a sleeping task within ~1.5 s (not up to 60 s)",
+        "pass":  true,
+        "detail":  "latency 1.26 s (clock read before publish)"
+    },
+    {
+        "id":  "TC-11d0",
+        "name":  "auto mode: a stable patient settles to 30 s",
+        "pass":  true,
+        "detail":  "trace: [RATE] auto-adapt: 5 s -\u003e 30 s"
+    },
+    {
+        "id":  "TC-11d",
+        "name":  "auto mode: abnormal vitals (HR 130) -\u003e 5 s",
+        "pass":  true,
+        "detail":  "trace: [RATE] auto-adapt: 30 s -\u003e 5 s"
+    },
+    {
+        "id":  "TC-11e",
+        "name":  "auto mode: stable -\u003e 30 s only after 3 fresh stable samples (hysteresis)",
+        "pass":  true,
+        "detail":  "samples between release and adapt: 3; adapted: True"
+    },
+    {
+        "id":  "TC-03-temp",
+        "name":  "probe temp off -\u003e DEGRADED/SENSOR within 3 s",
+        "pass":  true,
+        "detail":  "3.4 s; trace has [SENSOR] line: True"
+    },
+    {
+        "id":  "TC-03-hr",
+        "name":  "probe hr off -\u003e DEGRADED/SENSOR within 3 s",
+        "pass":  true,
+        "detail":  "1.6 s; trace has [SENSOR] line: True"
+    },
+    {
+        "id":  "TC-03-status",
+        "name":  "status reads \"Sensor disconnected\" (never \"Patient stable\")",
+        "pass":  true,
+        "detail":  "Sensor disconnected"
+    },
+    {
+        "id":  "TC-03-spo2",
+        "name":  "probe spo2 off -\u003e DEGRADED/SENSOR within 3 s",
+        "pass":  true,
+        "detail":  "3.0 s; trace has [SENSOR] line: True"
+    },
+    {
+        "id":  "TC-07",
+        "name":  "dose ramps at exactly 5 mg/hr per simulated second",
+        "pass":  true,
+        "detail":  "5.00 mg/hr/s from 13 lines"
+    },
+    {
+        "id":  "TC-14",
+        "name":  "OLED footer shows live dose on every page",
+        "pass":  true,
+        "detail":  "see TC14_footer_dose60_warn.png (footer: DOSE 60.0 mg/hr WARN)"
+    },
+    {
+        "id":  "TC-08A",
+        "name":  "unconfirmed 95 request is held at 80 and expires to 80 (safe ceiling)",
+        "pass":  true,
+        "detail":  "gate expired after 15006 ms (limit 15000 ms); max delivered 80 over 17 ramp lines; independent subscriber system.dosage: 0,4.63,30.03,55.56,80,80"
+    },
+    {
+        "id":  "TC-08A2",
+        "name":  "alarm (red LED + buzzer 3) active while confirmation pending",
+        "pass":  true,
+        "detail":  "red LED ON samples 81; buzzer-3 ON samples 50"
+    },
+    {
+        "id":  "TC-08B",
+        "name":  "confirmed request releases to 95, still ramped",
+        "pass":  true,
+        "detail":  "serial: [DOSE] confirmed 95.0 mg/hr"
+    },
+    {
+        "id":  "TC-09a",
+        "name":  "0 -\u003e 90 deg ramp takes about 2.2-2.4 s (1 deg / 25 ms)",
+        "pass":  true,
+        "detail":  "first log 1 deg, last 90 deg, 2.23 s"
+    },
+    {
+        "id":  "TC-09b",
+        "name":  "a manual command switches Auto bed OFF",
+        "pass":  true,
+        "detail":  "see TC09_oled_therapy_auto_off.png"
+    },
+    {
+        "id":  "TC-09c",
+        "name":  "presets sleep 10 / breathing 45 / emergency 90 reach the target (servo shown)",
+        "pass":  true,
+        "detail":  "emergency@90=\u003e89  breathing@45=\u003e46  sleep@10=\u003e12"
+    },
+    {
+        "id":  "TC-09d",
+        "name":  "emergency preset ramps faster (~0.75 s) but is still a ramp",
+        "pass":  true,
+        "detail":  "0.73 s, 5 log lines"
+    },
+    {
+        "id":  "TC-10a",
+        "name":  "SpO2 88 (\u003c 90) -\u003e bed 45 deg",
+        "pass":  true,
+        "detail":  "servo shows 46"
+    },
+    {
+        "id":  "TC-10b",
+        "name":  "SpO2 82 (\u003c 85, CRITICAL) -\u003e bed 90 deg",
+        "pass":  true,
+        "detail":  "servo shows 89; status: Severe hypoxaemia"
+    },
+    {
+        "id":  "TC-10c",
+        "name":  "SpO2 back to normal -\u003e bed returns to 10 deg",
+        "pass":  true,
+        "detail":  "servo shows 12"
+    },
+    {
+        "id":  "TC-10d",
+        "name":  "manual command beats automation (auto never overrides manual)",
+        "pass":  true,
+        "detail":  "bed stayed at 70 while SpO2 was 82"
+    },
+    {
+        "id":  "TC-12a",
+        "name":  "Wi-Fi cut detected -\u003e OFFLINE / cause WIFI within 2 s",
+        "pass":  true,
+        "detail":  "1.9 s"
+    },
+    {
+        "id":  "TC-12b",
+        "name":  "exponential backoff 1,2,4,8,16,32 while cut",
+        "pass":  true,
+        "detail":  "backoff sequence: 1,2,4,8,16"
+    },
+    {
+        "id":  "TC-12c",
+        "name":  "distinct buzzer pattern logged for Wi-Fi (3 short beeps)",
+        "pass":  true,
+        "detail":  ""
+    },
+    {
+        "id":  "TC-12d",
+        "name":  "amber LED lit while offline",
+        "pass":  true,
+        "detail":  ""
+    },
+    {
+        "id":  "TC-12e",
+        "name":  "restored: records out == records in, chronological, one MQTT message each",
+        "pass":  true,
+        "detail":  "buffered/replayed 8; resynced 8; independent subscriber saw 8 on system.backlog; in order: True; spacing 5.0,5.0,5.0,5.0"
+    },
+    {
+        "id":  "TC-12f",
+        "name":  "back ONLINE soon after release (reset backoff per layer, B-29)",
+        "pass":  true,
+        "detail":  "13.1 s from release to resync complete"
+    },
+    {
+        "id":  "TC-13a",
+        "name":  "broker cut detected -\u003e OFFLINE / cause MQTT within 2 s",
+        "pass":  true,
+        "detail":  "0.7 s"
+    },
+    {
+        "id":  "TC-13b",
+        "name":  "distinct buzzer pattern logged for broker (2 long beeps)",
+        "pass":  true,
+        "detail":  ""
+    },
+    {
+        "id":  "TC-13c",
+        "name":  "restored -\u003e ONLINE and backlog replayed",
+        "pass":  true,
+        "detail":  "[NET] resynced 4 records"
+    },
+    {
+        "id":  "TC-02",
+        "name":  "red-LED alarm cadence same before and during the outage",
+        "pass":  true,
+        "detail":  "critical-alarm passes: 5 before the cut (period 1.01 s) vs 4 during the Wi-Fi outage (period 1.16 s), ratio 1.15; OFFLINE/WIFI reported inside the window: True; sim windows +1..+6 s and +7.5..+12.5 s after the request"
+    },
+    {
+        "id":  "TC-05a",
+        "name":  "AQI pot 650/1023 -\u003e AQI ~317 -\u003e CRITICAL \"Air quality hazardous\"",
+        "pass":  true,
+        "detail":  "aqi=317 alert=[CRITICAL] Air quality hazardous"
+    },
+    {
+        "id":  "TC-05b",
+        "name":  "AQI pot 400 -\u003e AQI ~195 -\u003e WARNING \"Air quality poor\"",
+        "pass":  true,
+        "detail":  "aqi=195 alert=[WARNING] Air quality poor"
+    },
+    {
+        "id":  "TC-05c",
+        "name":  "O2 pot 60 -\u003e O2 ~15.6 % -\u003e CRITICAL \"Oxygen level unsafe\"",
+        "pass":  true,
+        "detail":  "o2=15.59 alert=[CRITICAL] Oxygen level unsafe"
+    },
+    {
+        "id":  "TC-05d",
+        "name":  "ECG pot full scale -\u003e ecgTask reports ~5.00 mV",
+        "pass":  true,
+        "detail":  "ecg=5.00"
+    },
+    {
+        "id":  "TC-04",
+        "name":  "device publishes disjoint medical.* / facility.* topic groups",
+        "pass":  true,
+        "detail":  "medical topics: medical.body-temperature,medical.heart-rate,medical.spo2,medical.patient-status,medical.blood-pressure,medical.ecg,medical.summary,medical.alerts; facility topics: facility.aqi,facility.humidity,facility.motion,facility.room-temperature,facility.oxygen-level,facility.summary,facility.alerts"
+    },
+    {
+        "id":  "TC-06",
+        "name":  "60 s aggregation JSON on both summary feeds, internally consistent",
+        "pass":  true,
+        "detail":  "medical.summary={\"n\":9,\"hr_avg\":63.9,\"hr_min\":53,\"hr_max\":81,\"spo2_avg\":97.7,\"spo2_min\":97,\"temp_avg\":36.81} | facility.summary={\"n\":9,\"room_avg\":22.00,\"o2_avg\":21.84,\"aqi_avg\":97,\"aqi_max\":97}"
+    },
+    {
+        "id":  "TC-16a",
+        "name":  "no panic/WDT/abort after the whole suite; boot banners == 1 + suite restarts",
+        "pass":  true,
+        "detail":  "sim clock 506 s (8.4 min) in the final session; banners=1; suite-initiated restarts so far=0"
+    }
+]

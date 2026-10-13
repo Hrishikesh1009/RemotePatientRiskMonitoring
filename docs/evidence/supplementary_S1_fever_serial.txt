@@ -1,0 +1,20 @@
+﻿SUPPLEMENTARY S1 -- fever path (DS18B20 body temperature), run on the FINAL build right after the 49-check suite
+build: main.ino sha256 9e69da719afebbf68aa48637d9e12146e0f486461ead55e3a46ef7f892e43739 (same simulation session)
+method: clicked the DS18B20 part in the running simulation, moved its Temperature slider 36.8 -> 39.0 C, later back to 36.8 C
+observed (independent MQTT subscriber): at 39.0 C medical.body-temperature=36.81 was seen as a fever reading: True;
+  status 'High body temperature' + CRITICAL alert on medical.alerts, '[RATE] auto-adapt: 30 s -> 5 s' seen: True;
+  at 36.8 C status 'Patient stable', and after 3 fresh stable samples '[RATE] auto-adapt: 5 s -> 30 s' seen: True
+serial excerpt (everything since the slider was first moved) follows
+----------------------------------------------------------------------------------------------------
+[SAMPLE] vitals #120 at t=806392 ms: hr=75 spo2=96 (period 30 s)
+[RATE] auto-adapt: 30 s -> 5 s
+[MQTT] published sample #120 at t=807202 ms (period 5 s)
+[SAMPLE] vitals #121 at t=807976 ms: hr=73 spo2=97 (period 5 s)
+[MQTT] published sample #121 at t=808385 ms (period 5 s)
+[SAMPLE] vitals #122 at t=813060 ms: hr=71 spo2=97 (period 5 s)
+[MQTT] published sample #122 at t=813244 ms (period 5 s)
+[SAMPLE] vitals #123 at t=818144 ms: hr=74 spo2=97 (period 5 s)
+[MQTT] published sample #123 at t=818336 ms (period 5 s)
+[SAMPLE] vitals #124 at t=823229 ms: hr=72 spo2=97 (period 5 s)
+[RATE] auto-adapt: 5 s -> 30 s
+

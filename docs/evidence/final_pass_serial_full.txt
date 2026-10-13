@@ -1,0 +1,569 @@
+﻿ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1156
+load:0x40078000,len:11456
+ho 0 tail 12 room 4
+load:0x40080400,len:2972
+entry 0x400805dc
+
+=== Remote Patient Risk Monitoring System ===
+ElevanceSkills internship build -- 6 integrated tasks
+[BOOT] firmware 2026-10-13 final (10 tasks, fault-injection switches, patient override)
+[WIFI] connected
+[BOOT] task watchdog armed: 20 s timeout, panic reset
+[ALERT] buzzer 4, MQTT fault: 2 long beeps
+[SAMPLE] vitals #1 at t=5955 ms: hr=81 spo2=97 (period 15 s)
+[BED] t=5956 ms 1 -> 10 deg
+[NET] recovery attempt, backoff=1s
+[BOOT] 10 FreeRTOS tasks started
+[BED] t=6156 ms 9 -> 10 deg
+[BED] t=6181 ms 10 -> 10 deg
+[NET] state OFFLINE -> ONLINE (fault: none)
+[NET] restored -- replaying 1 buffered samples
+[NET] resynced 1 records
+[MQTT] published sample #1 at t=11636 ms (period 15 s)
+[SAMPLE] vitals #2 at t=21039 ms: hr=78 spo2=97 (period 15 s)
+[MQTT] published sample #2 at t=21329 ms (period 15 s)
+[SAMPLE] vitals #3 at t=36123 ms: hr=75 spo2=97 (period 15 s)
+[RATE] auto-adapt: 15 s -> 30 s
+[MQTT] published sample #3 at t=36315 ms (period 30 s)
+[SAMPLE] vitals #4 at t=37007 ms: hr=75 spo2=97 (period 30 s)
+[MQTT] published sample #4 at t=37269 ms (period 30 s)
+[SAMPLE] vitals #5 at t=67091 ms: hr=72 spo2=97 (period 30 s)
+[MQTT] published sample #5 at t=67226 ms (period 30 s)
+[RATE] manual: 10 s (auto off)
+[RATE] manual: 11 s (auto off)
+[RATE] manual: 12 s (auto off)
+[SAMPLE] vitals #6 at t=70875 ms: hr=75 spo2=97 (period 12 s)
+[RATE] manual: 13 s (auto off)
+[RATE] manual: 14 s (auto off)
+[RATE] manual: 15 s (auto off)
+[MQTT] published sample #6 at t=71413 ms (period 15 s)
+[RATE] manual: 16 s (auto off)
+[RATE] manual: 17 s (auto off)
+[SAMPLE] vitals #7 at t=71759 ms: hr=77 spo2=97 (period 17 s)
+[RATE] manual: 18 s (auto off)
+[RATE] manual: 19 s (auto off)
+[MQTT] published sample #7 at t=72356 ms (period 19 s)
+[RATE] manual: 20 s (auto off)
+[RATE] manual: 21 s (auto off)
+[SAMPLE] vitals #8 at t=72642 ms: hr=78 spo2=96 (period 21 s)
+[MQTT] published sample #8 at t=73291 ms (period 21 s)
+[SAMPLE] vitals #9 at t=73526 ms: hr=80 spo2=96 (period 21 s)
+[MQTT] published sample #9 at t=74244 ms (period 21 s)
+[RATE] manual: 5 s (auto off)
+[SAMPLE] vitals #10 at t=75810 ms: hr=78 spo2=96 (period 5 s)
+[MQTT] published sample #10 at t=76352 ms (period 5 s)
+[SAMPLE] vitals #11 at t=80894 ms: hr=79 spo2=97 (period 5 s)
+[MQTT] published sample #11 at t=81216 ms (period 5 s)
+[SAMPLE] vitals #12 at t=85978 ms: hr=79 spo2=96 (period 5 s)
+[MQTT] published sample #12 at t=86310 ms (period 5 s)
+[SAMPLE] vitals #13 at t=91062 ms: hr=80 spo2=96 (period 5 s)
+[MQTT] published sample #13 at t=91406 ms (period 5 s)
+[SAMPLE] vitals #14 at t=96146 ms: hr=82 spo2=96 (period 5 s)
+[MQTT] published sample #14 at t=96269 ms (period 5 s)
+[SAMPLE] vitals #15 at t=101230 ms: hr=84 spo2=96 (period 5 s)
+[MQTT] published sample #15 at t=102282 ms (period 5 s)
+[SAMPLE] vitals #16 at t=106314 ms: hr=131 spo2=96 (period 5 s)
+[MQTT] published sample #16 at t=107375 ms (period 5 s)
+[SAMPLE] vitals #17 at t=111398 ms: hr=124 spo2=95 (period 5 s)
+[MQTT] published sample #17 at t=112240 ms (period 5 s)
+[RATE] manual: 60 s (auto off)
+[SAMPLE] vitals #18 at t=116483 ms: hr=120 spo2=95 (period 60 s)
+[MQTT] published sample #18 at t=117315 ms (period 60 s)
+[SAMPLE] vitals #19 at t=117367 ms: hr=114 spo2=96 (period 60 s)
+[MQTT] published sample #19 at t=118268 ms (period 60 s)
+[RATE] manual: 5 s (auto off)
+[SAMPLE] vitals #20 at t=121451 ms: hr=108 spo2=96 (period 5 s)
+[SIM] heart rate back to automatic
+[MQTT] published sample #20 at t=122203 ms (period 5 s)
+[RATE] mode: auto
+[SAMPLE] vitals #21 at t=122835 ms: hr=102 spo2=96 (period 5 s)
+[MQTT] published sample #21 at t=123365 ms (period 5 s)
+[SAMPLE] vitals #22 at t=123720 ms: hr=100 spo2=96 (period 5 s)
+[MQTT] published sample #22 at t=124319 ms (period 5 s)
+[SAMPLE] vitals #23 at t=128804 ms: hr=96 spo2=96 (period 5 s)
+[RATE] auto-adapt: 5 s -> 30 s
+[MQTT] published sample #23 at t=129401 ms (period 30 s)
+[SAMPLE] vitals #24 at t=129988 ms: hr=94 spo2=96 (period 30 s)
+[SIM] heart rate pinned at 130 bpm
+[MQTT] published sample #24 at t=130338 ms (period 30 s)
+[SAMPLE] vitals #25 at t=130973 ms: hr=130 spo2=96 (period 30 s)
+[RATE] auto-adapt: 30 s -> 5 s
+[MQTT] published sample #25 at t=131271 ms (period 5 s)
+[SIM] heart rate back to automatic
+[SAMPLE] vitals #26 at t=131957 ms: hr=81 spo2=97 (period 5 s)
+[MQTT] published sample #26 at t=132206 ms (period 5 s)
+[SAMPLE] vitals #27 at t=132841 ms: hr=80 spo2=97 (period 5 s)
+[MQTT] published sample #27 at t=133388 ms (period 5 s)
+[SAMPLE] vitals #28 at t=137925 ms: hr=81 spo2=97 (period 5 s)
+[RATE] auto-adapt: 5 s -> 30 s
+[MQTT] published sample #28 at t=138235 ms (period 30 s)
+[SIM] heart rate back to automatic
+[SIM] SpO2 back to automatic
+[RATE] mode: auto
+[SAMPLE] vitals #29 at t=139008 ms: hr=82 spo2=97 (period 30 s)
+[MQTT] published sample #29 at t=139406 ms (period 30 s)
+[SAMPLE] vitals #30 at t=139892 ms: hr=82 spo2=97 (period 30 s)
+[MQTT] published sample #30 at t=140359 ms (period 30 s)
+[SENSOR] probe change -> temp:OFF hr:ok spo2:ok pir:ok -- resampling now
+[SAMPLE] vitals #31 at t=142193 ms: hr=82 spo2=97 (period 30 s)
+[RATE] auto-adapt: 30 s -> 5 s
+[SAMPLE] vitals #32 at t=143194 ms: hr=79 spo2=97 (period 5 s)
+[MQTT] published sample #31 at t=143382 ms (period 5 s)
+[NET] state ONLINE -> DEGRADED (fault: SENSOR)
+[ALERT] buzzer 4, SENSOR fault: 1 chirp
+[MQTT] published sample #32 at t=144335 ms (period 5 s)
+[SENSOR] probe change -> temp:ok hr:ok spo2:ok pir:ok -- resampling now
+[SAMPLE] vitals #33 at t=146978 ms: hr=78 spo2=97 (period 5 s)
+[NET] state DEGRADED -> ONLINE (fault: none)
+[MQTT] published sample #33 at t=147358 ms (period 5 s)
+[SENSOR] probe change -> temp:ok hr:OFF spo2:ok pir:ok -- resampling now
+[SAMPLE] vitals #34 at t=150962 ms: hr=0 spo2=97 (period 5 s)
+[NET] state ONLINE -> DEGRADED (fault: SENSOR)
+[MQTT] published sample #34 at t=151302 ms (period 5 s)
+[ALERT] buzzer 4, SENSOR fault: 1 chirp
+[SAMPLE] vitals #35 at t=156046 ms: hr=0 spo2=97 (period 5 s)
+[MQTT] published sample #35 at t=156396 ms (period 5 s)
+[SAMPLE] vitals #36 at t=161130 ms: hr=0 spo2=97 (period 5 s)
+[MQTT] published sample #36 at t=161259 ms (period 5 s)
+[SENSOR] probe change -> temp:ok hr:ok spo2:ok pir:ok -- resampling now
+[SAMPLE] vitals #37 at t=165014 ms: hr=125 spo2=96 (period 5 s)
+[NET] state DEGRADED -> ONLINE (fault: none)
+[MQTT] published sample #37 at t=165435 ms (period 5 s)
+[SENSOR] probe change -> temp:ok hr:ok spo2:OFF pir:ok -- resampling now
+[SAMPLE] vitals #38 at t=168998 ms: hr=119 spo2=0 (period 5 s)
+[NET] state ONLINE -> DEGRADED (fault: SENSOR)
+[MQTT] published sample #38 at t=169378 ms (period 5 s)
+[ALERT] buzzer 4, SENSOR fault: 1 chirp
+[SENSOR] probe change -> temp:ok hr:ok spo2:ok pir:ok -- resampling now
+[SAMPLE] vitals #39 at t=171981 ms: hr=112 spo2=96 (period 5 s)
+[NET] state DEGRADED -> ONLINE (fault: none)
+[MQTT] published sample #39 at t=172402 ms (period 5 s)
+[SIM] heart rate back to automatic
+[SIM] SpO2 back to automatic
+[RATE] mode: auto
+[SAMPLE] vitals #40 at t=175965 ms: hr=108 spo2=96 (period 5 s)
+[MQTT] published sample #40 at t=176334 ms (period 5 s)
+[SAMPLE] vitals #41 at t=176850 ms: hr=106 spo2=96 (period 5 s)
+[MQTT] published sample #41 at t=177287 ms (period 5 s)
+[DOSE] t=181438 ms delivered 0.1 -> target 60.0 mg/hr
+[SAMPLE] vitals #42 at t=181934 ms: hr=100 spo2=97 (period 5 s)
+[RATE] auto-adapt: 5 s -> 30 s
+[MQTT] published sample #42 at t=182361 ms (period 30 s)
+[DOSE] t=182439 ms delivered 5.1 -> target 60.0 mg/hr
+[SAMPLE] vitals #43 at t=183018 ms: hr=99 spo2=97 (period 30 s)
+[MQTT] published sample #43 at t=183315 ms (period 30 s)
+[DOSE] t=183440 ms delivered 10.1 -> target 60.0 mg/hr
+[DOSE] t=184441 ms delivered 15.1 -> target 60.0 mg/hr
+[DOSE] t=185442 ms delivered 20.1 -> target 60.0 mg/hr
+[DOSE] t=186443 ms delivered 25.1 -> target 60.0 mg/hr
+[DOSE] t=187444 ms delivered 30.2 -> target 60.0 mg/hr
+[DOSE] t=188445 ms delivered 35.2 -> target 60.0 mg/hr
+[DOSE] t=189446 ms delivered 40.2 -> target 60.0 mg/hr
+[DOSE] t=190447 ms delivered 45.2 -> target 60.0 mg/hr
+[DOSE] t=191448 ms delivered 50.2 -> target 60.0 mg/hr
+[DOSE] t=192449 ms delivered 55.2 -> target 60.0 mg/hr
+[DOSE] t=193425 ms delivered 60.0 -> target 60.0 mg/hr
+[DOSE] t=197376 ms delivered 59.9 -> target 0.0 mg/hr
+[DOSE] t=198377 ms delivered 54.9 -> target 0.0 mg/hr
+[DOSE] t=199378 ms delivered 49.9 -> target 0.0 mg/hr
+[DOSE] t=200379 ms delivered 44.9 -> target 0.0 mg/hr
+[DOSE] t=201380 ms delivered 39.9 -> target 0.0 mg/hr
+[DOSE] t=202381 ms delivered 34.8 -> target 0.0 mg/hr
+[DOSE] t=203382 ms delivered 29.8 -> target 0.0 mg/hr
+[DOSE] t=204383 ms delivered 24.8 -> target 0.0 mg/hr
+[DOSE] t=205384 ms delivered 19.8 -> target 0.0 mg/hr
+[DOSE] t=206385 ms delivered 14.8 -> target 0.0 mg/hr
+[DOSE] t=207385 ms delivered 9.8 -> target 0.0 mg/hr
+[DOSE] t=208385 ms delivered 4.8 -> target 0.0 mg/hr
+[DOSE] t=209360 ms delivered 0.0 -> target 0.0 mg/hr
+[RATE] manual: 5 s (auto off)
+[SAMPLE] vitals #44 at t=213103 ms: hr=96 spo2=97 (period 5 s)
+[MQTT] published sample #44 at t=213267 ms (period 5 s)
+[DOSE] 95.0 mg/hr exceeds 80 -- awaiting confirmation
+[DOSE] t=213286 ms delivered 0.1 -> target 80.0 mg/hr
+[ALARM] critical dosage -- delivered 2.0 mg/hr, confirmation PENDING
+[SAMPLE] vitals #45 at t=213987 ms: hr=64 spo2=97 (period 5 s)
+[MQTT] published sample #45 at t=214218 ms (period 5 s)
+[DOSE] t=214287 ms delivered 5.1 -> target 80.0 mg/hr
+[DOSE] t=215288 ms delivered 10.1 -> target 80.0 mg/hr
+[DOSE] t=216289 ms delivered 15.1 -> target 80.0 mg/hr
+[DOSE] t=217290 ms delivered 20.1 -> target 80.0 mg/hr
+[DOSE] t=218291 ms delivered 25.1 -> target 80.0 mg/hr
+[SAMPLE] vitals #46 at t=219071 ms: hr=112 spo2=97 (period 5 s)
+[DOSE] t=219292 ms delivered 30.2 -> target 80.0 mg/hr
+[MQTT] published sample #46 at t=219312 ms (period 5 s)
+[DOSE] t=220292 ms delivered 35.2 -> target 80.0 mg/hr
+[DOSE] t=221293 ms delivered 40.2 -> target 80.0 mg/hr
+[DOSE] t=222294 ms delivered 45.2 -> target 80.0 mg/hr
+[DOSE] t=223295 ms delivered 50.2 -> target 80.0 mg/hr
+[SAMPLE] vitals #47 at t=224156 ms: hr=107 spo2=97 (period 5 s)
+[DOSE] t=224296 ms delivered 55.2 -> target 80.0 mg/hr
+[MQTT] published sample #47 at t=224406 ms (period 5 s)
+[DOSE] t=225297 ms delivered 60.2 -> target 80.0 mg/hr
+[DOSE] t=226298 ms delivered 65.2 -> target 80.0 mg/hr
+[DOSE] t=227299 ms delivered 70.2 -> target 80.0 mg/hr
+[DOSE] t=228274 ms confirmation expired after 15006 ms -- holding at 80 mg/hr
+[DOSE] t=228300 ms delivered 75.2 -> target 80.0 mg/hr
+[SAMPLE] vitals #48 at t=229240 ms: hr=106 spo2=97 (period 5 s)
+[DOSE] t=229276 ms delivered 80.0 -> target 80.0 mg/hr
+[MQTT] published sample #48 at t=230420 ms (period 5 s)
+[SAMPLE] vitals #49 at t=234324 ms: hr=104 spo2=97 (period 5 s)
+[MQTT] published sample #49 at t=235283 ms (period 5 s)
+[SAMPLE] vitals #50 at t=239408 ms: hr=100 spo2=97 (period 5 s)
+[DOSE] 95.0 mg/hr exceeds 80 -- awaiting confirmation
+[ALARM] critical dosage -- delivered 80.0 mg/hr, confirmation PENDING
+[MQTT] published sample #50 at t=240392 ms (period 5 s)
+[DOSE] confirmed 95.0 mg/hr
+[DOSE] t=242705 ms delivered 80.1 -> target 95.0 mg/hr
+[DOSE] t=243706 ms delivered 85.1 -> target 95.0 mg/hr
+[SAMPLE] vitals #51 at t=244493 ms: hr=98 spo2=97 (period 5 s)
+[DOSE] t=244707 ms delivered 90.1 -> target 95.0 mg/hr
+[MQTT] published sample #51 at t=245260 ms (period 5 s)
+[DOSE] t=245683 ms delivered 95.0 -> target 95.0 mg/hr
+[SAMPLE] vitals #52 at t=249577 ms: hr=66 spo2=97 (period 5 s)
+[MQTT] published sample #52 at t=250361 ms (period 5 s)
+[SAMPLE] vitals #53 at t=254661 ms: hr=70 spo2=97 (period 5 s)
+[MQTT] published sample #53 at t=255225 ms (period 5 s)
+[SAMPLE] vitals #54 at t=259745 ms: hr=74 spo2=97 (period 5 s)
+[MQTT] published sample #54 at t=260319 ms (period 5 s)
+[DOSE] t=261484 ms delivered 94.9 -> target 0.0 mg/hr
+[DOSE] t=262485 ms delivered 89.9 -> target 0.0 mg/hr
+[DOSE] t=263486 ms delivered 84.9 -> target 0.0 mg/hr
+[DOSE] t=264487 ms delivered 79.9 -> target 0.0 mg/hr
+[SAMPLE] vitals #55 at t=264829 ms: hr=41 spo2=97 (period 5 s)
+[MQTT] published sample #55 at t=265429 ms (period 5 s)
+[DOSE] t=265488 ms delivered 74.9 -> target 0.0 mg/hr
+[DOSE] t=266489 ms delivered 69.9 -> target 0.0 mg/hr
+[DOSE] t=267490 ms delivered 64.8 -> target 0.0 mg/hr
+[DOSE] t=268491 ms delivered 59.8 -> target 0.0 mg/hr
+[DOSE] t=269492 ms delivered 54.8 -> target 0.0 mg/hr
+[SAMPLE] vitals #56 at t=269913 ms: hr=47 spo2=97 (period 5 s)
+[MQTT] published sample #56 at t=270295 ms (period 5 s)
+[DOSE] t=270493 ms delivered 49.8 -> target 0.0 mg/hr
+[DOSE] t=271494 ms delivered 44.8 -> target 0.0 mg/hr
+[DOSE] t=272495 ms delivered 39.8 -> target 0.0 mg/hr
+[DOSE] t=273496 ms delivered 34.8 -> target 0.0 mg/hr
+[DOSE] t=274497 ms delivered 29.8 -> target 0.0 mg/hr
+[SAMPLE] vitals #57 at t=274997 ms: hr=50 spo2=97 (period 5 s)
+[MQTT] published sample #57 at t=275391 ms (period 5 s)
+[DOSE] t=275498 ms delivered 24.8 -> target 0.0 mg/hr
+[DOSE] t=276499 ms delivered 19.8 -> target 0.0 mg/hr
+[DOSE] t=277499 ms delivered 14.8 -> target 0.0 mg/hr
+[DOSE] t=278499 ms delivered 9.8 -> target 0.0 mg/hr
+[DOSE] t=279499 ms delivered 4.8 -> target 0.0 mg/hr
+[SAMPLE] vitals #58 at t=280081 ms: hr=54 spo2=97 (period 5 s)
+[MQTT] published sample #58 at t=280257 ms (period 5 s)
+[DOSE] t=280474 ms delivered 0.0 -> target 0.0 mg/hr
+[SIM] heart rate back to automatic
+[SIM] SpO2 back to automatic
+[RATE] mode: auto
+[SAMPLE] vitals #59 at t=285064 ms: hr=58 spo2=97 (period 5 s)
+[MQTT] published sample #59 at t=285374 ms (period 5 s)
+[BED] t=286075 ms 9 -> 0 deg
+[BED] t=286275 ms 1 -> 0 deg
+[BED] t=286300 ms 0 -> 0 deg
+[BED] t=289750 ms 1 -> 90 deg
+[BED] t=289950 ms 9 -> 90 deg
+[SAMPLE] vitals #60 at t=290147 ms: hr=62 spo2=97 (period 5 s)
+[BED] t=290150 ms 17 -> 90 deg
+[MQTT] published sample #60 at t=290242 ms (period 5 s)
+[BED] t=290350 ms 25 -> 90 deg
+[BED] t=290550 ms 33 -> 90 deg
+[BED] t=290750 ms 41 -> 90 deg
+[BED] t=290950 ms 49 -> 90 deg
+[BED] t=291150 ms 57 -> 90 deg
+[BED] t=291350 ms 65 -> 90 deg
+[BED] t=291551 ms 73 -> 90 deg
+[BED] t=291751 ms 81 -> 90 deg
+[BED] t=291951 ms 89 -> 90 deg
+[BED] t=291976 ms 90 -> 90 deg
+[BED] t=293701 ms 89 -> 10 deg
+[BED] t=293901 ms 81 -> 10 deg
+[BED] t=294101 ms 73 -> 10 deg
+[BED] t=294301 ms 65 -> 10 deg
+[BED] t=294501 ms 57 -> 10 deg
+[BED] t=294701 ms 49 -> 10 deg
+[BED] t=294902 ms 41 -> 10 deg
+[BED] t=295102 ms 33 -> 10 deg
+[SAMPLE] vitals #61 at t=295231 ms: hr=63 spo2=96 (period 5 s)
+[BED] t=295302 ms 25 -> 10 deg
+[BED] t=295502 ms 17 -> 10 deg
+[BED] t=295677 ms 10 -> 10 deg
+[MQTT] published sample #61 at t=296263 ms (period 5 s)
+[BED] t=296752 ms 11 -> 45 deg
+[BED] t=296952 ms 19 -> 45 deg
+[BED] t=297152 ms 27 -> 45 deg
+[BED] t=297352 ms 35 -> 45 deg
+[BED] t=297553 ms 43 -> 45 deg
+[BED] t=297603 ms 45 -> 45 deg
+[SAMPLE] vitals #62 at t=300315 ms: hr=64 spo2=96 (period 5 s)
+[BED] t=300428 ms 48 -> 90 deg
+[BED] t=300628 ms 72 -> 90 deg
+[BED] t=300778 ms 90 -> 90 deg
+[RATE] auto-adapt: 5 s -> 30 s
+[MQTT] published sample #62 at t=301345 ms (period 30 s)
+[SAMPLE] vitals #63 at t=301999 ms: hr=67 spo2=97 (period 30 s)
+[MQTT] published sample #63 at t=302298 ms (period 30 s)
+[BED] t=303005 ms 89 -> 10 deg
+[BED] t=303205 ms 81 -> 10 deg
+[BED] t=303405 ms 73 -> 10 deg
+[BED] t=303605 ms 65 -> 10 deg
+[BED] t=303805 ms 57 -> 10 deg
+[BED] t=304005 ms 49 -> 10 deg
+[BED] t=304205 ms 41 -> 10 deg
+[BED] t=304405 ms 33 -> 10 deg
+[BED] t=304605 ms 25 -> 10 deg
+[BED] t=304805 ms 17 -> 10 deg
+[BED] t=304980 ms 10 -> 10 deg
+[BED] t=310155 ms 9 -> 0 deg
+[BED] t=310355 ms 1 -> 0 deg
+[BED] t=310380 ms 0 -> 0 deg
+[BED] t=312855 ms 3 -> 90 deg
+[BED] t=313055 ms 27 -> 90 deg
+[BED] t=313255 ms 51 -> 90 deg
+[BED] t=313455 ms 75 -> 90 deg
+[BED] t=313580 ms 90 -> 90 deg
+[BED] t=314705 ms 89 -> 10 deg
+[BED] t=314905 ms 81 -> 10 deg
+[BED] t=315105 ms 73 -> 10 deg
+[BED] t=315305 ms 65 -> 10 deg
+[BED] t=315505 ms 57 -> 10 deg
+[BED] t=315705 ms 49 -> 10 deg
+[BED] t=315905 ms 41 -> 10 deg
+[BED] t=316105 ms 33 -> 10 deg
+[BED] t=316305 ms 25 -> 10 deg
+[BED] t=316505 ms 17 -> 10 deg
+[BED] t=316680 ms 10 -> 10 deg
+[SIM] SpO2 pinned at 88 %
+[SAMPLE] vitals #64 at t=321083 ms: hr=67 spo2=88 (period 30 s)
+[RATE] auto-adapt: 30 s -> 5 s
+[BED] t=321181 ms 11 -> 45 deg
+[BED] t=321381 ms 19 -> 45 deg
+[MQTT] published sample #64 at t=321391 ms (period 5 s)
+[BED] t=321581 ms 27 -> 45 deg
+[BED] t=321782 ms 35 -> 45 deg
+[SAMPLE] vitals #65 at t=321968 ms: hr=69 spo2=88 (period 5 s)
+[BED] t=321983 ms 43 -> 45 deg
+[BED] t=322033 ms 45 -> 45 deg
+[MQTT] published sample #65 at t=322347 ms (period 5 s)
+[SIM] SpO2 pinned at 82 %
+[SAMPLE] vitals #66 at t=327052 ms: hr=118 spo2=82 (period 5 s)
+[BED] t=327183 ms 48 -> 90 deg
+[MQTT] published sample #66 at t=327193 ms (period 5 s)
+[BED] t=327383 ms 72 -> 90 deg
+[BED] t=327533 ms 90 -> 90 deg
+[SAMPLE] vitals #67 at t=327936 ms: hr=114 spo2=82 (period 5 s)
+[MQTT] published sample #67 at t=328379 ms (period 5 s)
+[SIM] SpO2 back to automatic
+[SAMPLE] vitals #68 at t=332921 ms: hr=110 spo2=97 (period 5 s)
+[BED] t=333184 ms 89 -> 10 deg
+[MQTT] published sample #68 at t=333246 ms (period 5 s)
+[BED] t=333384 ms 81 -> 10 deg
+[BED] t=333584 ms 73 -> 10 deg
+[BED] t=333784 ms 65 -> 10 deg
+[BED] t=333984 ms 57 -> 10 deg
+[BED] t=334184 ms 49 -> 10 deg
+[BED] t=334384 ms 41 -> 10 deg
+[BED] t=334584 ms 33 -> 10 deg
+[BED] t=334784 ms 25 -> 10 deg
+[BED] t=334984 ms 17 -> 10 deg
+[BED] t=335159 ms 10 -> 10 deg
+[SAMPLE] vitals #69 at t=338005 ms: hr=105 spo2=98 (period 5 s)
+[BED] t=338084 ms 11 -> 70 deg
+[BED] t=338284 ms 19 -> 70 deg
+[MQTT] published sample #69 at t=338344 ms (period 5 s)
+[BED] t=338484 ms 27 -> 70 deg
+[BED] t=338684 ms 35 -> 70 deg
+[BED] t=338884 ms 43 -> 70 deg
+[BED] t=339084 ms 51 -> 70 deg
+[BED] t=339284 ms 59 -> 70 deg
+[BED] t=339484 ms 67 -> 70 deg
+[BED] t=339559 ms 70 -> 70 deg
+[SIM] SpO2 pinned at 82 %
+[SAMPLE] vitals #70 at t=342189 ms: hr=101 spo2=82 (period 5 s)
+[MQTT] published sample #70 at t=343213 ms (period 5 s)
+[SAMPLE] vitals #71 at t=347273 ms: hr=96 spo2=82 (period 5 s)
+[MQTT] published sample #71 at t=348309 ms (period 5 s)
+[SIM] SpO2 back to automatic
+[SIM] heart rate back to automatic
+[SIM] SpO2 back to automatic
+[RATE] mode: auto
+[BED] t=352184 ms 73 -> 90 deg
+[BED] t=352335 ms 90 -> 90 deg
+[SAMPLE] vitals #72 at t=352357 ms: hr=95 spo2=97 (period 5 s)
+[RATE] manual: 5 s (auto off)
+[BED] t=353188 ms 89 -> 10 deg
+[SAMPLE] vitals #73 at t=353241 ms: hr=91 spo2=96 (period 5 s)
+[BED] t=353389 ms 81 -> 10 deg
+[MQTT] published sample #72 at t=353410 ms (period 5 s)
+[BED] t=353589 ms 73 -> 10 deg
+[BED] t=353789 ms 65 -> 10 deg
+[BED] t=353989 ms 57 -> 10 deg
+[SAMPLE] vitals #74 at t=354125 ms: hr=90 spo2=96 (period 5 s)
+[BED] t=354189 ms 49 -> 10 deg
+[MQTT] published sample #74 at t=354362 ms (period 5 s)
+[BED] t=354389 ms 41 -> 10 deg
+[BED] t=354589 ms 33 -> 10 deg
+[BED] t=354789 ms 25 -> 10 deg
+[FAULT] SW_WIFI_CUT ON -- Wi-Fi link CUT
+[NET] state ONLINE -> OFFLINE (fault: WIFI)
+[NET] recovery attempt, backoff=1s
+[NET]   attempt failed: Wi-Fi link is down (SW_WIFI_CUT held)
+[BED] t=354989 ms 17 -> 10 deg
+[BED] t=355164 ms 10 -> 10 deg
+[ALERT] buzzer 4, WIFI fault: 3 short beeps
+[NET] recovery attempt, backoff=2s
+[NET]   attempt failed: Wi-Fi link is down (SW_WIFI_CUT held)
+[SAMPLE] vitals #75 at t=359209 ms: hr=90 spo2=97 (period 5 s)
+[NET] recovery attempt, backoff=4s
+[NET]   attempt failed: Wi-Fi link is down (SW_WIFI_CUT held)
+[SAMPLE] vitals #76 at t=364293 ms: hr=91 spo2=96 (period 5 s)
+[NET] recovery attempt, backoff=8s
+[NET]   attempt failed: Wi-Fi link is down (SW_WIFI_CUT held)
+[SAMPLE] vitals #77 at t=369377 ms: hr=92 spo2=96 (period 5 s)
+[SAMPLE] vitals #78 at t=374461 ms: hr=90 spo2=97 (period 5 s)
+[SAMPLE] vitals #79 at t=379544 ms: hr=91 spo2=97 (period 5 s)
+[SAMPLE] vitals #80 at t=384628 ms: hr=87 spo2=98 (period 5 s)
+[NET] recovery attempt, backoff=16s
+[NET]   attempt failed: Wi-Fi link is down (SW_WIFI_CUT held)
+[FAULT] SW_WIFI_CUT OFF -- Wi-Fi link restored
+[NET] recovery attempt, backoff=32s
+[NET]   Wi-Fi re-associated -- reconnecting to the broker next
+[SAMPLE] vitals #81 at t=389712 ms: hr=87 spo2=97 (period 5 s)
+[NET] still OFFLINE, fault changed WIFI -> MQTT
+[NET] recovery attempt, backoff=1s
+[ALERT] buzzer 4, MQTT fault: 2 long beeps
+[SAMPLE] vitals #82 at t=394796 ms: hr=84 spo2=97 (period 5 s)
+[NET] state OFFLINE -> ONLINE (fault: none)
+[NET] restored -- replaying 8 buffered samples
+[NET] resynced 8 records
+[MQTT] published sample #82 at t=399843 ms (period 5 s)
+[SAMPLE] vitals #83 at t=399879 ms: hr=81 spo2=98 (period 5 s)
+[MQTT] published sample #83 at t=400338 ms (period 5 s)
+[FAULT] SW_BROKER_CUT ON -- broker UNREACHABLE
+[NET] state ONLINE -> OFFLINE (fault: MQTT)
+[NET] recovery attempt, backoff=1s
+[NET]   attempt failed: broker unreachable (SW_BROKER_CUT held)
+[ALERT] buzzer 4, MQTT fault: 2 long beeps
+[NET] recovery attempt, backoff=2s
+[NET]   attempt failed: broker unreachable (SW_BROKER_CUT held)
+[SAMPLE] vitals #84 at t=404963 ms: hr=78 spo2=98 (period 5 s)
+[NET] recovery attempt, backoff=4s
+[NET]   attempt failed: broker unreachable (SW_BROKER_CUT held)
+[SAMPLE] vitals #85 at t=410047 ms: hr=48 spo2=98 (period 5 s)
+[FAULT] SW_BROKER_CUT OFF -- broker reachable again
+[NET] recovery attempt, backoff=8s
+[SAMPLE] vitals #86 at t=415131 ms: hr=53 spo2=98 (period 5 s)
+[NET] state OFFLINE -> ONLINE (fault: none)
+[NET] restored -- replaying 4 buffered samples
+[SAMPLE] vitals #87 at t=420215 ms: hr=58 spo2=98 (period 5 s)
+[NET] resynced 4 records
+[MQTT] published sample #86 at t=421161 ms (period 5 s)
+[MQTT] published sample #87 at t=421429 ms (period 5 s)
+[SIM] heart rate back to automatic
+[SIM] SpO2 back to automatic
+[RATE] mode: auto
+[SAMPLE] vitals #88 at t=423199 ms: hr=59 spo2=98 (period 5 s)
+[MQTT] published sample #88 at t=424243 ms (period 5 s)
+[RATE] manual: 15 s (auto off)
+[DOSE] 95.0 mg/hr exceeds 80 -- awaiting confirmation
+[DOSE] t=425192 ms delivered 0.1 -> target 80.0 mg/hr
+[SAMPLE] vitals #89 at t=425282 ms: hr=62 spo2=98 (period 15 s)
+[ALARM] critical dosage -- delivered 0.1 mg/hr, confirmation PENDING
+[DOSE] t=426193 ms delivered 5.1 -> target 80.0 mg/hr
+[MQTT] published sample #89 at t=426352 ms (period 15 s)
+[DOSE] t=427194 ms delivered 10.1 -> target 80.0 mg/hr
+[DOSE] t=428195 ms delivered 15.1 -> target 80.0 mg/hr
+[DOSE] t=429196 ms delivered 20.1 -> target 80.0 mg/hr
+[DOSE] t=430197 ms delivered 25.1 -> target 80.0 mg/hr
+[DOSE] t=431198 ms delivered 30.2 -> target 80.0 mg/hr
+[DOSE] t=432199 ms delivered 35.2 -> target 80.0 mg/hr
+[FAULT] SW_WIFI_CUT ON -- Wi-Fi link CUT
+[NET] state ONLINE -> OFFLINE (fault: WIFI)
+[NET] recovery attempt, backoff=1s
+[NET]   attempt failed: Wi-Fi link is down (SW_WIFI_CUT held)
+[DOSE] t=433199 ms delivered 40.2 -> target 80.0 mg/hr
+[DOSE] t=434199 ms delivered 45.2 -> target 80.0 mg/hr
+[ALERT] buzzer 4, WIFI fault: 3 short beeps
+[NET] recovery attempt, backoff=2s
+[NET]   attempt failed: Wi-Fi link is down (SW_WIFI_CUT held)
+[DOSE] t=435199 ms delivered 50.2 -> target 80.0 mg/hr
+[DOSE] t=436199 ms delivered 55.2 -> target 80.0 mg/hr
+[DOSE] t=437199 ms delivered 60.2 -> target 80.0 mg/hr
+[DOSE] t=438199 ms delivered 65.2 -> target 80.0 mg/hr
+[FAULT] SW_WIFI_CUT OFF -- Wi-Fi link restored
+[NET] recovery attempt, backoff=4s
+[DOSE] t=439199 ms delivered 70.2 -> target 80.0 mg/hr
+[DOSE] t=440174 ms confirmation expired after 15006 ms -- holding at 80 mg/hr
+[DOSE] t=440200 ms delivered 75.2 -> target 80.0 mg/hr
+[NET]   Wi-Fi re-associated -- reconnecting to the broker next
+[SAMPLE] vitals #90 at t=440367 ms: hr=64 spo2=98 (period 15 s)
+[DOSE] t=441176 ms delivered 80.0 -> target 80.0 mg/hr
+[NET] still OFFLINE, fault changed WIFI -> MQTT
+[NET] recovery attempt, backoff=1s
+[ALERT] buzzer 4, MQTT fault: 2 long beeps
+[NET] state OFFLINE -> ONLINE (fault: none)
+[NET] restored -- replaying 1 buffered samples
+[NET] resynced 1 records
+[MQTT] published sample #90 at t=447638 ms (period 15 s)
+[SIM] heart rate back to automatic
+[SIM] SpO2 back to automatic
+[RATE] mode: auto
+[DOSE] t=453177 ms delivered 79.9 -> target 0.0 mg/hr
+[SAMPLE] vitals #91 at t=453751 ms: hr=66 spo2=97 (period 15 s)
+[DOSE] t=454178 ms delivered 74.9 -> target 0.0 mg/hr
+[MQTT] published sample #91 at t=454333 ms (period 15 s)
+[RATE] manual: 5 s (auto off)
+[SAMPLE] vitals #92 at t=454635 ms: hr=65 spo2=97 (period 5 s)
+[DOSE] t=455180 ms delivered 69.9 -> target 0.0 mg/hr
+[MQTT] published sample #92 at t=455267 ms (period 5 s)
+[SAMPLE] vitals #93 at t=455519 ms: hr=67 spo2=97 (period 5 s)
+[DOSE] t=456181 ms delivered 64.9 -> target 0.0 mg/hr
+[MQTT] published sample #93 at t=456222 ms (period 5 s)
+[DOSE] t=457182 ms delivered 59.9 -> target 0.0 mg/hr
+[DOSE] t=458183 ms delivered 54.8 -> target 0.0 mg/hr
+[DOSE] t=459184 ms delivered 49.8 -> target 0.0 mg/hr
+[DOSE] t=460185 ms delivered 44.8 -> target 0.0 mg/hr
+[SAMPLE] vitals #94 at t=460603 ms: hr=68 spo2=97 (period 5 s)
+[DOSE] t=461186 ms delivered 39.8 -> target 0.0 mg/hr
+[MQTT] published sample #94 at t=461318 ms (period 5 s)
+[DOSE] t=462187 ms delivered 34.8 -> target 0.0 mg/hr
+[DOSE] t=463188 ms delivered 29.8 -> target 0.0 mg/hr
+[DOSE] t=464189 ms delivered 24.8 -> target 0.0 mg/hr
+[DOSE] t=465190 ms delivered 19.8 -> target 0.0 mg/hr
+[SAMPLE] vitals #95 at t=465687 ms: hr=71 spo2=98 (period 5 s)
+[DOSE] t=466191 ms delivered 14.8 -> target 0.0 mg/hr
+[MQTT] published sample #95 at t=466413 ms (period 5 s)
+[DOSE] t=467193 ms delivered 9.8 -> target 0.0 mg/hr
+[DOSE] t=468194 ms delivered 4.8 -> target 0.0 mg/hr
+[DOSE] t=469170 ms delivered 0.0 -> target 0.0 mg/hr
+[SAMPLE] vitals #96 at t=470771 ms: hr=70 spo2=98 (period 5 s)
+[MQTT] published sample #96 at t=471279 ms (period 5 s)
+[SAMPLE] vitals #97 at t=475855 ms: hr=73 spo2=97 (period 5 s)
+[MQTT] published sample #97 at t=476375 ms (period 5 s)
+[SAMPLE] vitals #98 at t=480939 ms: hr=74 spo2=97 (period 5 s)
+[MQTT] published sample #98 at t=481241 ms (period 5 s)
+[SAMPLE] vitals #99 at t=486023 ms: hr=74 spo2=96 (period 5 s)
+[MQTT] published sample #99 at t=486337 ms (period 5 s)
+[SAMPLE] vitals #100 at t=491107 ms: hr=73 spo2=97 (period 5 s)
+[MQTT] published sample #100 at t=491434 ms (period 5 s)
+[SAMPLE] vitals #101 at t=496191 ms: hr=74 spo2=97 (period 5 s)
+[MQTT] published sample #101 at t=497221 ms (period 5 s)
+[SAMPLE] vitals #102 at t=501275 ms: hr=75 spo2=96 (period 5 s)
+[MQTT] published sample #102 at t=502318 ms (period 5 s)
+[SAMPLE] vitals #103 at t=506360 ms: hr=73 spo2=96 (period 5 s)
+[MQTT] published sample #103 at t=507413 ms (period 5 s)
+[SAMPLE] vitals #104 at t=511444 ms: hr=73 spo2=97 (period 5 s)
+[MQTT] published sample #104 at t=512277 ms (period 5 s)
+[SAMPLE] vitals #105 at t=516528 ms: hr=76 spo2=97 (period 5 s)
+[MQTT] published sample #105 at t=517371 ms (period 5 s)
+[SIM] heart rate back to automatic
+[SIM] SpO2 back to automatic
+[RATE] mode: auto
+

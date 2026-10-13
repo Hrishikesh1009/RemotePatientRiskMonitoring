@@ -1,0 +1,28 @@
+﻿SUPPLEMENTARY S-1 -- fever path (DS18B20 body temperature), run on the final build immediately after the 49-check suite
+build: main.ino sha256 9d169735604a532f8610269f6b43974904bf32d51a569d6e486d685017c005a6  (same simulation session, 11-13 simulated minutes in)
+method: clicked the DS18B20 part in the running simulation, moved its Temperature slider 36.8 -> 39.0 C, later back to 36.8 C
+observed (independent MQTT subscriber):
+  slider 39.0 C  -> medical.body-temperature 39.00, medical.patient-status 'High body temperature', medical.alerts '[CRITICAL] High body temperature'
+                    buzzer 1 active in the LED/buzzer sampler (2 samples), '[RATE] auto-adapt: 30 s -> 5 s'
+  slider 36.8 C  -> medical.body-temperature 36.81, status 'Patient stable'; after 3 fresh stable samples '[RATE] auto-adapt: 5 s -> 30 s'
+serial excerpt follows
+----------------------------------------------------------------------------------------------------
+[SAMPLE] vitals #122 at t=705412 ms: hr=77 spo2=98 (period 30 s)
+[MQTT] published sample #122 at t=706244 ms (period 30 s)
+[SAMPLE] vitals #123 at t=735496 ms: hr=79 spo2=98 (period 30 s)
+[RATE] auto-adapt: 30 s -> 5 s
+[MQTT] published sample #123 at t=736297 ms (period 5 s)
+[SAMPLE] vitals #124 at t=737079 ms: hr=80 spo2=97 (period 5 s)
+[MQTT] published sample #124 at t=737253 ms (period 5 s)
+[SAMPLE] vitals #125 at t=742163 ms: hr=81 spo2=97 (period 5 s)
+[MQTT] published sample #125 at t=742344 ms (period 5 s)
+[SAMPLE] vitals #126 at t=747247 ms: hr=82 spo2=97 (period 5 s)
+[MQTT] published sample #126 at t=748354 ms (period 5 s)
+[SAMPLE] vitals #127 at t=752331 ms: hr=84 spo2=97 (period 5 s)
+[MQTT] published sample #127 at t=753447 ms (period 5 s)
+[SAMPLE] vitals #128 at t=757415 ms: hr=84 spo2=96 (period 5 s)
+[RATE] auto-adapt: 5 s -> 30 s
+[MQTT] published sample #128 at t=758291 ms (period 30 s)
+[SAMPLE] vitals #129 at t=758999 ms: hr=81 spo2=96 (period 30 s)
+[MQTT] published sample #129 at t=759247 ms (period 30 s)
+

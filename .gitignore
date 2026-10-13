@@ -9,6 +9,10 @@ build/
 # (comment the next line out if you want the PDFs in the repo)
 submission_pdfs/
 
+# Verification rig: npm packages and per-run captures (the evidence worth keeping is copied to docs/evidence/)
+tools/verification/node_modules/
+tools/verification/out/
+
 # OS / editor
 Thumbs.db
 Desktop.ini

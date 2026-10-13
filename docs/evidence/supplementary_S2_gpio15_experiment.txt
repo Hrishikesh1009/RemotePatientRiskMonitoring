@@ -1,0 +1,32 @@
+﻿SUPPLEMENTARY S2 -- BUG_LOG B-14 re-verification: does an output on GPIO15 reach the LED in Wokwi's ESP32 model?
+date: 2026-10-13
+variant under test = the project as it stood on build 9d169735... (the final build at that moment; the later change B-38 does not touch the LED path) with exactly two changes:
+    main.ino      : #define LED_DOSAGE 19  ->  15
+    diagram.json  : "rDose:2" -> "esp:D19"  becomes  "rDose:2" -> "esp:D15"      (LED cathode stays on GND.1, i.e. the GND.3 defect B-16 is NOT present)
+validity of the wiring: the simulated board's own pin list (read from the page) is
+    EN VN VP D34 D35 D32 D33 D25 D26 D27 D14 D12 D13 GND.2 VIN 3V3 GND.1 D15 D2 D4 RX2 TX2 D5 D18 D19 D21 RX0 TX0 D22 D23
+    -> D15 exists; D16/D17 do not (RX2/TX2, B-15); only GND.1 and GND.2 exist (B-16).
+build: Wokwi cloud build HTTP 200, 1,599,776 bytes (same size as the final build -- a pin constant does not change the image size)
+stimulus: control.dosage = 95 on the broker (starts the critical alarm: 5 x 60 ms red-LED blinks + 2 buzzer-3 beeps per pass of alertTask)
+observed over 9.7 simulated seconds (27 sampler events, 30 ms real-time sampler):
+    red LED (ledDose) ON samples ........ 0     rising edges 0
+    buzzer 3 (bzSpo2) ON samples ........ 18    <- the same alert loop pass that drives the LED was running
+    ledDose.value at the end ............ false
+control (final build, LED on GPIO19, same stimulus, suite check TC-08A2 in final_pass.log):
+    red LED ON samples .................. 81    buzzer-3 ON samples 47
+conclusion: B-14 is confirmed by experiment, not just by the earlier pin sweep. With a valid pin name and correct ground wiring an output on GPIO15
+            never lights the LED in Wokwi's ESP32 model, while GPIO19 does. The comment in main.ino (pin map section) is therefore accurate.
+serial tail at the end of the experiment:
+[SAMPLE] vitals #6 at t=49069 ms: hr=105 spo2=96 (period 30 s)
+[DOSE] t=49165 ms delivered 55.2 -> target 80.0 mg/hr
+[MQTT] published sample #6 at t=49241 ms (period 30 s)
+[DOSE] t=50166 ms delivered 60.2 -> target 80.0 mg/hr
+[DOSE] t=51167 ms delivered 65.2 -> target 80.0 mg/hr
+[DOSE] t=52168 ms delivered 70.2 -> target 80.0 mg/hr
+[DOSE] t=53144 ms confirmation expired after 15010 ms -- holding at 80 mg/hr
+[DOSE] t=53170 ms delivered 75.2 -> target 80.0 mg/hr
+[DOSE] t=54146 ms delivered 80.0 -> target 80.0 mg/hr
+[SAMPLE] vitals #7 at t=79152 ms: hr=104 spo2=96 (period 30 s)
+[MQTT] published sample #7 at t=79430 ms (period 30 s)
+
+

@@ -1,0 +1,26 @@
+﻿[
+    {
+        "id":  "S-14a",
+        "name":  "footer band identical on all five pages at dose 0 and not blank",
+        "pass":  true,
+        "detail":  "distinct footer signatures: 1 over 5 pages; lit pixels per page: 366,366,366,366,366"
+    },
+    {
+        "id":  "S-14b",
+        "name":  "at dose 60 the footer is again identical on all five pages and differs from the dose-0 footer",
+        "pass":  true,
+        "detail":  "distinct footer signatures: 1; equals the dose-0 footer: False"
+    },
+    {
+        "id":  "S-14c",
+        "name":  "the offline banner carries the same dose footer (dose 60)",
+        "pass":  true,
+        "detail":  "banner footer signature equals the dose-60 page footer: True"
+    },
+    {
+        "id":  "S-09b",
+        "name":  "a manual bed command changes the Auto-bed row (ON -\u003e OFF) and \"auto\" restores it (OFF -\u003e ON)",
+        "pass":  true,
+        "detail":  "ON 1486377667:133 | after manual angle -1642058590:144 | auto again 1486377667:133"
+    }
+]

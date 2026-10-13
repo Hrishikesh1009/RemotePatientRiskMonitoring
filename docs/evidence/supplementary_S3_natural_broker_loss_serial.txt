@@ -1,0 +1,58 @@
+﻿SUPPLEMENTARY S3 -- a NATURAL broker loss on the final build (not fault-injected)
+build: main.ino sha256 9e69da719afebbf68aa48637d9e12146e0f486461ead55e3a46ef7f892e43739
+when: ~886 simulated seconds into the session, after the 49 checks, the supplementary checks and the fever test had all finished (so it did not affect any of them)
+what happened: the public broker / Wokwi IoT gateway stopped answering. The firmware detected it by itself (idle keepalive missed 3 times), reported OFFLINE / MQTT,
+  and has been retrying with exponential backoff (1, 2, 4, 8, 16 s ...). No reboot, no watchdog, no panic -- compare BUG_LOG B-38, where the same kind of event rebooted the previous build.
+captured at simulated clock 22:06.859 (about 6 minutes after the loss); the excerpt starts at the last healthy publishes. The device did NOT recover by itself in that time (the PC reached the broker fine throughout) -- a simulation restart was needed.
+----------------------------------------------------------------------------------------------------
+[MQTT] published sample #126 at t=855241 ms (period 30 s)
+[SAMPLE] vitals #127 at t=885182 ms: hr=69 spo2=97 (period 30 s)
+[MQTT] published sample #127 at t=886417 ms (period 30 s)
+[NET] broker not answering keepalive -- dropping connection
+[NET] state ONLINE -> OFFLINE (fault: MQTT)
+[NET] recovery attempt, backoff=1s
+[ALERT] buzzer 4, MQTT fault: 2 long beeps
+[NET]   broker connect failed: Connection failed
+[NET] recovery attempt, backoff=2s
+[SAMPLE] vitals #128 at t=915266 ms: hr=40 spo2=97 (period 30 s)
+[RATE] auto-adapt: 30 s -> 5 s
+[SAMPLE] vitals #129 at t=917050 ms: hr=45 spo2=97 (period 5 s)
+[NET]   broker connect failed: Connection failed
+[SAMPLE] vitals #130 at t=922134 ms: hr=50 spo2=97 (period 5 s)
+[NET] recovery attempt, backoff=4s
+[SAMPLE] vitals #131 at t=927219 ms: hr=53 spo2=97 (period 5 s)
+[SAMPLE] vitals #132 at t=932303 ms: hr=55 spo2=96 (period 5 s)
+[NET]   broker connect failed: Connection failed
+[SAMPLE] vitals #133 at t=937387 ms: hr=56 spo2=97 (period 5 s)
+[NET] recovery attempt, backoff=8s
+[SAMPLE] vitals #134 at t=942471 ms: hr=60 spo2=97 (period 5 s)
+[SAMPLE] vitals #135 at t=947556 ms: hr=64 spo2=97 (period 5 s)
+[NET]   broker connect failed: Connection failed
+[SAMPLE] vitals #136 at t=952640 ms: hr=66 spo2=98 (period 5 s)
+[RATE] auto-adapt: 5 s -> 30 s
+[SAMPLE] vitals #137 at t=954024 ms: hr=67 spo2=97 (period 30 s)
+[NET] recovery attempt, backoff=16s
+[NET]   broker connect failed: Connection failed
+[SAMPLE] vitals #138 at t=984109 ms: hr=66 spo2=98 (period 30 s)
+[NET] recovery attempt, backoff=32s
+[SAMPLE] vitals #139 at t=1014193 ms: hr=68 spo2=97 (period 30 s)
+[NET]   broker connect failed: Connection failed
+[SAMPLE] vitals #140 at t=1044277 ms: hr=69 spo2=97 (period 30 s)
+[SAMPLE] vitals #141 at t=1074362 ms: hr=68 spo2=98 (period 30 s)
+[NET] recovery attempt, backoff=60s
+[NET]   broker connect failed: Connection failed
+[SAMPLE] vitals #142 at t=1104446 ms: hr=72 spo2=98 (period 30 s)
+[SAMPLE] vitals #143 at t=1134530 ms: hr=70 spo2=98 (period 30 s)
+[NET] recovery attempt, backoff=60s
+[NET]   broker connect failed: Connection failed
+[SAMPLE] vitals #144 at t=1164614 ms: hr=72 spo2=97 (period 30 s)
+[SAMPLE] vitals #145 at t=1194699 ms: hr=72 spo2=97 (period 30 s)
+[NET] recovery attempt, backoff=60s
+[SAMPLE] vitals #146 at t=1224783 ms: hr=70 spo2=97 (period 30 s)
+[NET]   broker connect failed: Connection failed
+[SAMPLE] vitals #147 at t=1254867 ms: hr=68 spo2=97 (period 30 s)
+[SAMPLE] vitals #148 at t=1284951 ms: hr=70 spo2=98 (period 30 s)
+[NET] recovery attempt, backoff=60s
+[NET]   broker connect failed: Connection failed
+[SAMPLE] vitals #149 at t=1315036 ms: hr=72 spo2=98 (period 30 s)
+

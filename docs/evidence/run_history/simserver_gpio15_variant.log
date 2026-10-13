@@ -1,0 +1,9 @@
+11:01:22.213 API listening on 9444
+11:01:22.632 mqtt connected
+11:01:23.920 chrome up; opening project
+11:01:32.066 loaded sketch.ino chars 89888 expected 89888
+11:01:34.225 loaded diagram.json chars 6427 expected 6427
+11:01:35.828 loaded libraries.txt chars 155 expected 155
+11:01:39.933 pressing Play
+11:01:40.058 READY: controller up, simulation requested
+11:04:03.199 PUB control.dosage 95

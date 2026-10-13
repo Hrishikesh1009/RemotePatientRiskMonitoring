@@ -1,0 +1,84 @@
+﻿================================================================================
+FINAL VERIFICATION SUITE  started 2026-10-13 15:00:33
+tested files: 7467ed71467004d1f6e723ed7ec3f2af24a222c037779ebb87ae460e41803d91  main.ino  lines=2028  bytes(LF)=89481 | 3602f9cf74674d9281c8cb3c9ad7a2d817670b21b2a6119cffdc1db38bce77ed  diagram.json  lines=143  bytes(LF)=6427 | 2e74856bc9d7a8f800c3651dca25c8ecdec1e58f0924c3ef36e9cddc446727ae  libraries.txt  lines=14  bytes(LF)=374
+================================================================================
+
+---- TC-01 boot, tasks, watchdog, OLED pages, resets
+[PASS] TC-01a firmware tag printed -- [BOOT] firmware 2026-10-13 final
+[PASS] TC-01b 10 FreeRTOS tasks started (once) -- serial: [BOOT] 10 FreeRTOS tasks started
+[PASS] TC-01c task watchdog armed 20 s -- 
+[PASS] TC-01d no panic/WDT/abort lines -- count=0
+[PASS] TC-01e exactly one boot banner (no resets) -- boot banners=1
+[PASS] TC-01f no phantom Wi-Fi fault at boot (B-34) -- Wi-Fi associated at boot
+[PASS] TC-01g no boot-time rate flip 15->5 s (B-30) -- 
+[FAIL] TC-01h all five OLED pages appear -- pages seen: PATIENT,THERAPY,SYSTEM,FACILITY
+
+---- TC-15 command reliability (12 commands in a burst)
+[PASS] TC-15 12/12 commands applied -- applied: 10,11,12,13,14,15,16,17,18,19,20,21
+
+---- TC-11 adaptive sampling
+[PASS] TC-11a manual 5 s: samples ~5.0 s apart (sim time) -- mean spacing 5.08 s over 7 intervals
+[PASS] TC-11b one publish per sample, none repeated (publish-per-sample, B-32) -- 8 of 9 samples published exactly once; repeated publishes: 0
+[PASS] TC-11c rate change wakes a sleeping task within ~1.5 s (not up to 60 s) -- latency 1.27 s (clock read before publish)
+[PASS] TC-11d0 auto mode: a stable patient settles to 30 s -- trace: [RATE] auto-adapt: 5 s -> 30 s
+[PASS] TC-11d auto mode: abnormal vitals (HR 130) -> 5 s -- trace: [RATE] auto-adapt: 30 s -> 5 s
+[PASS] TC-11e auto mode: stable -> 30 s only after 3 fresh stable samples (hysteresis) -- samples between release and adapt: 3; adapted: True
+
+---- TC-03 probe disconnect -> DEGRADED (<= ~3 s)
+[FAIL] TC-03-temp probe temp off -> DEGRADED/SENSOR within 3 s -- 40.7 s; trace has [SENSOR] line: False
+[PASS] TC-03-hr probe hr off -> DEGRADED/SENSOR within 3 s -- 2.4 s; trace has [SENSOR] line: True
+[PASS] TC-03-status status reads "Sensor disconnected" (never "Patient stable") -- Sensor disconnected
+[PASS] TC-03-spo2 probe spo2 off -> DEGRADED/SENSOR within 3 s -- 2.9 s; trace has [SENSOR] line: True
+
+---- TC-07/08/14 dosage
+[PASS] TC-07 dose ramps at exactly 5 mg/hr per simulated second -- 5.00 mg/hr/s from 13 lines
+[PASS] TC-14 OLED footer shows live dose on every page -- see TC14_footer_dose60_warn.png (footer: DOSE 60.0 mg/hr WARN)
+[PASS] TC-08A unconfirmed 95 request is held at 80 and expires to 80 (safe ceiling) -- max delivered while pending/after expiry = 80; ramp lines 17
+[PASS] TC-08A2 alarm (red LED + buzzer 3) active while confirmation pending -- red LED ON samples 87; buzzer-3 ON samples 49
+[PASS] TC-08B confirmed request releases to 95, still ramped -- serial: [DOSE] confirmed 95.0 mg/hr
+
+---- TC-09 bed servo: smooth ramp, presets, manual overrides auto
+[PASS] TC-09a 0 -> 90 deg ramp takes about 2.2-2.4 s (1 deg / 25 ms) -- first log 1 deg, last 90 deg, 2.23 s
+[PASS] TC-09b a manual command switches Auto bed OFF -- see TC09_oled_therapy_auto_off.png
+[PASS] TC-09c presets sleep 10 / breathing 45 / emergency 90 reach the target (servo shown) -- emergency@90=>89  breathing@45=>46  sleep@10=>12
+[PASS] TC-09d emergency preset ramps faster (~0.75 s) but is still a ramp -- 0.73 s, 5 log lines
+
+---- TC-10 automatic bed from patient condition
+[PASS] TC-10a SpO2 88 (< 90) -> bed 45 deg -- servo shows 46
+[PASS] TC-10b SpO2 82 (< 85, CRITICAL) -> bed 90 deg -- servo shows 89; status: Severe hypoxaemia
+[PASS] TC-10c SpO2 back to normal -> bed returns to 10 deg -- servo shows 12
+[PASS] TC-10d manual command beats automation (auto never overrides manual) -- bed stayed at 70 while SpO2 was 82
+
+---- TC-12 Wi-Fi cut -> OFFLINE -> buffer -> restore -> resync
+[PASS] TC-12a Wi-Fi cut detected -> OFFLINE / cause WIFI within 2 s -- 2.3 s
+[PASS] TC-12b exponential backoff 1,2,4,8,16,32 while cut -- backoff sequence: 1,2,4,8,16
+[PASS] TC-12c distinct buzzer pattern logged for Wi-Fi (3 short beeps) -- 
+[PASS] TC-12d amber LED lit while offline -- 
+[PASS] TC-12e restored: records out == records in, chronological, one MQTT message each -- buffered/replayed 8; resynced 8; independent subscriber saw 8 on system.backlog; in order: True; spacing 5.0,5.0,5.0,5.0
+[PASS] TC-12f back ONLINE soon after release (reset backoff per layer, B-29) -- 12.1 s from release to resync complete
+
+---- TC-13 broker unreachable -> OFFLINE / MQTT
+[PASS] TC-13a broker cut detected -> OFFLINE / cause MQTT within 2 s -- 2.2 s
+[PASS] TC-13b distinct buzzer pattern logged for broker (2 long beeps) -- 
+[PASS] TC-13c restored -> ONLINE and backlog replayed -- [NET] resynced 4 records
+
+---- TC-02 alarm cadence unaffected by a network outage
+[FAIL] TC-02 red-LED alarm cadence same before and during the outage -- transitions/s: before 0.00, during outage 1.66
+
+---- TC-05 potentiometers drive facility parameters and alert feeds (T1/T2)
+[PASS] TC-05a AQI pot 650/1023 -> AQI ~317 -> CRITICAL "Air quality hazardous" -- aqi=317 alert=[CRITICAL] Air quality hazardous
+[PASS] TC-05b AQI pot 400 -> AQI ~195 -> WARNING "Air quality poor" -- aqi=195 alert=[WARNING] Air quality poor
+[PASS] TC-05c O2 pot 60 -> O2 ~15.6 % -> CRITICAL "Oxygen level unsafe" -- o2=15.59 alert=[CRITICAL] Oxygen level unsafe
+[PASS] TC-05d ECG pot full scale -> ecgTask reports ~5.00 mV -- ecg=5.00
+
+---- TC-04 role separation (topic level) and TC-06 aggregation
+[PASS] TC-04 device publishes disjoint medical.* / facility.* topic groups -- medical topics: medical.body-temperature,medical.heart-rate,medical.spo2,medical.patient-status,medical.blood-pressure,medical.ecg,medical.alerts,medical.summary; facility topics: facility.aqi,facility.humidity,facility.motion,facility.room-temperature,facility.oxygen-level,facility.summary,facility.alerts
+[PASS] TC-06 60 s aggregation JSON on both summary feeds, internally consistent -- medical.summary={"n":9,"hr_avg":91.0,"hr_min":80,"hr_max":112,"spo2_avg":97.0,"spo2_min":97,"temp_avg":36.81} | facility.summary={"n":9,"room_avg":22.00,"o2_avg":21.84,"aqi_avg":146,"aqi_max":317}
+
+---- TC-16 stability so far
+[PASS] TC-16a no panic/WDT/abort after the whole suite; boot banners == 1 + suite restarts -- sim clock 583 s (9.7 min) in the final session; banners=1; suite-initiated restarts so far=0
+   [env] keepalive-triggered broker drops observed in the final session: 0; suite-initiated simulator restarts: 0
+
+================================================================================
+SUMMARY: 46 PASS, 3 FAIL, 49 checks
+finished 2026-10-13 15:22:18

@@ -1,0 +1,107 @@
+09:12:41.442 API listening on 9444
+09:12:43.055 mqtt connected
+09:12:43.123 chrome up; opening project
+09:12:53.478 loaded sketch.ino chars 89481 expected 89481
+09:12:55.225 loaded diagram.json chars 6427 expected 6427
+09:12:56.853 loaded libraries.txt chars 155 expected 155
+09:13:00.923 pressing Play
+09:13:00.968 READY: controller up, simulation requested
+09:32:34.073 PUB control.sampling-rate 10
+09:32:35.756 PUB control.sampling-rate 11
+09:32:37.347 PUB control.sampling-rate 12
+09:32:39.410 PUB control.sampling-rate 13
+09:32:41.728 PUB control.sampling-rate 14
+09:32:43.972 PUB control.sampling-rate 15
+09:32:46.321 PUB control.sampling-rate 16
+09:32:48.848 PUB control.sampling-rate 17
+09:32:51.150 PUB control.sampling-rate 18
+09:32:53.285 PUB control.sampling-rate 19
+09:32:55.673 PUB control.sampling-rate 20
+09:32:57.663 PUB control.sampling-rate 21
+09:33:09.627 PUB control.sampling-rate 5
+09:34:13.257 PUB control.sampling-rate 60
+09:34:29.500 PUB control.sampling-rate 5
+09:34:36.292 PUB control.sim-hr 0
+09:34:36.374 PUB control.sampling-mode 1
+09:35:13.624 PUB control.sim-hr 130
+09:35:23.473 PUB control.sim-hr 0
+09:35:49.519 PUB control.sim-hr 0
+09:35:49.526 PUB control.sim-spo2 0
+09:35:49.533 PUB control.dosage 0
+09:35:49.536 PUB control.bed-auto 1
+09:35:49.541 PUB control.sampling-mode 1
+09:36:00.442 SWITCH swTemp -> 0
+09:38:07.950 SWITCH swHr -> 1
+09:38:37.651 SWITCH swHr -> 0
+09:38:50.839 SWITCH swSpo2 -> 1
+09:39:06.546 SWITCH swSpo2 -> 0
+09:39:29.303 PUB control.sim-hr 0
+09:39:29.307 PUB control.sim-spo2 0
+09:39:29.312 PUB control.dosage 0
+09:39:29.316 PUB control.bed-auto 1
+09:39:29.319 PUB control.sampling-mode 1
+09:39:49.576 PUB control.dosage 60
+09:40:57.464 PUB control.dosage 0
+09:41:19.040 PUB control.dosage 95
+09:42:05.853 PUB control.dosage 95
+09:42:09.943 PUB control.dosage-confirm 1
+09:42:35.084 PUB control.dosage 0
+09:43:00.421 PUB control.sim-hr 0
+09:43:00.424 PUB control.sim-spo2 0
+09:43:00.426 PUB control.dosage 0
+09:43:00.429 PUB control.bed-auto 1
+09:43:00.431 PUB control.sampling-mode 1
+09:43:08.437 PUB control.bed-angle 0
+09:43:14.491 PUB control.bed-angle 90
+09:43:26.419 PUB control.bed-preset sleep
+09:43:35.511 PUB control.bed-preset breathing
+09:43:44.614 PUB control.bed-preset emergency
+09:43:53.801 PUB control.bed-preset sleep
+09:44:03.491 PUB control.bed-angle 0
+09:44:08.553 PUB control.bed-preset emergency
+09:44:10.727 PUB control.bed-angle 10
+09:44:15.049 PUB control.bed-auto 1
+09:44:19.209 PUB control.sim-spo2 88
+09:44:41.195 PUB control.sim-spo2 82
+09:45:20.652 PUB control.sim-spo2 0
+09:45:37.806 PUB control.bed-angle 70
+09:45:43.847 PUB control.sim-spo2 82
+09:45:58.121 PUB control.sim-spo2 0
+09:45:59.637 PUB control.sim-hr 0
+09:45:59.641 PUB control.sim-spo2 0
+09:45:59.651 PUB control.dosage 0
+09:45:59.660 PUB control.bed-auto 1
+09:45:59.665 PUB control.sampling-mode 1
+09:46:05.686 PUB control.sampling-rate 5
+09:46:18.870 SWITCH swWifiCut -> 1
+09:47:32.559 SWITCH swWifiCut -> 0
+09:48:18.136 SWITCH swBrokerCut -> 1
+09:48:48.420 SWITCH swBrokerCut -> 0
+09:49:08.453 PUB control.sim-hr 0
+09:49:08.456 PUB control.sim-spo2 0
+09:49:08.458 PUB control.dosage 0
+09:49:08.461 PUB control.bed-auto 1
+09:49:08.463 PUB control.sampling-mode 1
+09:49:16.531 PUB control.sampling-rate 15
+09:49:19.984 PUB control.dosage 95
+09:49:28.735 SWITCH swWifiCut -> 1
+09:49:37.003 SWITCH swWifiCut -> 0
+09:49:37.036 PUB control.dosage 0
+09:49:59.616 PUB control.sim-hr 0
+09:49:59.725 PUB control.sim-spo2 0
+09:49:59.727 PUB control.dosage 0
+09:49:59.933 PUB control.bed-auto 1
+09:49:59.938 PUB control.sampling-mode 1
+09:50:10.269 PUB control.sampling-rate 5
+09:50:16.706 POT potAqi -> 650
+09:50:20.864 POT potAqi -> 400
+09:50:58.067 POT potAqi -> 200
+09:50:58.343 POT potO2 -> 60
+09:51:20.553 POT potO2 -> 700
+09:51:20.704 POT potEcg -> 1023
+09:51:31.394 POT potEcg -> 512
+09:52:17.078 PUB control.sim-hr 0
+09:52:17.136 PUB control.sim-spo2 0
+09:52:17.139 PUB control.dosage 0
+09:52:17.190 PUB control.bed-auto 1
+09:52:17.193 PUB control.sampling-mode 1

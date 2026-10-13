@@ -1,0 +1,21 @@
+﻿WOKWI PUBLIC PROJECT -- logged-out verification, 2026-10-13
+project : https://wokwi.com/projects/473060533558119425   (owner: Hrishikesh Lokhande)
+action  : the final main.ino / diagram.json / libraries.txt were loaded into the owner's logged-in editor and saved; the previous live content
+          (sketch 66,723 chars sha256 a11e8d74f8d1553c..., diagram 5,875 chars sha256 b702a0977400a902...) was backed up first.
+check   : the public URL was then opened by a fresh, anonymous headless browser WITHOUT injecting anything (tools/verification/simserver.js --keep).
+file hashes read from that anonymous page (SHA-256 of the editor text, LF-normalised) vs the repository files:
+  sketch.ino    9e69da719afebbf68aa48637d9e12146e0f486461ead55e3a46ef7f892e43739  92244 chars   = main.ino        (MATCH)
+  diagram.json  3602f9cf74674d9281c8cb3c9ad7a2d817670b21b2a6119cffdc1db38bce77ed   6427 chars   = diagram.json     (MATCH)
+  libraries.txt ecf027b2209449b38eeabe8b7d1df73a1116d3c2762b7494139d3f4c443be808    155 chars   = libraries.txt without its '#' comment lines (MATCH)
+build   : Wokwi cloud build HTTP 200, firmware image 1,600,201 bytes (same size as every run of the final files)
+boot log of the anonymous run:
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+[BOOT] firmware 2026-10-13 final (10 tasks, fault-injection switches, patient override)
+[WIFI] connected
+[BOOT] task watchdog armed: 20 s timeout, panic reset
+[BOOT] 10 FreeRTOS tasks started
+[NET] state OFFLINE -> ONLINE (fault: none)
+[NET] restored -- replaying 1 buffered samples
+[NET] resynced 1 records
+[MQTT] published sample #1 at t=11806 ms (period 15 s)
+screenshot: wokwi_public_project_logged_out.png

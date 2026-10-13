@@ -1,0 +1,15 @@
+{
+  "name": "rprms-verification-rig",
+  "version": "1.0.0",
+  "description": "Measurement rig used to verify the Remote Patient Risk Monitoring firmware in the Wokwi simulator (development aid, not part of the product).",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "controller": "node simserver.js",
+    "suite": "powershell -NoProfile -ExecutionPolicy Bypass -File suite.ps1"
+  },
+  "dependencies": {
+    "mqtt": "5.15.2"
+  }
+}

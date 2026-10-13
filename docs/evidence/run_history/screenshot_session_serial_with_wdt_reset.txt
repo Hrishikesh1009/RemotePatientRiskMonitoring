@@ -1,0 +1,195 @@
+﻿ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1156
+load:0x40078000,len:11456
+ho 0 tail 12 room 4
+load:0x40080400,len:2972
+entry 0x400805dc
+
+=== Remote Patient Risk Monitoring System ===
+ElevanceSkills internship build -- 6 integrated tasks
+[BOOT] firmware 2026-10-13 final (10 tasks, fault-injection switches, patient override)
+[WIFI] connected
+[BOOT] task watchdog armed: 20 s timeout, panic reset
+[ALERT] buzzer 4, MQTT fault: 2 long beeps
+[SAMPLE] vitals #1 at t=5952 ms: hr=75 spo2=97 (period 15 s)
+[BED] t=5953 ms 1 -> 10 deg
+[NET] recovery attempt, backoff=1s
+[BOOT] 10 FreeRTOS tasks started
+[BED] t=6154 ms 9 -> 10 deg
+[BED] t=6179 ms 10 -> 10 deg
+[NET] state OFFLINE -> ONLINE (fault: none)
+[NET] restored -- replaying 1 buffered samples
+[NET] resynced 1 records
+[MQTT] published sample #1 at t=10770 ms (period 15 s)
+[SAMPLE] vitals #2 at t=21036 ms: hr=78 spo2=97 (period 15 s)
+[MQTT] published sample #2 at t=21433 ms (period 15 s)
+[SAMPLE] vitals #3 at t=36119 ms: hr=76 spo2=97 (period 15 s)
+[RATE] auto-adapt: 15 s -> 30 s
+[MQTT] published sample #3 at t=36349 ms (period 30 s)
+[SAMPLE] vitals #4 at t=37002 ms: hr=75 spo2=97 (period 30 s)
+[MQTT] published sample #4 at t=37303 ms (period 30 s)
+[SAMPLE] vitals #5 at t=67086 ms: hr=74 spo2=96 (period 30 s)
+[MQTT] published sample #5 at t=67319 ms (period 30 s)
+[SAMPLE] vitals #6 at t=97169 ms: hr=71 spo2=96 (period 30 s)
+[MQTT] published sample #6 at t=97288 ms (period 30 s)
+[RATE] mode: auto
+[SAMPLE] vitals #7 at t=120252 ms: hr=70 spo2=96 (period 30 s)
+[MQTT] published sample #7 at t=121265 ms (period 30 s)
+[SAMPLE] vitals #8 at t=150336 ms: hr=71 spo2=95 (period 30 s)
+[MQTT] published sample #8 at t=151324 ms (period 30 s)
+[SAMPLE] vitals #9 at t=180419 ms: hr=73 spo2=96 (period 30 s)
+[MQTT] published sample #9 at t=181225 ms (period 30 s)
+[SAMPLE] vitals #10 at t=210502 ms: hr=40 spo2=96 (period 30 s)
+[RATE] auto-adapt: 30 s -> 5 s
+[MQTT] published sample #10 at t=211393 ms (period 5 s)
+[SAMPLE] vitals #11 at t=211986 ms: hr=47 spo2=96 (period 5 s)
+[MQTT] published sample #11 at t=212348 ms (period 5 s)
+[SAMPLE] vitals #12 at t=217069 ms: hr=49 spo2=97 (period 5 s)
+[MQTT] published sample #12 at t=217214 ms (period 5 s)
+[SAMPLE] vitals #13 at t=222152 ms: hr=52 spo2=96 (period 5 s)
+[MQTT] published sample #13 at t=222310 ms (period 5 s)
+[SAMPLE] vitals #14 at t=227236 ms: hr=100 spo2=96 (period 5 s)
+[MQTT] published sample #14 at t=228324 ms (period 5 s)
+[SAMPLE] vitals #15 at t=232319 ms: hr=98 spo2=96 (period 5 s)
+[MQTT] published sample #15 at t=233411 ms (period 5 s)
+[SAMPLE] vitals #16 at t=237402 ms: hr=93 spo2=96 (period 5 s)
+[RATE] auto-adapt: 5 s -> 30 s
+[MQTT] published sample #16 at t=238254 ms (period 30 s)
+[SAMPLE] vitals #17 at t=238986 ms: hr=89 spo2=97 (period 30 s)
+[MQTT] published sample #17 at t=239208 ms (period 30 s)
+[SAMPLE] vitals #18 at t=269069 ms: hr=84 spo2=97 (period 30 s)
+[MQTT] published sample #18 at t=269355 ms (period 30 s)
+[SAMPLE] vitals #19 at t=299152 ms: hr=84 spo2=97 (period 30 s)
+[MQTT] published sample #19 at t=299244 ms (period 30 s)
+[SAMPLE] vitals #20 at t=329236 ms: hr=84 spo2=97 (period 30 s)
+[MQTT] published sample #20 at t=330300 ms (period 30 s)
+[SAMPLE] vitals #21 at t=359319 ms: hr=82 spo2=97 (period 30 s)
+[MQTT] published sample #21 at t=360252 ms (period 30 s)
+[SAMPLE] vitals #22 at t=389402 ms: hr=80 spo2=96 (period 30 s)
+[MQTT] published sample #22 at t=390280 ms (period 30 s)
+[SAMPLE] vitals #23 at t=419486 ms: hr=78 spo2=96 (period 30 s)
+[MQTT] published sample #23 at t=420280 ms (period 30 s)
+[SAMPLE] vitals #24 at t=449569 ms: hr=79 spo2=97 (period 30 s)
+[MQTT] published sample #24 at t=450249 ms (period 30 s)
+[SAMPLE] vitals #25 at t=479652 ms: hr=81 spo2=97 (period 30 s)
+[MQTT] published sample #25 at t=480286 ms (period 30 s)
+[SAMPLE] vitals #26 at t=509736 ms: hr=78 spo2=97 (period 30 s)
+[MQTT] published sample #26 at t=510273 ms (period 30 s)
+[SAMPLE] vitals #27 at t=539819 ms: hr=126 spo2=96 (period 30 s)
+[RATE] auto-adapt: 30 s -> 5 s
+[MQTT] published sample #27 at t=540221 ms (period 5 s)
+[SAMPLE] vitals #28 at t=541002 ms: hr=121 spo2=96 (period 5 s)
+[MQTT] published sample #28 at t=541406 ms (period 5 s)
+[SAMPLE] vitals #29 at t=546086 ms: hr=118 spo2=96 (period 5 s)
+[MQTT] published sample #29 at t=546264 ms (period 5 s)
+[SAMPLE] vitals #30 at t=551169 ms: hr=116 spo2=96 (period 5 s)
+[MQTT] published sample #30 at t=551369 ms (period 5 s)
+[RATE] mode: auto
+[SAMPLE] vitals #31 at t=552452 ms: hr=114 spo2=96 (period 5 s)
+[MQTT] published sample #31 at t=553247 ms (period 5 s)
+[SAMPLE] vitals #32 at t=557536 ms: hr=107 spo2=96 (period 5 s)
+[MQTT] published sample #32 at t=558340 ms (period 5 s)
+[SAMPLE] vitals #33 at t=562619 ms: hr=105 spo2=96 (period 5 s)
+[RATE] auto-adapt: 5 s -> 30 s
+[MQTT] published sample #33 at t=563204 ms (period 30 s)
+[SAMPLE] vitals #34 at t=564002 ms: hr=103 spo2=97 (period 30 s)
+[MQTT] published sample #34 at t=564387 ms (period 30 s)
+[SAMPLE] vitals #35 at t=594086 ms: hr=101 spo2=97 (period 30 s)
+[MQTT] published sample #35 at t=594376 ms (period 30 s)
+[RATE] mode: auto
+[SAMPLE] vitals #36 at t=616069 ms: hr=96 spo2=97 (period 30 s)
+[MQTT] published sample #36 at t=616375 ms (period 30 s)
+[SAMPLE] vitals #37 at t=646152 ms: hr=93 spo2=97 (period 30 s)
+[MQTT] published sample #37 at t=646305 ms (period 30 s)
+[RATE] manual: 5 s (auto off)
+[SAMPLE] vitals #38 at t=651236 ms: hr=91 spo2=97 (period 5 s)
+[MQTT] published sample #38 at t=652323 ms (period 5 s)
+[SAMPLE] vitals #39 at t=656319 ms: hr=89 spo2=97 (period 5 s)
+[MQTT] published sample #39 at t=657411 ms (period 5 s)
+[SAMPLE] vitals #40 at t=661402 ms: hr=85 spo2=97 (period 5 s)
+[MQTT] published sample #40 at t=662272 ms (period 5 s)
+[SAMPLE] vitals #41 at t=666486 ms: hr=86 spo2=97 (period 5 s)
+[SAMPLE] vitals #42 at t=671569 ms: hr=88 spo2=98 (period 5 s)
+[MQTT] published sample #41 at t=672590 ms (period 5 s)
+[SAMPLE] vitals #43 at t=676652 ms: hr=88 spo2=97 (period 5 s)
+[SAMPLE] vitals #44 at t=681736 ms: hr=86 spo2=97 (period 5 s)
+[SAMPLE] vitals #45 at t=686819 ms: hr=83 spo2=97 (period 5 s)
+[SAMPLE] vitals #46 at t=691902 ms: hr=84 spo2=97 (period 5 s)
+E (702687) task_wdt: Task watchdog got triggered. The following tasks/users did not reset the watchdog in time:
+E (702687) task_wdt:  - Mqtt (CPU 0)
+E (702687) task_wdt: Tasks currently running:
+E (702687) task_wdt: CPU 0: IDLE0
+E (702687) task_wdt: CPU 1: IDLE1
+E (702687) task_wdt: Aborting.
+E (702687) task_wdt: Print CPU 0 (current core) backtrace
+
+
+
+
+Backtrace: 0x4008a0a7:0x3ffbcfc0 0x4017f445:0x3ffbcfe0 0x4008ded3:0x3ffbd000 0x4008cf09:0x3ffbd020
+
+
+
+
+ELF file SHA256: 0a1c4f2a0
+
+Rebooting...
+ets Jul 29 2019 12:21:46
+
+rst:0xc (SW_CPU_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1156
+load:0x40078000,len:11456
+ho 0 tail 12 room 4
+load:0x40080400,len:2972
+entry 0x400805dc
+
+=== Remote Patient Risk Monitoring System ===
+ElevanceSkills internship build -- 6 integrated tasks
+[BOOT] firmware 2026-10-13 final (10 tasks, fault-injection switches, patient override)
+[WIFI] not connected -- starting offline
+[BOOT] task watchdog armed: 20 s timeout, panic reset
+[ALERT] buzzer 4, WIFI fault: 3 short beeps
+[SAMPLE] vitals #1 at t=705929 ms: hr=77 spo2=97 (period 15 s)
+[BED] t=705930 ms 1 -> 10 deg
+[NET] recovery attempt, backoff=1s
+[BOOT] 10 FreeRTOS tasks started
+[BED] t=706130 ms 9 -> 10 deg
+[BED] t=706155 ms 10 -> 10 deg
+[NET] recovery attempt, backoff=2s
+[SAMPLE] vitals #2 at t=721013 ms: hr=80 spo2=97 (period 15 s)
+[NET] recovery attempt, backoff=4s
+[SAMPLE] vitals #3 at t=736097 ms: hr=80 spo2=97 (period 15 s)
+[RATE] auto-adapt: 15 s -> 30 s
+[SAMPLE] vitals #4 at t=736980 ms: hr=82 spo2=98 (period 30 s)
+[NET] recovery attempt, backoff=8s
+[SAMPLE] vitals #5 at t=767063 ms: hr=84 spo2=97 (period 30 s)
+[NET] recovery attempt, backoff=16s
+[SAMPLE] vitals #6 at t=797147 ms: hr=80 spo2=97 (period 30 s)
+[NET] recovery attempt, backoff=32s
+[SAMPLE] vitals #7 at t=827230 ms: hr=81 spo2=97 (period 30 s)
+[SAMPLE] vitals #8 at t=857313 ms: hr=83 spo2=96 (period 30 s)
+[SAMPLE] vitals #9 at t=887397 ms: hr=82 spo2=97 (period 30 s)
+[NET] recovery attempt, backoff=60s
+[SAMPLE] vitals #10 at t=917481 ms: hr=52 spo2=97 (period 30 s)
+[RATE] auto-adapt: 30 s -> 5 s
+[SAMPLE] vitals #11 at t=918965 ms: hr=58 spo2=97 (period 5 s)
+[SAMPLE] vitals #12 at t=924049 ms: hr=59 spo2=96 (period 5 s)
+[SAMPLE] vitals #13 at t=929133 ms: hr=62 spo2=96 (period 5 s)
+[SAMPLE] vitals #14 at t=934216 ms: hr=66 spo2=96 (period 5 s)
+[SAMPLE] vitals #15 at t=939300 ms: hr=64 spo2=96 (period 5 s)
+[RATE] auto-adapt: 5 s -> 30 s
+[SAMPLE] vitals #16 at t=940983 ms: hr=68 spo2=95 (period 30 s)
+[NET] recovery attempt, backoff=60s
+[SAMPLE] vitals #17 at t=971067 ms: hr=72 spo2=95 (period 30 s)
+[SAMPLE] vitals #18 at t=1001151 ms: hr=75 spo2=96 (period 30 s)
+[NET] recovery attempt, backoff=60s
+[SAMPLE] vitals #19 at t=1031235 ms: hr=72 spo2=96 (period 30 s)
+

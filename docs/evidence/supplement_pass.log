@@ -1,0 +1,15 @@
+﻿================================================================================
+SUPPLEMENTARY CHECKS  started 2026-10-13 17:37:24
+================================================================================
+
+---- S-14 OLED dose footer on every page and on the offline banner (Task 3, real-time read-out)
+[PASS] S-14a footer band identical on all five pages at dose 0 and not blank -- distinct footer signatures: 1 over 5 pages; lit pixels per page: 366,366,366,366,366
+[PASS] S-14b at dose 60 the footer is again identical on all five pages and differs from the dose-0 footer -- distinct footer signatures: 1; equals the dose-0 footer: False
+[PASS] S-14c the offline banner carries the same dose footer (dose 60) -- banner footer signature equals the dose-60 page footer: True
+
+---- S-09b OLED THERAPY page reflects Auto bed ON/OFF (Task 4)
+[PASS] S-09b a manual bed command changes the Auto-bed row (ON -> OFF) and "auto" restores it (OFF -> ON) -- ON 1486377667:133 | after manual angle -1642058590:144 | auto again 1486377667:133
+
+================================================================================
+SUMMARY: 4 PASS, 0 FAIL, 4 checks
+finished 2026-10-13 17:43:01
