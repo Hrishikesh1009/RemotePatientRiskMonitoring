@@ -21,7 +21,7 @@ the UI, not just asserted in the report.
 | Heart rate, SpO₂, body temp gauges with clinical thresholds | Room temp, oxygen, AQI gauges with safe-range bands |
 | Blood pressure, ECG, clinical status, 60 s aggregate | Humidity, occupancy, 60 s aggregate |
 | Vitals trend chart (1 h) | Environment trend chart (1 h) |
-| **Therapy Control** — 3 sliders, 3 toggles, 3 preset buttons | **System Health** — link state, sampling interval, resync log |
+| **Therapy Control** — 3 sliders, 3 toggles, 3 preset buttons | **System Health** — link state, sampling interval, time of the last resynced record (no patient values) |
 | **Actuator readback** — delivered dose + actual bed angle | Environmental alert log (last 30) |
 | Clinical alert log (last 30) | |
 

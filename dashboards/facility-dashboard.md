@@ -47,6 +47,16 @@ the demo video.
 | Environment Trend | `facility.room-temperature` + `facility.aqi` | Line chart | 1 hour |
 | Environmental Alert Log | `facility.alerts` | Stream | `[LEVEL] message` |
 | 60 s Aggregate | `facility.summary` | Text | JSON avg/max |
+| System Health (Task 6, as built) | `system.state`, `system.sampling-rate`, `system.backlog` | Text | link state, sampling interval, `t=… s (record replayed)` |
+
+**As built — the System Health group.** The flow (`tools/gen_flows.py`) adds a *System Health
+(Task 6)* group to this tab. It is fed by the device-level `system.*` feeds, not by any
+`medical.*` feed. The replayed backlog records on `system.backlog` do contain heart rate,
+SpO₂ and temperature, so the `compact backlog` function node reduces each record to the
+device time it was sampled at (`t=254 s (record replayed)`) before it is sent to the browser:
+no patient value reaches the Facility tab, which is what the separation above requires
+(an earlier build printed the whole record here; screenshot `10-backlog-resync.png` was
+retaken with the fixed flow).
 
 ---
 

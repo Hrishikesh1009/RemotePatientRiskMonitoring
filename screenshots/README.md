@@ -4,8 +4,12 @@ Twelve required evidence shots and three bonus shots, all taken on **13 October 
 **final firmware** (`main.ino` SHA-256 `9e69da71…`, see `docs/evidence/tested_files_sha256.txt`)
 running in the Wokwi simulator, with the Node-RED dashboards (`dashboards/node-red-flows.json`,
 84 nodes) subscribed to the live public broker. They were captured by the verification tooling
-(headless Chrome), not edited by hand. Two honest notes apply to all of them:
+(headless Chrome), not edited by hand. Three honest notes apply to them:
 
+* `10-backlog-resync.png` was **retaken on 17 October 2026**, with the same firmware: the Facility
+  "Last Resynced Record" card used to print the whole replayed record (heart rate, SpO₂,
+  temperature), which contradicts the role separation, so the flow now shows only the time of the
+  record (`tools/gen_flows.py`, `compact backlog` node). All other shots are from 13 October.
 * The Wokwi page shows **SIGN IN** in the corner because the rig opens the public project in an
   anonymous session and types the repository files into it; nothing is saved to the Wokwi account.
 * The simulated patient has rare random episodes (a heart rate below 60 or above 120 raises a
@@ -24,7 +28,7 @@ running in the Wokwi simulator, with the Node-RED dashboards (`dashboards/node-r
 | `07-bed-control.png` | 4 | **Composite** of real captures: Wokwi pane (servo horn at 60°, serial `[BED]` 1°/25 ms ramp) beside the dashboard's Bed Angle slider and Actual Bed Angle gauge (60) |
 | `08-sampling-adaptive.png` | 5 | **Composite**: serial `[RATE] auto-adapt: 30 s -> 5 s` on a heart rate of 53, back to `5 s -> 30 s` after stable samples, beside the Facility "Sampling Interval" and the Adaptive Sampling switch |
 | `09-offline-banner.png` | 6 | Wi-Fi cut in the circuit: `*** LINK FAILURE ***`, `LOGGING OFFLINE`, `Cause: WIFI`, `Buffered: 9`, `Retry in 25s`, dose footer still shown, **amber LED lit** |
-| `10-backlog-resync.png` | 6 | **Composite**: serial `[NET] restored -- replaying 14 buffered samples` / `resynced 14 records` beside the Facility System Health card (ONLINE, last replayed record) |
+| `10-backlog-resync.png` | 6 | **Composite**: serial `[NET] restored -- replaying 10 buffered samples` / `resynced 10 records` beside the Facility System Health card (ONLINE, `Last Resynced Record` = only the time, `t=254 s (record replayed)` — the card shows no patient values) |
 | `11-wokwi-circuit.png` | 1 | The complete circuit — all 26 parts, six slide switches along the top |
 | `12-serial-monitor.png` | 1 | Boot log from the top: banner, `[BOOT] 10 FreeRTOS tasks started`, `[BOOT] task watchdog armed: 20 s timeout`, `[NET]` OFFLINE → ONLINE and the first resync |
 | `13-bonus-node-red-flow.png` | 2 | The 84-node dashboard flow in the Node-RED editor (including the three "compact …" formatter nodes) |

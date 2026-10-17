@@ -1138,7 +1138,7 @@
     "type": "function",
     "z": "f_rprms",
     "name": "compact backlog",
-    "func": "try { const j = (typeof msg.payload === 'string') ? JSON.parse(msg.payload) : msg.payload;\n  msg.payload = 't=' + Math.round(j.t / 1000) + ' s  HR ' + j.hr + '  SpO2 ' + j.spo2 + '  ' + Number(j.bt).toFixed(1) + ' C  risk ' + j.risk; } catch (e) {}\nreturn msg;",
+    "func": "let s = 'record replayed';\ntry { const j = (typeof msg.payload === 'string') ? JSON.parse(msg.payload) : msg.payload;\n  if (j && j.t != null) s = 't=' + Math.round(j.t / 1000) + ' s  (record replayed)'; } catch (e) {}\nmsg.payload = s;\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "initialize": "",

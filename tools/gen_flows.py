@@ -150,10 +150,13 @@ COMPACT = {
         "  msg.payload = 'n=' + j.n + '  ' + Number(j.room_avg).toFixed(1) + ' C  O2 ' + Number(j.o2_avg).toFixed(1)"
         " + '%  AQI ' + j.aqi_avg + ' (max ' + j.aqi_max + ')'; } catch (e) {}\n"
         "return msg;",
+    # The replayed record carries heart rate / SpO2 / temperature, so the FACILITY tab must never show it:
+    # this card shows only WHEN a record was replayed (the Medical tab's data feeds are unaffected).
     "system.backlog":
+        "let s = 'record replayed';\n"
         "try { const j = (typeof msg.payload === 'string') ? JSON.parse(msg.payload) : msg.payload;\n"
-        "  msg.payload = 't=' + Math.round(j.t / 1000) + ' s  HR ' + j.hr + '  SpO2 ' + j.spo2"
-        " + '  ' + Number(j.bt).toFixed(1) + ' C  risk ' + j.risk; } catch (e) {}\n"
+        "  if (j && j.t != null) s = 't=' + Math.round(j.t / 1000) + ' s  (record replayed)'; } catch (e) {}\n"
+        "msg.payload = s;\n"
         "return msg;",
 }
 for feed, label, fmt, group, order in TEXTS:
