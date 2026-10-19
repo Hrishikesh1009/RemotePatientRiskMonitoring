@@ -9,7 +9,7 @@
 |----------|----------|
 | Source code, circuit, docs | GitHub — https://github.com/Hrishikesh1009/RemotePatientRiskMonitoring |
 | Live simulation (public, no login) | Wokwi — https://wokwi.com/projects/473060533558119425 |
-| Demonstration video | **[add the link here after recording — script: `docs/DEMO_VIDEO_SCRIPT.md`]** |
+| Demonstration video (4 min 57 s) | Google Drive — https://drive.google.com/file/d/1z_txnAd4YhKfVJfZGMZbQZoqUU3RGK9w/view?usp=sharing (script and timeline: `docs/DEMO_VIDEO_SCRIPT.md`) |
 
 ---
 

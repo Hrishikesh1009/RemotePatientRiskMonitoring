@@ -19,6 +19,7 @@ submit). **Do not press Submit until every box in Parts B and C is ticked.**
 * Wokwi (live simulation): https://wokwi.com/projects/473060533558119425
 * GitHub: https://github.com/Hrishikesh1009/RemotePatientRiskMonitoring
 * Drive folder (optional mirror): https://drive.google.com/drive/folders/1tpl56Z8DgJtOQY_sncOU8mxls7EHA00L
+* Demo video (Drive, anyone with the link): https://drive.google.com/file/d/1z_txnAd4YhKfVJfZGMZbQZoqUU3RGK9w/view?usp=sharing
 
 ---
 
@@ -35,7 +36,7 @@ submit). **Do not press Submit until every box in Parts B and C is ticked.**
 | ✔ | 15 screenshots (12 required + 3 bonus), taken on the final build | `screenshots/README.md` |
 | ✔ | Architecture and workflow diagrams (SVG and PNG) | `docs/architecture-diagram.svg`, `docs/workflow-diagram.svg` |
 | ✔ | Two role-separated Node-RED dashboards (84-node flow), setup guides, topic map | `dashboards/`, `docs/NODE_RED_SETUP.md` |
-| ✔ | Demo-video script that covers overview → implementation → simulation → verification → working demonstration | `docs/DEMO_VIDEO_SCRIPT.md` |
+| ✔ | Demo video recorded (4 min 57 s) and uploaded to Drive; covers overview → implementation → simulation → verification → working demonstration; script and timeline | `docs/DEMO_VIDEO_SCRIPT.md` |
 | ✔ | Measurement rig and how to re-run every number | `tools/verification/README.md` |
 
 ---
@@ -63,19 +64,24 @@ had the pre-fix wiring (BUG_LOG B-14 – B-16, B-23).
       byte-identical to the local files.
 - [x] **Drive folder refreshed** (13 Oct): the August/September files were replaced by the new set —
       `00_START_HERE.txt`, 14 PDFs, `15_Source_Code/`, `16_Screenshots/`, `17_Evidence/` (48 files;
-      names and sizes checked, folder and files open without a login). When the demo-video link is
-      added, regenerate and re-upload `01_Technical_Report.pdf`, `14_README.pdf` and
-      `00_START_HERE.txt`. `submission_pdfs/` on your PC (git-ignored) is the local copy.
+      names and sizes checked, folder and files open without a login).
+- [x] **Demo video added to Drive** (19 Oct): `18_Demo_Video.mp4` (50,363,322 bytes; opens without a
+      login; the public copy is byte-identical to the file on the PC, SHA-256 `2FB6B140…FADA67`).
+      `00_START_HERE.txt`, `01_Technical_Report.pdf`, `13_Demo_Video_Script.pdf` and `14_README.pdf`
+      were regenerated with the video link and re-uploaded in place. `submission_pdfs/` on your PC
+      (git-ignored) is the local copy.
 
 ---
 
 ## Part C — Only you can do these
 
-- [ ] **Record the demo video** (about 7 minutes) following `docs/DEMO_VIDEO_SCRIPT.md`, in your
-      own words. Say plainly what is simulated (heart rate, SpO₂, blood pressure) and that role
-      separation is by topic only. Upload it (Drive "Anyone with the link" or YouTube unlisted),
-      open the link in a private window, then **add the link** to: `README.md` (status list),
+- [x] **Demo video recorded** (19 Oct, 4 min 57 s, in your own voice). It says plainly what is
+      simulated (heart rate, SpO₂, blood pressure) and that role separation is by topic only. It is
+      on Drive ("Anyone with the link"); the link is in `README.md` (top and status list),
       `docs/TECHNICAL_REPORT.md` (table at the top) and the Drive `00_START_HERE.txt`.
+- [ ] **Watch the video once from start to end**, then upload the same file in the portal's
+      submission form (the Instructions require the video to be uploaded there; the portal does not
+      allow replacing it afterwards).
 - [ ] **Complete `docs/SELF_ATTESTATION.md`** — tick only what is true, write the *Disclosure of
       assistance* in your own words (this project was built with AI coding assistants; the policy
       treats misrepresenting authorship as a disqualifying offence), sign and date it, commit it.
@@ -91,7 +97,7 @@ had the pre-fix wiring (BUG_LOG B-14 – B-16, B-23).
 |---|---|
 | Website Hosted URL | `https://wokwi.com/projects/473060533558119425` |
 | GitHub Repository | `https://github.com/Hrishikesh1009/RemotePatientRiskMonitoring` |
-| Project report | the content of `docs/TECHNICAL_REPORT.md`. Easiest: open the file on GitHub, select the rendered text, copy, paste into the box, then check headings, tables and code blocks survived. Put the video link in the first table first. |
+| Project report | the content of `docs/TECHNICAL_REPORT.md`. Easiest: open the file on GitHub, select the rendered text, copy, paste into the box, then check headings, tables and code blocks survived. The video link is already in the first table. |
 
 ---
 

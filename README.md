@@ -2,6 +2,7 @@
 
 **Live Wokwi project (public, no login):** https://wokwi.com/projects/473060533558119425
 **Source:** https://github.com/Hrishikesh1009/RemotePatientRiskMonitoring
+**Demo video (4 min 57 s):** https://drive.google.com/file/d/1z_txnAd4YhKfVJfZGMZbQZoqUU3RGK9w/view?usp=sharing
 
 **ElevanceSkills Internship — Final Project**
 Intern: **Hrishikesh Lokhande** · Domain: IoT / Embedded Systems
@@ -233,7 +234,8 @@ RemotePatientRiskMonitoring/
 - [x] Node-RED dashboards import and run against the live device
 - [x] Mandatory documents present: README, Bug Log, Assumptions, Self-Attestation, report
 - [ ] Self-Attestation Checklist completed and signed **by the intern**
-- [ ] Demo video recorded and linked here — see [`docs/DEMO_VIDEO_SCRIPT.md`](docs/DEMO_VIDEO_SCRIPT.md)
+- [x] Demo video recorded and linked (4 min 57 s, Google Drive, link at the top) — script and
+      timeline in [`docs/DEMO_VIDEO_SCRIPT.md`](docs/DEMO_VIDEO_SCRIPT.md)
 - [ ] Final portal submission (GitHub link, live URL, report) — one-time and irreversible;
       see [`docs/SUBMISSION_CHECKLIST.md`](docs/SUBMISSION_CHECKLIST.md)
 
