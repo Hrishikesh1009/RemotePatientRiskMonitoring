@@ -485,7 +485,7 @@ docs/TEST_PLAN.md   docs/TEST_RESULTS.md                16 test cases and the me
 docs/BUG_LOG.md     docs/ASSUMPTIONS.md                 mandatory logs
 docs/SELF_ATTESTATION.md                                mandatory checklist (to be completed by the intern)
 docs/BUILD_VERIFICATION.md  docs/DASHBOARD_SETUP.md  docs/NODE_RED_SETUP.md
-docs/DEMO_VIDEO_SCRIPT.md   docs/SUBMISSION_CHECKLIST.md
+docs/DEMO_VIDEO_SCRIPT.md                               script and timeline of the demonstration video
 docs/architecture-diagram.svg  docs/workflow-diagram.svg
 docs/evidence/                                          serial logs, MQTT capture, test-run JSON
 dashboards/   screenshots/   tools/                     flows, 15 screenshots, helper scripts

@@ -175,8 +175,7 @@ RemotePatientRiskMonitoring/
 │   ├── BUILD_VERIFICATION.md    Compile evidence and reproduction steps
 │   ├── NODE_RED_SETUP.md        Free dashboard route — import and deploy
 │   ├── DASHBOARD_SETUP.md       Step-by-step Adafruit IO / HiveMQ dashboard build
-│   ├── DEMO_VIDEO_SCRIPT.md     Shot-by-shot recording script
-│   ├── SUBMISSION_CHECKLIST.md  What to upload and where
+│   ├── DEMO_VIDEO_SCRIPT.md     Script and timeline of the demonstration video
 │   ├── architecture-diagram.svg System architecture
 │   ├── workflow-diagram.svg     Runtime workflow / state machines
 │   └── evidence/                Serial logs, MQTT capture and JSON results of the final test run
@@ -236,8 +235,7 @@ RemotePatientRiskMonitoring/
 - [ ] Self-Attestation Checklist completed and signed **by the intern**
 - [x] Demo video recorded and linked (4 min 57 s, Google Drive, link at the top) — script and
       timeline in [`docs/DEMO_VIDEO_SCRIPT.md`](docs/DEMO_VIDEO_SCRIPT.md)
-- [ ] Final portal submission (GitHub link, live URL, report) — one-time and irreversible;
-      see [`docs/SUBMISSION_CHECKLIST.md`](docs/SUBMISSION_CHECKLIST.md)
+- [ ] Final portal submission (GitHub link, live URL, report, video) — one-time and irreversible
 
 ---
 
