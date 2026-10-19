@@ -225,20 +225,6 @@ RemotePatientRiskMonitoring/
 
 ---
 
-## Submission status
-
-- [x] Final firmware, circuit and libraries are saved in the public Wokwi project and run there
-      logged out (hash-checked, `docs/evidence/wokwi_public_project_verification.txt`)
-- [x] Verified in simulation — `docs/TEST_RESULTS.md`
-- [x] Node-RED dashboards import and run against the live device
-- [x] Mandatory documents present: README, Bug Log, Assumptions, Self-Attestation, report
-- [ ] Self-Attestation Checklist completed and signed **by the intern**
-- [x] Demo video recorded and linked (4 min 57 s, Google Drive, link at the top) — script and
-      timeline in [`docs/DEMO_VIDEO_SCRIPT.md`](docs/DEMO_VIDEO_SCRIPT.md)
-- [ ] Final portal submission (GitHub link, live URL, report, video) — one-time and irreversible
-
----
-
 ## Notes on the original training sketch
 
 This project extends the training build (`IoT-in-healthcare/main.ino`). The original pin
